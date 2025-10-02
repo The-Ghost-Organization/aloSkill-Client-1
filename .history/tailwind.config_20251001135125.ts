@@ -305,7 +305,7 @@ const config: Config = {
     // require('@tailwindcss/forms'),
     // require('@tailwindcss/typography'),
     // require('@tailwindcss/aspect-ratio'),
-    // require('lucide-react'),
+    require('@lucide-react'),
     // Add other plugins as needed
   ],
 };

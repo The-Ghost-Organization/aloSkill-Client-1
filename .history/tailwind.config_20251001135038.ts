@@ -301,13 +301,12 @@ const config: Config = {
     },
   },
 
-  plugins: [
-    // require('@tailwindcss/forms'),
-    // require('@tailwindcss/typography'),
-    // require('@tailwindcss/aspect-ratio'),
-    // require('lucide-react'),
-    // Add other plugins as needed
-  ],
+  // plugins: [
+  //   require('@tailwindcss/forms'),
+  //   require('@tailwindcss/typography'),
+  //   require('@tailwindcss/aspect-ratio'),
+  //   // Add other plugins as needed
+  // ],
 };
 
 export default config;

@@ -166,7 +166,7 @@ export const authOptions: NextAuthOptions = {
         token["accessToken"] = extendedUser.accessToken;
         token["refreshToken"] = extendedUser.refreshToken;
       }
-      // http://localhost:3000/api/auth/callback/google
+
       if (account?.provider === "google") {
         try {
           const response = await fetch(`${process.env["BACKEND_API_URL"]}/auth/google`, {
