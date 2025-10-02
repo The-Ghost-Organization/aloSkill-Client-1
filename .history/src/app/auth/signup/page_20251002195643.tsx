@@ -204,7 +204,7 @@ export default function SignupPage() {
       )}
 
       {/* Main Container */}
-      <div className='relative z-10 w-full max-w-4/6'>
+      <div className='relative z-10 w-full max-w-5/6'>
         {/* Glassmorphism Card */}
         <div className='backdrop-blur-xl bg-white/80 border border-white/20 rounded-3xl shadow-2xl p-8 md:p-10'>
           {/* Header */}
