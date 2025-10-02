@@ -10,7 +10,7 @@ import {
   rateLimiter,
   securityScanner,
   threatIntelligence,
-} from "../lib/security-modules";
+} from "./lib/security-modules";
 
 // Security configuration
 const SECURITY_CONFIG = {
@@ -44,13 +44,27 @@ export default withAuth(
     const response = NextResponse.next();
     const { pathname, searchParams } = request.nextUrl;
     const clientIP = getClientIP(request);
-    const token = await getToken({
-      req: request,
-      secret: process.env.NEXTAUTH_SECRET as string,
-    });
-    // const path = request.nextUrl.pathname;
 
-    // Public routes
+    // Ensure NEXTAUTH_SECRET is set
+    const secret = process.env.NEXTAUTH_SECRET;
+    if (!secret) {
+      console.error("NEXTAUTH_SECRET not configured");
+      return new NextResponse("Server configuration error", { status: 500 });
+    }
+
+    let token;
+    try {
+      token = await getToken({
+        req: request,
+        secret: secret,
+      });
+      console.log("token", token);
+    } catch (error) {
+      console.error("Error retrieving token:", error);
+      // Continue without token, let withAuth handle authentication
+    }
+
+    // Public routes - early return
     if (
       pathname === "/" ||
       pathname.startsWith("/auth") ||
@@ -87,116 +101,194 @@ export default withAuth(
     }
 
     // Start security audit
-    const auditId = await auditLogger.startAudit(request);
+    let auditId: string;
+    try {
+      auditId = await auditLogger.startAudit(request);
+    } catch (error) {
+      console.error("Failed to start audit:", error);
+      // Continue without audit ID, but log the error
+      auditId = `error_${Date.now()}`;
+    }
 
     try {
       // === PHASE 1: PRE-AUTHENTICATION SECURITY ===
 
       // 1. Geo-blocking & Regional Compliance
-      const geoCheck = await threatIntelligence.checkGeoLocation(request);
-      if (!geoCheck.allowed) {
-        await auditLogger.logThreat(auditId, "geo_blocked", geoCheck);
-        return blockResponse(request, "Service not available in your region", 451);
+      let geoCheck;
+      try {
+        geoCheck = await threatIntelligence.checkGeoLocation(request);
+        if (!geoCheck.allowed) {
+          await auditLogger.logThreat(auditId, "geo_blocked", geoCheck);
+          return blockResponse(request, "Service not available in your region", 451);
+        }
+      } catch (error) {
+        console.error("Geo-check failed:", error);
+        // Continue if geo-check fails, but log
+        await auditLogger.logError(auditId, error, request);
       }
 
       // 2. IP Reputation & Threat Intelligence
-      const ipReputation = await threatIntelligence.checkIPReputation(clientIP);
-      if (ipReputation.riskScore > 70) {
-        await auditLogger.logThreat(auditId, "malicious_ip", ipReputation as any);
-        return blockResponse(request, "Access denied", 403);
+      let ipReputation;
+      try {
+        ipReputation = await threatIntelligence.checkIPReputation(clientIP);
+        if (ipReputation && ipReputation.riskScore > 70) {
+          await auditLogger.logThreat(auditId, "malicious_ip", ipReputation as any);
+          return blockResponse(request, "Access denied", 403);
+        }
+      } catch (error) {
+        console.error("IP reputation check failed:", error);
+        await auditLogger.logError(auditId, error, request);
       }
 
       // 3. Advanced Threat Detection
-      const threatScan = await securityScanner.comprehensiveScan(request);
-      if (threatScan.isThreat) {
-        await handleThreatResponse(threatScan, request, auditId);
+      let threatScan;
+      try {
+        threatScan = await securityScanner.comprehensiveScan(request);
+        if (threatScan && threatScan.isThreat) {
+          await handleThreatResponse(threatScan, request, auditId);
 
-        if (threatScan.riskLevel === "critical" || threatScan.riskLevel === "high") {
-          return blockResponse(request, "Security threat detected", 403);
+          if (threatScan.riskLevel === "critical" || threatScan.riskLevel === "high") {
+            return blockResponse(request, "Security threat detected", 403);
+          }
         }
+      } catch (error) {
+        console.error("Threat scan failed:", error);
+        await auditLogger.logError(auditId, error, request);
       }
 
       // 4. Multi-layer Rate Limiting
-      const rateLimitResult = await rateLimiter.checkMultiLayer(request);
-      if (rateLimitResult.blocked) {
-        await auditLogger.logThreat(auditId, "rate_limit_exceeded", rateLimitResult as any);
-        return new NextResponse("Too Many Requests", {
-          status: 429,
-          headers: {
-            "Retry-After": rateLimitResult.retryAfter,
-            "X-RateLimit-Limit": rateLimitResult.limit.toString(),
-            "X-RateLimit-Remaining": rateLimitResult.remaining.toString(),
-          },
-        });
+      let rateLimitResult;
+      try {
+        rateLimitResult = await rateLimiter.checkMultiLayer(request);
+        if (rateLimitResult && rateLimitResult.blocked) {
+          await auditLogger.logThreat(auditId, "rate_limit_exceeded", rateLimitResult as any);
+          return new NextResponse("Too Many Requests", {
+            status: 429,
+            headers: {
+              "Retry-After": rateLimitResult.retryAfter,
+              "X-RateLimit-Limit": rateLimitResult.limit.toString(),
+              "X-RateLimit-Remaining": rateLimitResult.remaining.toString(),
+            },
+          });
+        }
+      } catch (error) {
+        console.error("Rate limiting failed:", error);
+        await auditLogger.logError(auditId, error, request);
+        // Allow request to continue if rate limiting fails
       }
 
       // === PHASE 2: AUTHENTICATION & SESSION SECURITY ===
 
       // 5. Session Security & Anomaly Detection
       if (token) {
-        const sessionCheck = await validateSessionSecurity(token, request);
-        if (!sessionCheck.valid) {
-          await auditLogger.logThreat(auditId, "session_anomaly", sessionCheck);
-          return NextResponse.redirect(
-            new URL(`/auth/signout?reason=security&anomaly=${sessionCheck["anomaly"]}`, request.url)
-          );
-        }
+        try {
+          const sessionCheck = await validateSessionSecurity(token, request);
+          if (!sessionCheck.valid) {
+            await auditLogger.logThreat(auditId, "session_anomaly", sessionCheck);
+            return NextResponse.redirect(
+              new URL(
+                `/auth/signout?reason=security&anomaly=${sessionCheck["anomaly"]}`,
+                request.url
+              )
+            );
+          }
 
-        // Update session activity
-        await updateSessionActivity(token, request);
+          // Update session activity
+          await updateSessionActivity(token, request);
+        } catch (error) {
+          console.error("Session validation failed:", error);
+          await auditLogger.logError(auditId, error, request);
+          // Allow request to continue
+        }
       }
 
       // 6. Advanced Access Control
-      const accessControl = await enforceAccessControl(request, token);
-      if (!accessControl.granted) {
-        await auditLogger.logAccessViolation(auditId, request, token, accessControl);
-        return NextResponse.redirect(new URL(accessControl.redirectUrl, request.url));
+      try {
+        const accessControl = await enforceAccessControl(request, token);
+        if (!accessControl.granted) {
+          await auditLogger.logAccessViolation(auditId, request, token, accessControl);
+          return NextResponse.redirect(new URL(accessControl.redirectUrl, request.url));
+        }
+      } catch (error) {
+        console.error("Access control failed:", error);
+        await auditLogger.logError(auditId, error, request);
+        // Allow request to continue
       }
 
       // === PHASE 3: LMS-SPECIFIC CONTENT SECURITY ===
 
       // 7. Video Content Protection
       if (pathname.includes("/video/")) {
-        const videoSecurity = await enforceVideoSecurity(request, token, searchParams);
-        if (!videoSecurity.allowed) {
-          await auditLogger.logThreat(auditId, "video_access_violation", videoSecurity);
-          return blockResponse(request, "Video access denied", 403);
-        }
+        try {
+          const videoSecurity = await enforceVideoSecurity(request, token, searchParams);
+          if (!videoSecurity.allowed) {
+            await auditLogger.logThreat(auditId, "video_access_violation", videoSecurity);
+            return blockResponse(request, "Video access denied", 403);
+          }
 
-        // Add video-specific security headers
-        addVideoSecurityHeaders(response);
+          // Add video-specific security headers
+          addVideoSecurityHeaders(response);
+        } catch (error) {
+          console.error("Video security check failed:", error);
+          await auditLogger.logError(auditId, error, request);
+          return blockResponse(request, "Video access verification failed", 500);
+        }
       }
 
       // 8. Document & PDF Protection
       if (pathname.includes("/document/") || pathname.includes("/pdf/")) {
-        const documentSecurity = await contentValidator.validateContentAccess(request, token);
-        if (!documentSecurity.granted) {
+        try {
+          const documentSecurity = await contentValidator.validateContentAccess(request, token);
+          if (!documentSecurity.granted) {
+            return NextResponse.redirect(
+              new URL("/dashboard?error=document_access_denied", request.url)
+            );
+          }
+
+          addDocumentSecurityHeaders(response, documentSecurity);
+        } catch (error) {
+          console.error("Document security check failed:", error);
+          await auditLogger.logError(auditId, error, request);
           return NextResponse.redirect(
-            new URL("/dashboard?error=document_access_denied", request.url)
+            new URL("/dashboard?error=document_access_error", request.url)
           );
         }
-
-        addDocumentSecurityHeaders(response, documentSecurity);
       }
 
       // 9. Exam & Assessment Security
       if (pathname.includes("/exam/") || pathname.includes("/assessment/")) {
-        const examSecurity = await enforceExamSecurity(request, token, searchParams);
-        if (!examSecurity.valid) {
-          await auditLogger.logThreat(auditId, "exam_security_violation", examSecurity);
-          return NextResponse.redirect(new URL("/dashboard?error=exam_access_denied", request.url));
-        }
+        try {
+          const examSecurity = await enforceExamSecurity(request, token, searchParams);
+          if (!examSecurity.valid) {
+            await auditLogger.logThreat(auditId, "exam_security_violation", examSecurity);
+            return NextResponse.redirect(
+              new URL("/dashboard?error=exam_access_denied", request.url)
+            );
+          }
 
-        addExamSecurityHeaders(response);
+          addExamSecurityHeaders(response);
+        } catch (error) {
+          console.error("Exam security check failed:", error);
+          await auditLogger.logError(auditId, error, request);
+          return NextResponse.redirect(new URL("/dashboard?error=exam_access_error", request.url));
+        }
       }
 
       // 10. Course Content Access Validation
       if (pathname.startsWith("/learn/") || pathname.startsWith("/course/")) {
-        const contentAccess = await contentValidator.validateContentAccess(request, token);
-        if (!contentAccess.granted) {
-          await auditLogger.logAccessViolation(auditId, request, token, contentAccess);
+        try {
+          const contentAccess = await contentValidator.validateContentAccess(request, token);
+          if (!contentAccess.granted) {
+            await auditLogger.logAccessViolation(auditId, request, token, contentAccess);
+            return NextResponse.redirect(
+              new URL("/dashboard?error=content_access_denied", request.url)
+            );
+          }
+        } catch (error) {
+          console.error("Content access validation failed:", error);
+          await auditLogger.logError(auditId, error, request);
           return NextResponse.redirect(
-            new URL("/dashboard?error=content_access_denied", request.url)
+            new URL("/dashboard?error=content_access_error", request.url)
           );
         }
       }
@@ -204,21 +296,46 @@ export default withAuth(
       // === PHASE 4: RESPONSE SECURITY HARDENING ===
 
       // 11. Advanced Security Headers
-      addAdvancedSecurityHeaders(response, request);
+      try {
+        addAdvancedSecurityHeaders(response, request);
+      } catch (error) {
+        console.error("Failed to add security headers:", error);
+        // Continue without headers
+      }
 
       // 12. LMS-Specific Security Headers
-      addLMSSpecificHeaders(response, pathname);
+      try {
+        addLMSSpecificHeaders(response, pathname);
+      } catch (error) {
+        console.error("Failed to add LMS headers:", error);
+      }
 
       // 13. Real-time Monitoring Headers
-      addMonitoringHeaders(response, auditId);
+      try {
+        addMonitoringHeaders(response, auditId);
+      } catch (error) {
+        console.error("Failed to add monitoring headers:", error);
+      }
 
       // Success audit
-      await auditLogger.logSuccess(auditId, request, token);
+      try {
+        await auditLogger.logSuccess(auditId, request, token);
+      } catch (error) {
+        console.error("Failed to log success:", error);
+      }
 
       return response;
     } catch (error) {
       // Security failure handling
-      await auditLogger.logError(auditId, error, request);
+      console.error("Middleware error:", error);
+
+      try {
+        if (auditId) {
+          await auditLogger.logError(auditId, error, request);
+        }
+      } catch (logError) {
+        console.error("Failed to log error:", logError);
+      }
 
       // Don't leak error details in production
       if (process.env.NODE_ENV === "production") {
