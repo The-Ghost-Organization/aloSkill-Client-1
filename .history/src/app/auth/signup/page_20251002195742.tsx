@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { authService } from "@/lib/api/auth.service";
@@ -25,6 +24,8 @@ const signupSchema = z
       .regex(/^[a-zA-Z\s]+$/, "Only letters and spaces allowed"),
 
     email: z
+      .string()
+      .min(1, "Email is required")
       .email("Please enter a valid email address")
       .toLowerCase(),
 

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { authService } from "@/lib/api/auth.service";
@@ -25,6 +24,8 @@ const signupSchema = z
       .regex(/^[a-zA-Z\s]+$/, "Only letters and spaces allowed"),
 
     email: z
+      .string()
+      .min(1, "Email is required")
       .email("Please enter a valid email address")
       .toLowerCase(),
 
@@ -203,7 +204,7 @@ export default function SignupPage() {
       )}
 
       {/* Main Container */}
-      <div className='relative z-10 w-full max-w-4/6'>
+      <div className='relative z-10 w-full max-w-3/5'>
         {/* Glassmorphism Card */}
         <div className='backdrop-blur-xl bg-white/80 border border-white/20 rounded-3xl shadow-2xl p-8 md:p-10'>
           {/* Header */}

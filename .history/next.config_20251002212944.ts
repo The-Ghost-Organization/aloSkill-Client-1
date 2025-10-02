@@ -145,6 +145,7 @@ const nextConfig: NextConfig = {
 
 const securityHeaders = [
   // Content Security Policy
+  
   {
     key: "Content-Security-Policy",
     value: `
@@ -155,7 +156,7 @@ const securityHeaders = [
       style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
       img-src 'self' data: https: blob:;
       font-src 'self' https://fonts.gstatic.com;
-      connect-src 'self' http://localhost:5000/;
+     
       frame-ancestors 'none';
       frame-src 'none',
       object-src 'none',
