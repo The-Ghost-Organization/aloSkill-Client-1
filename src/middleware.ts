@@ -58,7 +58,7 @@ export default withAuth(
         req: request,
         secret: secret,
       });
-      console.log("token", token);
+      // console.log("token", token);
     } catch (error) {
       console.error("Error retrieving token:", error);
       // Continue without token, let withAuth handle authentication
