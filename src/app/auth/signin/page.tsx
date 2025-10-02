@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 // app/auth/signin/page.tsx
 "use client";
 

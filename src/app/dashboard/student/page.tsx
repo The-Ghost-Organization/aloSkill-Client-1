@@ -1,7 +1,7 @@
 // app/dashboard/student/page.tsx (Example protected page)
 "use client";
 
-import { UserRole } from "@/app/api/auth/[...nextauth]/route";
+import { UserRole } from "@/app/api/auth/[...nextauth]/route.js";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { useAuth } from "@/hooks/useAuth";
 
