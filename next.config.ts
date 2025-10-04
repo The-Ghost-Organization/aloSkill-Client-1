@@ -53,6 +53,13 @@ const nextConfig: NextConfig = {
   // === Security Headers ===
   async headers() {
     return [
+      // {
+      //   source: '/api/:path*',
+      //   headers: [
+      //     { key: 'Access-Control-Allow-Credentials', value: 'true' },
+      //     { key: 'Access-Control-Allow-Origin', value: process.env["NEXT_PUBLIC_BACKEND_API_URL"] },
+      //   ],
+      // },
       {
         source: "/(.*)",
         headers: securityHeaders,
