@@ -1,3 +1,5 @@
+import { config } from "@/config/env.ts";
+
 // app/auth/verify/page.tsx
 export default async function VerifyEmailPage({
   searchParams,
@@ -6,7 +8,7 @@ export default async function VerifyEmailPage({
 }) {
   // Call backend to verify token
   const response = await fetch(
-    `${process.env.BACKEND_API_URL}/auth/verify`,
+    `${config.BACKEND_API_URL}/auth/verify`,
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },

@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// lib/api/client.ts
 
-const API_BASE_URL = process.env["NEXT_PUBLIC_BACKEND_API_URL"] || "http://localhost:5000/api/v1";
+import { config } from "@/config/env.ts";
+
+const API_BASE_URL = config.BACKEND_API_URL || "http://localhost:5000/api/v1";
 
 interface ApiResponse<T = unknown> {
   success: boolean;

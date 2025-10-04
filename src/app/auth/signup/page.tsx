@@ -59,7 +59,7 @@ export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [apiError, setApiError] = useState<string | null>(null);
+  const [apiError, setApiError] = useState<string | null>("");
 
   const {
     register,
@@ -102,6 +102,8 @@ export default function SignupPage() {
       }
       const response = await authService.register(payload);
 
+      console.log("api", response);
+
       if (!response.success) {
         // Handle validation errors from backend
         if (response.errors && Array.isArray(response.errors)) {
@@ -137,7 +139,7 @@ export default function SignupPage() {
 
       // Redirect to dashboard after 2 seconds
       setTimeout(() => {
-        router.push("/dashboard");
+        router.push("/dashboard/student");
       }, 2000);
     } catch (error) {
       console.error("Signup error:", error);
