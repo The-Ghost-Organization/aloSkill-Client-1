@@ -46,8 +46,9 @@ export interface ForgotPasswordPayload {
 export interface ResetPasswordPayload {
   id: string;
   token: string;
-  oldPassword: string;
-  newPassword: string;
+  password:string;
+  confirmPassword: string;
+  // newPassword: string;
 }
 
 // === AUTH SERVICE ===
@@ -147,8 +148,8 @@ export const authService = {
   // Reset password
   async resetPassword(payload: ResetPasswordPayload) {
     return await apiClient.post(`/auth/reset-password?id=${payload.id}&token=${payload.token}`, {
-      oldPassword: payload.oldPassword,
-      newPassword: payload.newPassword,
+      password: payload.password,
+      confirmPassword: payload.confirmPassword,
     });
   },
 
