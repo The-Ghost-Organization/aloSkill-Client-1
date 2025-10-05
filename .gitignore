@@ -10,6 +10,7 @@
 !.yarn/releases
 !.yarn/versions
 .history
+.husky
 # testing
 /coverage
 
