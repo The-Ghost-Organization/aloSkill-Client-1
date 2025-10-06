@@ -68,17 +68,21 @@ export const authOptions: NextAuthOptions = {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials): Promise<ExtendedUser | null> {
+      async authorize(credentials , req): Promise<ExtendedUser | null> {
         if (!credentials?.email || !credentials?.password) {
           throw new Error("Email and password required");
         }
 
         try {
+          const userAgent =
+      (req as any).headers?.get?.("user-agent") || "node";
           // 🔑 KEY CHANGE: Add credentials: "include" to send/receive cookies
           const response = await fetch(`${process.env["BACKEND_API_URL"]}/auth/login`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
+                "User-Agent": userAgent,
+
             },
             credentials: "include", // 🔑 Enable cookie handling
             body: JSON.stringify({

@@ -1,6 +1,7 @@
 // lib/api/auth.service.ts - FOR COOKIE-BASED AUTH
 
 import { apiClient } from "./client";
+import tokenManager from "./tokenManager.ts";
 
 // === INTERFACES ===
 export interface RegisterPayload {
@@ -103,25 +104,45 @@ export const authService = {
   },
 
   // Logout
-  async logout() {
-    // Call backend to clear cookies
-    await apiClient.post("/auth/logout");
+  // async logout() {
+  //   // Call backend to clear cookies
+  //   await apiClient.post("/auth/logout");
 
-    // Clear cached user data
-    this.currentUser = null;
-  },
+  //   // Clear cached user data
+  //   this.currentUser = null;
+  // },
 
-  // Logout from all devices
-  async logoutAllDevices() {
-    if (this.currentUser) {
-      await apiClient.post("/auth/logout-all", {
-        email: this.currentUser.email,
-      });
+  // // Logout from all devices
+  // async logoutAllDevices() {
+  //   if (this.currentUser) {
+  //     await apiClient.post("/auth/logout-all", {
+  //       email: this.currentUser.email,
+  //     });
+  //   }
+
+  //   this.currentUser = null;
+  // },
+ // === Logout from current device ===
+  async logoutCurrentDevice() {
+    try {
+      await apiClient.post("/auth/logout");
+      tokenManager.clearAuth(); // clear local tokens
+    } catch (error) {
+      console.error("Logout failed:", error);
+      throw error;
     }
-
-    this.currentUser = null;
   },
 
+  // === Logout from all devices ===
+  async logoutAllDevices(email: string) {
+    try {
+      await apiClient.post("/auth/logout-all", { email });
+      tokenManager.clearAuth();
+    } catch (error) {
+      console.error("Logout all failed:", error);
+      throw error;
+    }
+  },
   // Refresh access token (automatic via cookies)
   async refreshToken() {
     const response = await apiClient.post<AuthResponse>("/auth/refresh");
@@ -153,6 +174,7 @@ export const authService = {
     });
   },
 
+ 
   // Get current user (from cache or fetch from backend)
   async getCurrentUser(): Promise<UserData | null> {
     // Return cached user if available
