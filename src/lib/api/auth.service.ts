@@ -1,7 +1,6 @@
 // lib/api/auth.service.ts - FOR COOKIE-BASED AUTH
 
 import { apiClient } from "./client";
-import tokenManager from "./tokenManager.ts";
 
 // === INTERFACES ===
 export interface RegisterPayload {
@@ -47,7 +46,7 @@ export interface ForgotPasswordPayload {
 export interface ResetPasswordPayload {
   id: string;
   token: string;
-  password:string;
+  password: string;
   confirmPassword: string;
   // newPassword: string;
 }
@@ -103,46 +102,16 @@ export const authService = {
     return response;
   },
 
-  // Logout
-  // async logout() {
-  //   // Call backend to clear cookies
-  //   await apiClient.post("/auth/logout");
-
-  //   // Clear cached user data
-  //   this.currentUser = null;
-  // },
-
-  // // Logout from all devices
-  // async logoutAllDevices() {
-  //   if (this.currentUser) {
-  //     await apiClient.post("/auth/logout-all", {
-  //       email: this.currentUser.email,
-  //     });
-  //   }
-
-  //   this.currentUser = null;
-  // },
- // === Logout from current device ===
+  // === Logout from current device ===
   async logoutCurrentDevice() {
-    try {
-      await apiClient.post("/auth/logout");
-      tokenManager.clearAuth(); // clear local tokens
-    } catch (error) {
-      console.error("Logout failed:", error);
-      throw error;
-    }
+    return apiClient.post("/auth/logout-current-device");
   },
 
   // === Logout from all devices ===
   async logoutAllDevices(email: string) {
-    try {
-      await apiClient.post("/auth/logout-all", { email });
-      tokenManager.clearAuth();
-    } catch (error) {
-      console.error("Logout all failed:", error);
-      throw error;
-    }
+    return apiClient.post("/auth/logout-all-devices", { email });
   },
+
   // Refresh access token (automatic via cookies)
   async refreshToken() {
     const response = await apiClient.post<AuthResponse>("/auth/refresh");
@@ -174,7 +143,6 @@ export const authService = {
     });
   },
 
- 
   // Get current user (from cache or fetch from backend)
   async getCurrentUser(): Promise<UserData | null> {
     // Return cached user if available
