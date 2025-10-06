@@ -2,7 +2,7 @@
 /* eslint-disable no-console */
 
 import { config as envConfig } from "@/config/env";
-import NextAuth, { type NextAuthOptions, type User, type Session } from "next-auth";
+import NextAuth, { type NextAuthOptions, type User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 
@@ -26,6 +26,17 @@ declare module "next-auth" {
   interface User {
     userId: string;
     role: string;
+    firstName: string;
+    lastName: string;
+    profilePicture?: string;
+    accessToken: string; // Token from backend
+    refreshToken: string; // Token from backend
+    accessTokenExpires: number;
+  }
+  interface Profile {
+    given_name: string;
+    family_name: string;
+    picture: string;
   }
 }
 
@@ -60,11 +71,13 @@ interface ExtendedUser extends User {
   firstName: string;
   lastName: string;
   role: UserRole;
+  accessToken: string;
+  refreshToken: string;
+  accessTokenExpires: number;
   status: UserStatus;
   isEmailVerified: boolean;
   profilePicture?: string;
 }
-
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -75,19 +88,19 @@ export const authOptions: NextAuthOptions = {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
+      // START: Modified authorize function to receive and return tokens from backend
       async authorize(credentials): Promise<ExtendedUser | null> {
         if (!credentials?.email || !credentials?.password) {
           throw new Error("Email and password required");
         }
 
         try {
-          // 🔑 KEY CHANGE: Add credentials: "include" to send/receive cookies
           const response = await fetch(`${process.env["BACKEND_API_URL"]}/auth/login`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            credentials: "include", // 🔑 Enable cookie handling
+            credentials: "include", // Enable cookie handling for session management
             body: JSON.stringify({
               email: credentials.email,
               password: credentials.password,
@@ -95,17 +108,19 @@ export const authOptions: NextAuthOptions = {
           });
 
           const data = await response.json();
-          console.log("response", data);
+          console.log("Login response:", data);
 
           if (!response.ok) {
             throw new Error(data.message || "Invalid credentials");
           }
 
-          // ✅ Backend sets cookies automatically
-          // Response only contains user data, not tokens
+          // Extract user data and tokens from backend response
           const user: BackendUser = data.data.user || data.data;
+          const { accessToken, refreshToken, accessTokenExpires } = data.data;
 
+          // Return user object with tokens for NextAuth to manage
           return {
+            userId: user.id,
             id: user.id,
             email: user.email,
             name: `${user.firstName} ${user.lastName}`,
@@ -114,9 +129,12 @@ export const authOptions: NextAuthOptions = {
             role: user.role,
             status: user.status,
             isEmailVerified: user.isEmailVerified,
-            profilePicture: user.profilePicture,
-            image: user.profilePicture,
-          } as ExtendedUser;
+            profilePicture: user.profilePicture as string,
+            image: user.profilePicture as string,
+            accessToken, // Token from backend
+            refreshToken, // Token from backend (will be stored securely)
+            accessTokenExpires, // Expiration timestamp
+          };
         } catch (error: unknown) {
           console.error("Login error:", error);
           if (error instanceof Error) {
@@ -125,6 +143,7 @@ export const authOptions: NextAuthOptions = {
           throw new Error("Authentication failed");
         }
       },
+      // END: Modified authorize function
     }),
 
     GoogleProvider({
@@ -159,165 +178,175 @@ export const authOptions: NextAuthOptions = {
   },
 
   callbacks: {
+    // START: Modified signIn callback to receive tokens from backend for Google OAuth
     async signIn({ user, account, profile }) {
       // Only for Google OAuth
       if (account?.provider !== "google") return true;
-
-      // const userName = user?.name?.split(" ") as string[];
-      // const registerUserWithGoogle = {
-      //   firstName: userName[0],
-      //   lastName: userName.slice(1).join(" "),
-      //   email: user.email,
-      //   googleId: profile?.sub,
-      //   profilePicture: user.image,
-      //   image: user.image,
-      //   emailVerified: profile?.email,
-      // };
+      console.log("google provider signin called : ", profile);
 
       try {
+        // Call backend to authenticate with Google credentials and receive tokens
         const userFromDB = await fetch(`${envConfig.BACKEND_API_URL}/auth/login`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
+          credentials: "include", // Include cookies for session management
           body: JSON.stringify({
             email: user.email,
             googleId: profile?.sub,
+            // Include additional Google profile data if needed
+            firstName: profile?.given_name,
+            lastName: profile?.family_name,
+            profilePicture: user.image,
           }),
         });
 
         if (!userFromDB.ok) {
-          console.error("Verification failed");
+          console.error("Google verification failed");
           return false;
         }
 
         const result = await userFromDB.json();
 
         if (result.success) {
-          // Attach backend user ID to user object for JWT callback
-          user.userId = result.data.id;
-          user.role = result.data.role;
+          // Extract backend user data and tokens
+          const backendUser = result.data.user || result.data;
+          const { accessToken, refreshToken, accessTokenExpires } = result.data;
+
+          // Attach backend data and tokens to user object for JWT callback
+          user.id = backendUser.id; // Override Google ID with backend ID
+          user.userId = backendUser.id;
+          user.role = backendUser.role;
+          user.firstName = backendUser.firstName;
+          user.lastName = backendUser.lastName;
+          user.profilePicture = backendUser.profilePicture;
+          user.accessToken = accessToken; // Token from backend
+          user.refreshToken = refreshToken; // Token from backend
+          user.accessTokenExpires = accessTokenExpires; // Expiration timestamp
+
           return true;
         } else {
-          console.log(`User ${user.email} not found`);
-          // return "/auth/unauthorized?email=" + encodeURIComponent(user.email as string);
-          return "/auth/register";
+          console.log(`User ${user.email} not found in backend`);
+          return "/auth/register"; // Redirect to registration
         }
       } catch (error) {
         console.error("Error during Google sign-in:", error);
         return "/auth/error?error=VerificationFailed";
       }
     },
-    
-    async jwt({ token, user, account }) { 
+    // END: Modified signIn callback
 
+    // START: Enhanced JWT callback for proper token management and refresh
+    async jwt({ token, user, account }) {
+      // Initial sign-in: Store user data and tokens
       if (account && user) {
         token["provider"] = account.provider;
-        token["userId"] = user.id;
-        // store access token and expiry if present
-        if (account.expires_at) {
+        token["userId"] = user.id || user.userId;
+
+        // Store access token and expiration from backend (prioritize backend tokens over OAuth tokens)
+        // Store access token and expiration from backend (prioritize backend tokens over OAuth tokens)
+        token["accessToken"] = user.accessToken || account.access_token;
+        token["refreshToken"] = user.refreshToken || account.refresh_token; // Consider encrypting this in production
+
+        // Set expiration time (backend provides this, fallback to OAuth or default)
+        if (user.accessTokenExpires) {
+          token["accessTokenExpires"] = user.accessTokenExpires;
+        } else if (account.expires_at) {
           token["accessTokenExpires"] = account.expires_at * 1000;
         } else {
-          token["accessTokenExpires"] = Date.now() + 60 * 60 * 1000;
+          token["accessTokenExpires"] = Date.now() + 60 * 60 * 1000; // 1 hour default
         }
-        token["accessToken"] = account.access_token ?? token["accessToken"];
-        // Do NOT store the raw refresh token inside the JWT. We store refresh_token in DB encrypted.
+
+        // Store user profile data in JWT
+        if (user) {
+          token["firstName"] = user.firstName;
+          token["lastName"] = user.lastName;
+          token["role"] = user.role;
+          token["profilePicture"] = user.profilePicture;
+        }
       }
 
-      if (
-        token["accessToken"] &&
-        token["accessTokenExpires"] &&
-        Date.now() < (token as any)["accessTokenExpires"] - 1000 * 10
-      ) {
-        return token;
+      // Check if access token needs refresh (with 5-minute buffer)
+      const shouldRefresh =
+        !token["accessTokenExpires"] ||
+        Date.now() > Number(token["accessTokenExpires"]) - 5 * 60 * 1000;
+
+      if (shouldRefresh && token["refreshToken"]) {
+        try {
+          console.log("Attempting to refresh access token");
+
+          // Call backend refresh endpoint
+          const refreshResponse = await fetch(`${envConfig.BACKEND_API_URL}/auth/refresh`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({
+              refreshToken: token["refreshToken"],
+            }),
+          });
+
+          if (refreshResponse.ok) {
+            const refreshData = await refreshResponse.json();
+
+            if (refreshData.success) {
+              // Update token with new access token and expiration
+              // Update token with new access token and expiration
+              token["accessToken"] = refreshData.data.accessToken;
+              token["refreshToken"] = refreshData.data.refreshToken || token["refreshToken"];
+              token["accessTokenExpires"] = refreshData.data.accessTokenExpires;
+
+              console.log("Access token refreshed successfully");
+            } else {
+              console.error("Token refresh failed:", refreshData.message);
+              // Token refresh failed - user may need to re-authenticate
+              // Consider redirecting or clearing session
+            }
+          } else {
+            console.error("Token refresh request failed with status:", refreshResponse.status);
+          }
+        } catch (error) {
+          console.error("Error refreshing access token:", error);
+          // Don't throw error - allow session to continue with expired token
+          // User will need to re-authenticate on next API call
+        }
       }
-      
-      // if (user) {
-      //   const extendedUser = user as ExtendedUser;
-      //   token["id"] = extendedUser.id;
-      //   token.email = extendedUser.email;
-      //   token["firstName"] = extendedUser.firstName;
-      //   token["lastName"] = extendedUser.lastName;
-      //   token["role"] = extendedUser.role;
-      //   token["status"] = extendedUser.status;
-      //   token["isEmailVerified"] = extendedUser.isEmailVerified;
-      //   token["profilePicture"] = extendedUser.profilePicture;
-      // }
 
-      // Google OAuth sign-in
-      // if (account?.provider === "google") {
-      //   try {
-      //     const response = await fetch(`${envConfig.BACKEND_API_URL}/auth/google`, {
-      //       method: "POST",
-      //       headers: {
-      //         "Content-Type": "application/json",
-      //       },
-      //       credentials: "include", // 🔑 Enable cookie handling
-      //       body: JSON.stringify({
-      //         googleId: account.providerAccountId,
-      //         email: token.email,
-      //         firstName: token.name?.split(" ")[0] || "",
-      //         lastName: token.name?.split(" ").slice(1).join(" ") || "",
-      //         profilePicture: token.picture,
-      //       }),
-      //     });
-      //     const data = await response.json();
-      //     const backendUser: BackendUser = data.data.user || data.data;
-
-      //     token["id"] = backendUser.id;
-      //     token["role"] = backendUser.role;
-      //     token["status"] = backendUser.status;
-      //     token["isEmailVerified"] = backendUser.isEmailVerified;
-      //   } catch (error) {
-      //     console.error("Google auth backend error:", error);
-      //   }
-      // }
-
-      // Session update (when calling update() from client)
-      // if (trigger === "update" && session) {
-      //   return { ...token, ...session };
-      // }
       return token;
     },
+    // END: Enhanced JWT callback
 
+    // START: Enhanced session callback to properly populate user data and expose necessary tokens
     async session({ session, token }) {
-      console.log("inside session callback :", session, "Token :", token);
-      // if (token) {
-      //   if (!session.user) {
-      //     session.user = {
-      //       id: "",
-      //       email: "",
-      //       firstName: "",
-      //       lastName: "",
-      //       role: UserRole.STUDENT,
-      //       status: UserStatus.ACTIVE,
-      //       isEmailVerified: false,
-      //       name: null,
-      //       image: null,
-      //       profilePicture: null,
-      //     };
-      //   }
+      // Populate user data from JWT token
+      if (token) {
+        session.user.id = token["userId"] as string;
+        session.user.email = token.email as string;
+        session.user.firstName = token["firstName"] as string;
+        session.user.lastName = token["lastName"] as string;
+        session.user.role = token["role"] as UserRole;
+        session.user.status = token["status"] as UserStatus;
+        session.user.isEmailVerified = token["isEmailVerified"] as boolean;
+        session.user.profilePicture = token["profilePicture"] as string | null;
+        session.user.name = token.name as string; // Full name if available
+        session.user.image = token["profilePicture"] as string | null; // For NextAuth compatibility
 
-      //   session.user.id = token["id"] as string;
-      //   session.user.email = token.email as string;
-      //   session.user.firstName = token["firstName"] as string;
-      //   session.user.lastName = token["lastName"] as string;
-      //   session.user.role = token["role"] as UserRole;
-      //   session.user.status = token["status"] as UserStatus;
-      //   session.user.isEmailVerified = token["isEmailVerified"] as boolean;
-      //   session.user.profilePicture = token["profilePicture"] as string | null;
-      //   session.error = token["error"] as string;
-      // }
+        // Expose access token to client for API calls (never expose refresh token)
+        (session as any).accessToken = token["accessToken"];
+        (session as any).accessTokenExpires = token["accessTokenExpires"];
+        (session as any).provider = token["provider"];
 
-      // Attach minimal info to the session — never send refresh token to client
-      (session as Session & any).user = { ...session.user, id: token["userId"] };
-      (session as any).accessToken = token["accessToken"];
-      (session as any).accessTokenExpires = token["accessTokenExpires"];
-      if (token["error"]) (session as any).error = token["error"];
+        // Handle any errors
+        if (token["error"]) {
+          (session as any).error = token["error"];
+        }
+      }
+
       return session;
-
-      // return session;
     },
+    // END: Enhanced session callback
 
     async redirect({ url, baseUrl }) {
       if (url.startsWith("/")) return `${baseUrl}${url}`;
