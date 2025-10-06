@@ -25,8 +25,6 @@ const signupSchema = z
       .regex(/^[a-zA-Z\s]+$/, "Only letters and spaces allowed"),
 
     email: z
-      .string()
-      .min(1, "Email is required")
       .email("Please enter a valid email address")
       .toLowerCase(),
 
@@ -61,7 +59,7 @@ export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [apiError, setApiError] = useState<string | null>(null);
+  const [apiError, setApiError] = useState<string | null>("");
 
   const {
     register,
@@ -281,11 +279,10 @@ export default function SignupPage() {
                     type='text'
                     {...register("firstName")}
                     placeholder='John'
-                    className={`w-full pl-10 pr-4 py-3 bg-white/50 border-2 rounded-xl outline-none transition-all ${
-                      errors.firstName
-                        ? "border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100"
-                        : "border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                    }`}
+                    className={`w-full pl-10 pr-4 py-3 bg-white/50 border-2 rounded-xl outline-none transition-all ${errors.firstName
+                      ? "border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100"
+                      : "border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                      }`}
                   />
                 </div>
                 {errors.firstName && (
@@ -309,11 +306,10 @@ export default function SignupPage() {
                     type='text'
                     {...register("lastName")}
                     placeholder='Doe'
-                    className={`w-full pl-10 pr-4 py-3 bg-white/50 border-2 rounded-xl outline-none transition-all ${
-                      errors.lastName
-                        ? "border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100"
-                        : "border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                    }`}
+                    className={`w-full pl-10 pr-4 py-3 bg-white/50 border-2 rounded-xl outline-none transition-all ${errors.lastName
+                      ? "border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100"
+                      : "border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                      }`}
                   />
                 </div>
                 {errors.lastName && (
@@ -339,11 +335,10 @@ export default function SignupPage() {
                   type='email'
                   {...register("email")}
                   placeholder='you@example.com'
-                  className={`w-full pl-10 pr-4 py-3 bg-white/50 border-2 rounded-xl outline-none transition-all ${
-                    errors.email
-                      ? "border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100"
-                      : "border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                  }`}
+                  className={`w-full pl-10 pr-4 py-3 bg-white/50 border-2 rounded-xl outline-none transition-all ${errors.email
+                    ? "border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100"
+                    : "border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                    }`}
                 />
               </div>
               {errors.email && (
@@ -366,11 +361,10 @@ export default function SignupPage() {
                   type={showPassword ? "text" : "password"}
                   {...register("password")}
                   placeholder='••••••••'
-                  className={`w-full pl-10 pr-12 py-3 bg-white/50 border-2 rounded-xl outline-none transition-all ${
-                    errors.password
-                      ? "border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100"
-                      : "border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                  }`}
+                  className={`w-full pl-10 pr-12 py-3 bg-white/50 border-2 rounded-xl outline-none transition-all ${errors.password
+                    ? "border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100"
+                    : "border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                    }`}
                 />
                 <button
                   type='button'
@@ -400,11 +394,10 @@ export default function SignupPage() {
                   type={showConfirmPassword ? "text" : "password"}
                   {...register("confirmPassword")}
                   placeholder='••••••••'
-                  className={`w-full pl-10 pr-12 py-3 bg-white/50 border-2 rounded-xl outline-none transition-all ${
-                    errors.confirmPassword
-                      ? "border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100"
-                      : "border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                  }`}
+                  className={`w-full pl-10 pr-12 py-3 bg-white/50 border-2 rounded-xl outline-none transition-all ${errors.confirmPassword
+                    ? "border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100"
+                    : "border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                    }`}
                 />
                 <button
                   type='button'
@@ -438,11 +431,10 @@ export default function SignupPage() {
                 type='tel'
                 {...register("phoneNumber")}
                 placeholder='+8801XXXXXXXXX'
-                className={`w-full px-4 py-3 bg-white/50 border-2 rounded-xl outline-none transition-all ${
-                  errors.phoneNumber
-                    ? "border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100"
-                    : "border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                }`}
+                className={`w-full px-4 py-3 bg-white/50 border-2 rounded-xl outline-none transition-all ${errors.phoneNumber
+                  ? "border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100"
+                  : "border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                  }`}
               />
               {errors.phoneNumber && (
                 <p className='mt-1.5 text-sm text-red-600 font-medium'>
@@ -464,11 +456,10 @@ export default function SignupPage() {
                 {...register("bio")}
                 placeholder='Tell us a little about yourself...'
                 rows={3}
-                className={`w-full px-4 py-3 bg-white/50 border-2 rounded-xl outline-none resize-none transition-all ${
-                  errors.bio
-                    ? "border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100"
-                    : "border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                }`}
+                className={`w-full px-4 py-3 bg-white/50 border-2 rounded-xl outline-none resize-none transition-all ${errors.bio
+                  ? "border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100"
+                  : "border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                  }`}
               />
               {errors.bio && (
                 <p className='mt-1.5 text-sm text-red-600 font-medium'>{errors.bio.message}</p>

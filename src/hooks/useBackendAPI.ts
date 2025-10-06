@@ -1,5 +1,6 @@
 "use client";
 
+import { config } from "@/config/env.ts";
 import { useSession } from "next-auth/react";
 import { useCallback } from "react";
 
@@ -24,7 +25,7 @@ export function useBackendAPI() {
         headers["Authorization"] = `Bearer ${session.accessToken}`;
       }
 
-      const response = await fetch(`${process.env["NEXT_PUBLIC_BACKEND_API_URL"]}${endpoint}`, {
+      const response = await fetch(`${config.BACKEND_API_URL}${endpoint}`, {
         ...fetchOptions,
         headers,
       });

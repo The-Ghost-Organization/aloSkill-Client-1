@@ -1,3 +1,4 @@
+import { config } from "@/config/env.ts";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
@@ -6,15 +7,15 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   typedRoutes: true,
   productionBrowserSourceMaps: false,
-  compiler: {
-    removeConsole: process.env.NODE_ENV === "production",
-    reactRemoveProperties:
-      process.env.NODE_ENV === "production"
-        ? {
-            properties: ["^data-testid$"], // Remove test attributes in prod
-          }
-        : false,
-  },
+  // compiler: {
+  //   removeConsole: config.NODE_ENV === "production",
+  //   reactRemoveProperties:
+  //     config.NODE_ENV === "production"
+  //       ? {
+  //           properties: ["^data-testid$"], // Remove test attributes in prod
+  //         }
+  //       : false,
+  // },
 
   // === Image Optimizations ===
   images: {
@@ -98,7 +99,7 @@ const nextConfig: NextConfig = {
   // Disable redirects in production unless explicitly defined
   async redirects() {
     const productionRedirects =
-      process.env.NODE_ENV === "production"
+      config.NODE_ENV === "production"
         ? []
         : [
             {
@@ -114,7 +115,7 @@ const nextConfig: NextConfig = {
   // === API Security ===
   async rewrites() {
     // No rewrites to external domains in production
-    if (process.env.NODE_ENV === "production") {
+    if (config.NODE_ENV === "production") {
       return [];
     }
 
@@ -130,7 +131,7 @@ const nextConfig: NextConfig = {
   env: {
     APP_VERSION: process.env["npm_package_version"],
     BUILD_TIME: new Date().toISOString(),
-    BACKEND_URL: process.env["BACKEND_URL"] || "http://localhost:3001",
+    BACKEND_URL: config.BACKEND_API_URL || "http://localhost:5000/api/v1",
   },
 
   // === Webpack Optimizations ===
@@ -157,7 +158,7 @@ const securityHeaders = [
     value: `
       default-src 'self';
       script-src 'self' 'unsafe-eval' 'unsafe-inline' ${
-        process.env.NODE_ENV === "development" ? "'unsafe-eval'" : ""
+        config.NODE_ENV === "development" ? "'unsafe-eval'" : ""
       };
       style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
       img-src 'self' data: https: blob:;
@@ -201,7 +202,7 @@ const securityHeaders = [
   },
 ];
 
-if (process.env.NODE_ENV === "production") {
+if (config.NODE_ENV === "production") {
   securityHeaders.push({
     key: "Strict-Transport-Security",
     value: "max-age=63072000; includeSubDomains; preload",
