@@ -29,8 +29,8 @@ declare module "next-auth" {
     firstName: string;
     lastName: string;
     profilePicture?: string;
-    accessToken: string; // Token from backend
-    refreshToken: string; // Token from backend
+    accessToken: string;
+    refreshToken: string;
     accessTokenExpires: number;
   }
   interface Profile {
@@ -65,20 +65,6 @@ interface BackendUser {
   profilePicture?: string;
 }
 
-interface ExtendedUser extends User {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  role: UserRole;
-  accessToken: string;
-  refreshToken: string;
-  accessTokenExpires: number;
-  status: UserStatus;
-  isEmailVerified: boolean;
-  profilePicture?: string;
-}
-
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -88,8 +74,7 @@ export const authOptions: NextAuthOptions = {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
-      // START: Modified authorize function to receive and return tokens from backend
-      async authorize(credentials): Promise<ExtendedUser | null> {
+      async authorize(credentials): Promise<User | null> {
         if (!credentials?.email || !credentials?.password) {
           throw new Error("Email and password required");
         }
@@ -100,7 +85,7 @@ export const authOptions: NextAuthOptions = {
             headers: {
               "Content-Type": "application/json",
             },
-            credentials: "include", // Enable cookie handling for session management
+            credentials: "include",
             body: JSON.stringify({
               email: credentials.email,
               password: credentials.password,
@@ -108,32 +93,28 @@ export const authOptions: NextAuthOptions = {
           });
 
           const data = await response.json();
-          console.log("Login response:", data);
 
           if (!response.ok) {
             throw new Error(data.message || "Invalid credentials");
           }
 
           // Extract user data and tokens from backend response
-          const user: BackendUser = data.data.user || data.data;
+          const user: BackendUser = data.data;
           const { accessToken, refreshToken, accessTokenExpires } = data.data;
 
           // Return user object with tokens for NextAuth to manage
           return {
-            userId: user.id,
             id: user.id,
+            userId: user.id,
             email: user.email,
             name: `${user.firstName} ${user.lastName}`,
             firstName: user.firstName,
             lastName: user.lastName,
             role: user.role,
-            status: user.status,
-            isEmailVerified: user.isEmailVerified,
             profilePicture: user.profilePicture as string,
-            image: user.profilePicture as string,
-            accessToken, // Token from backend
-            refreshToken, // Token from backend (will be stored securely)
-            accessTokenExpires, // Expiration timestamp
+            accessToken,
+            refreshToken,
+            accessTokenExpires,
           };
         } catch (error: unknown) {
           console.error("Login error:", error);
@@ -143,7 +124,6 @@ export const authOptions: NextAuthOptions = {
           throw new Error("Authentication failed");
         }
       },
-      // END: Modified authorize function
     }),
 
     GoogleProvider({
@@ -160,45 +140,34 @@ export const authOptions: NextAuthOptions = {
   ],
 
   session: {
-    strategy: "jwt", // use stateless JWTs
-    maxAge: 60 * 60, // 1 hour
-    updateAge: 15 * 60, // refresh every 15 minutes
+    strategy: "jwt",
+    maxAge: 7 * 24 * 60 * 60, // 7 days (same as refresh token)
+    updateAge: 15 * 60, // every 15 mins, refresh if needed
   },
 
   jwt: {
-    maxAge: 60 * 60, // align with session
+    maxAge: 15 * 60, // 15 mins (same as backend access token)
   },
 
   pages: {
     signIn: "/auth/signin",
-    // signOut: "/auth/signout",
     error: "/auth/error",
-    // verifyRequest: "/auth/verify-email",
-    // newUser: "/onboarding",
   },
 
   callbacks: {
-    // START: Modified signIn callback to receive tokens from backend for Google OAuth
     async signIn({ user, account, profile }) {
-      // Only for Google OAuth
       if (account?.provider !== "google") return true;
-      console.log("google provider signin called : ", profile);
 
       try {
-        // Call backend to authenticate with Google credentials and receive tokens
         const userFromDB = await fetch(`${envConfig.BACKEND_API_URL}/auth/login`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          credentials: "include", // Include cookies for session management
+          credentials: "include",
           body: JSON.stringify({
             email: user.email,
             googleId: profile?.sub,
-            // Include additional Google profile data if needed
-            firstName: profile?.given_name,
-            lastName: profile?.family_name,
-            profilePicture: user.image,
           }),
         });
 
@@ -210,41 +179,38 @@ export const authOptions: NextAuthOptions = {
         const result = await userFromDB.json();
 
         if (result.success) {
-          // Extract backend user data and tokens
-          const backendUser = result.data.user || result.data;
+          const backendUser = result.data;
           const { accessToken, refreshToken, accessTokenExpires } = result.data;
 
           // Attach backend data and tokens to user object for JWT callback
           user.id = backendUser.id; // Override Google ID with backend ID
           user.userId = backendUser.id;
+          user.email = backendUser.email;
           user.role = backendUser.role;
+          user.name = `${backendUser.firstName} ${backendUser.lastName}`;
           user.firstName = backendUser.firstName;
           user.lastName = backendUser.lastName;
           user.profilePicture = backendUser.profilePicture;
-          user.accessToken = accessToken; // Token from backend
-          user.refreshToken = refreshToken; // Token from backend
-          user.accessTokenExpires = accessTokenExpires; // Expiration timestamp
+          user.accessToken = accessToken;
+          user.refreshToken = refreshToken;
+          user.accessTokenExpires = accessTokenExpires;
 
           return true;
         } else {
           console.log(`User ${user.email} not found in backend`);
-          return "/auth/register"; // Redirect to registration
+          return "/auth/register";
         }
       } catch (error) {
         console.error("Error during Google sign-in:", error);
         return "/auth/error?error=VerificationFailed";
       }
     },
-    // END: Modified signIn callback
 
     // START: Enhanced JWT callback for proper token management and refresh
     async jwt({ token, user, account }) {
       // Initial sign-in: Store user data and tokens
       if (account && user) {
-        token["provider"] = account.provider;
         token["userId"] = user.id || user.userId;
-
-        // Store access token and expiration from backend (prioritize backend tokens over OAuth tokens)
         // Store access token and expiration from backend (prioritize backend tokens over OAuth tokens)
         token["accessToken"] = user.accessToken || account.access_token;
         token["refreshToken"] = user.refreshToken || account.refresh_token; // Consider encrypting this in production
@@ -255,11 +221,13 @@ export const authOptions: NextAuthOptions = {
         } else if (account.expires_at) {
           token["accessTokenExpires"] = account.expires_at * 1000;
         } else {
-          token["accessTokenExpires"] = Date.now() + 60 * 60 * 1000; // 1 hour default
+          token["accessTokenExpires"] = Date.now() + 60 * 60 * 1000;
         }
 
         // Store user profile data in JWT
         if (user) {
+          token["name"] = user.name as string;
+          token["email"] = user.email as string;
           token["firstName"] = user.firstName;
           token["lastName"] = user.lastName;
           token["role"] = user.role;
@@ -267,10 +235,10 @@ export const authOptions: NextAuthOptions = {
         }
       }
 
-      // Check if access token needs refresh (with 5-minute buffer)
+      // Check if access token needs refresh (with 1-minute buffer)
       const shouldRefresh =
         !token["accessTokenExpires"] ||
-        Date.now() > Number(token["accessTokenExpires"]) - 5 * 60 * 1000;
+        Date.now() > Number(token["accessTokenExpires"]) - 60 * 1000;
 
       if (shouldRefresh && token["refreshToken"]) {
         try {
@@ -293,7 +261,6 @@ export const authOptions: NextAuthOptions = {
 
             if (refreshData.success) {
               // Update token with new access token and expiration
-              // Update token with new access token and expiration
               token["accessToken"] = refreshData.data.accessToken;
               token["refreshToken"] = refreshData.data.refreshToken || token["refreshToken"];
               token["accessTokenExpires"] = refreshData.data.accessTokenExpires;
@@ -303,6 +270,12 @@ export const authOptions: NextAuthOptions = {
               console.error("Token refresh failed:", refreshData.message);
               // Token refresh failed - user may need to re-authenticate
               // Consider redirecting or clearing session
+              return {
+                ...token,
+                error: "RefreshAccessTokenError",
+                accessToken: null,
+                refreshToken: null,
+              };
             }
           } else {
             console.error("Token refresh request failed with status:", refreshResponse.status);
@@ -311,32 +284,26 @@ export const authOptions: NextAuthOptions = {
           console.error("Error refreshing access token:", error);
           // Don't throw error - allow session to continue with expired token
           // User will need to re-authenticate on next API call
+          token["error"] = "RefreshAccessTokenError";
         }
       }
-
       return token;
     },
-    // END: Enhanced JWT callback
 
     // START: Enhanced session callback to properly populate user data and expose necessary tokens
     async session({ session, token }) {
-      // Populate user data from JWT token
       if (token) {
         session.user.id = token["userId"] as string;
         session.user.email = token.email as string;
+        session.user.name = token.name as string;
         session.user.firstName = token["firstName"] as string;
         session.user.lastName = token["lastName"] as string;
         session.user.role = token["role"] as UserRole;
-        session.user.status = token["status"] as UserStatus;
-        session.user.isEmailVerified = token["isEmailVerified"] as boolean;
         session.user.profilePicture = token["profilePicture"] as string | null;
-        session.user.name = token.name as string; // Full name if available
-        session.user.image = token["profilePicture"] as string | null; // For NextAuth compatibility
 
         // Expose access token to client for API calls (never expose refresh token)
         (session as any).accessToken = token["accessToken"];
         (session as any).accessTokenExpires = token["accessTokenExpires"];
-        (session as any).provider = token["provider"];
 
         // Handle any errors
         if (token["error"]) {
@@ -346,7 +313,6 @@ export const authOptions: NextAuthOptions = {
 
       return session;
     },
-    // END: Enhanced session callback
 
     async redirect({ url, baseUrl }) {
       if (url.startsWith("/")) return `${baseUrl}${url}`;
@@ -356,47 +322,47 @@ export const authOptions: NextAuthOptions = {
   },
 
   events: {
-    async signIn({ user, account, isNewUser }) {
+    async signIn({ user, account }) {
       console.log(`✅ User ${user.email} signed in via ${account?.provider}`);
 
-      if (account?.provider !== "credentials") {
-        try {
-          await fetch(`${envConfig.BACKEND_API_URL}/auth/track-login`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: "include", // 🔑 Send cookies
-            body: JSON.stringify({
-              userId: user.id,
-              provider: account?.provider,
-              isNewUser,
-            }),
-          });
-        } catch (error) {
-          console.error("Failed to track login:", error);
-        }
-      }
+      // if (account?.provider !== "credentials") {
+      //   try {
+      //     await fetch(`${envConfig.BACKEND_API_URL}/auth/track-login`, {
+      //       method: "POST",
+      //       headers: {
+      //         "Content-Type": "application/json",
+      //       },
+      //       credentials: "include",
+      //       body: JSON.stringify({
+      //         userId: user.id,
+      //         provider: account?.provider,
+      //         isNewUser,
+      //       }),
+      //     });
+      //   } catch (error) {
+      //     console.error("Failed to track login:", error);
+      //   }
+      // }
     },
 
     async signOut({ token }) {
       console.log(`👋 User ${token?.email} signed out`);
 
-      if (token?.["refreshToken"]) {
-        try {
-          await fetch(`${process.env["BACKEND_API_URL"]}/auth/logout`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              refreshToken: token["refreshToken"],
-            }),
-          });
-        } catch (error) {
-          console.error("Failed to logout from backend:", error);
-        }
-      }
+      // if (token?.["refreshToken"]) {
+      //   try {
+      //     await fetch(`${process.env["BACKEND_API_URL"]}/auth/logout`, {
+      //       method: "POST",
+      //       headers: {
+      //         "Content-Type": "application/json",
+      //       },
+      //       body: JSON.stringify({
+      //         refreshToken: token["refreshToken"],
+      //       }),
+      //     });
+      //   } catch (error) {
+      //     console.error("Failed to logout from backend:", error);
+      //   }
+      // }
     },
   },
   secret: envConfig.NEXTAUTH_SECRET,
