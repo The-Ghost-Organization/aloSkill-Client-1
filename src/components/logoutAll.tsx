@@ -3,7 +3,7 @@
 import { authService } from "@/lib/api/auth.service.ts";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import Toast from "./toast/toast.tsx";
+import Toast from "./toast/successToast.tsx";
 
 export default function LogoutAllDevicesButton({ email }: { email: string }) {
   const router = useRouter();

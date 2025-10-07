@@ -63,8 +63,6 @@ interface BackendUser {
   isEmailVerified: boolean;
   profilePicture?: string;
 }
-// console.log("GOOGLE_CLIENT_ID: env", envConfig.GOOGLE_CLIENT_ID);
-// console.log("GOOGLE_CLIENT_SECRET:env ", envConfig.GOOGLE_CLIENT_SECRET);
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -114,7 +112,7 @@ export const authOptions: NextAuthOptions = {
             role: user.role,
             profilePicture: user.profilePicture as string,
             accessToken,
-            if(accessTokenExpires) && accessTokenExpires,
+            accessTokenExpires: accessTokenExpires,
           };
         } catch (error: unknown) {
           console.error("Login error:", error);
@@ -157,38 +155,53 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async signIn({ user, account, profile }) {
       if (account?.provider !== "google") return true;
-      console.log("account google", account);
-      console.log("profile == ", profile);
-      console.log("user == ", user);
+
       try {
+        // Step 1: Try login with backend
         const userFromDB = await fetch(`${envConfig.BACKEND_API_URL}/auth/login`, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           credentials: "include",
           body: JSON.stringify({
             email: user.email,
             googleId: profile?.sub,
-            firstName: profile?.given_name,
-            lastName: profile?.family_name,
-            profilePicture: profile?.picture,
           }),
         });
 
+        // Step 2: If user not found → register automatically
+        let result;
         if (!userFromDB.ok) {
-          console.error("Google verification failed");
-          return "/auth/register";
-        }
+          console.log(`User ${user.email} not found, creating new user...`);
 
-        const result = await userFromDB.json();
+          const registerResponse = await fetch(`${envConfig.BACKEND_API_URL}/auth/register`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({
+              firstName: user.name?.split(" ")[0],
+              lastName: user.name?.split(" ").slice(1).join(" ") || "",
+              email: user.email,
+              googleId: profile?.sub,
+              profilePicture: user.image,
+              // provider: "google",
+            }),
+          });
+
+          if (!registerResponse.ok) {
+            console.error("Failed to register user automatically");
+            return "/auth/error?error=AutoRegisterFailed";
+          }
+
+          result = await registerResponse.json();
+        } else {
+          result = await userFromDB.json();
+        }
 
         if (result.success) {
           const backendUser = result.data;
           const { accessToken, accessTokenExpires } = result.data;
 
-          // Attach backend data and tokens to user object for JWT callback
-          user.id = backendUser.id; // Override Google ID with backend ID
+          user.id = backendUser.id;
           user.userId = backendUser.id;
           user.email = backendUser.email;
           user.role = backendUser.role;
@@ -197,18 +210,70 @@ export const authOptions: NextAuthOptions = {
           user.lastName = backendUser.lastName;
           user.profilePicture = backendUser.profilePicture;
           user.accessToken = accessToken;
-          if(accessTokenExpires) && user.accessTokenExpires = accessTokenExpires;
+          if (accessTokenExpires) user.accessTokenExpires = accessTokenExpires;
 
           return true;
-        } else {
-          console.log(`User ${user.email} not found in backend`);
-          return "/auth/register";
         }
+
+        console.error(`Backend login/register failed for ${user.email}`);
+        return "/auth/error?error=GoogleAuthFailed";
       } catch (error) {
         console.error("Error during Google sign-in:", error);
         return "/auth/error?error=VerificationFailed";
       }
     },
+
+    // async signIn({ user, account, profile }) {
+    //   if (account?.provider !== "google") return true;
+
+    //   try {
+    //     const userFromDB = await fetch(`${envConfig.BACKEND_API_URL}/auth/login`, {
+    //       method: "POST",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //       },
+    //       credentials: "include",
+    //       body: JSON.stringify({
+    //         email: user.email,
+    //         googleId: profile?.sub,
+    //       }),
+    //     });
+
+    //     if (!userFromDB.ok) {
+    //       console.log(`User ${user.email} not found in backend`);
+    //       return "/auth/register";
+    //     }
+
+    //     const result = await userFromDB.json();
+
+    //     if (result.success) {
+    //       const backendUser = result.data;
+    //       const { accessToken, accessTokenExpires } = result.data;
+
+    //       // Attach backend data and tokens to user object for JWT callback
+    //       user.id = backendUser.id; // Override Google ID with backend ID
+    //       user.userId = backendUser.id;
+    //       user.email = backendUser.email;
+    //       user.role = backendUser.role;
+    //       user.name = `${backendUser.firstName} ${backendUser.lastName}`;
+    //       user.firstName = backendUser.firstName;
+    //       user.lastName = backendUser.lastName;
+    //       user.profilePicture = backendUser.profilePicture;
+    //       user.accessToken = accessToken;
+    //       if (accessTokenExpires) {
+    //         user.accessTokenExpires = accessTokenExpires;
+    //       }
+
+    //       return true;
+    //     } else {
+    //       console.log(`User ${user.email} not found in backend`);
+    //       return "/auth/register";
+    //     }
+    //   } catch (error) {
+    //     console.error("Error during Google sign-in:", error);
+    //     return "/auth/error?error=VerificationFailed";
+    //   }
+    // },
 
     // START: Enhanced JWT callback for proper token management and refresh
     async jwt({ token, user, account }) {

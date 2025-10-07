@@ -113,13 +113,43 @@ const nextConfig: NextConfig = {
   },
 
   // === API Security ===
+  // async rewrites() {
+  //   // No rewrites to external domains in production
+  //   if (config.NODE_ENV === "production") {
+  //     return [];
+  //   }
+
+  //   return [
+  //     {
+  //       source: "/api/users/:path*",
+  //       destination: "http://localhost:5000/api/users/:path*",
+  //     },
+  //     {
+  //       source: "/api/courses/:path*",
+  //       destination: "http://localhost:5000/api/courses/:path*",
+  //     },
+
+  //     {
+  //       source: "/sitemap.xml",
+  //       destination: "/api/sitemap",
+  //     },
+  //   ];
+  // },
   async rewrites() {
-    // No rewrites to external domains in production
     if (config.NODE_ENV === "production") {
       return [];
     }
 
     return [
+      // Rewrite only your custom backend API endpoints, NOT /api/auth
+      {
+        source: "/api/users/:path*",
+        destination: "http://localhost:5000/api/users/:path*",
+      },
+      {
+        source: "/api/courses/:path*",
+        destination: "http://localhost:5000/api/courses/:path*",
+      },
       {
         source: "/sitemap.xml",
         destination: "/api/sitemap",
@@ -208,6 +238,11 @@ if (config.NODE_ENV === "production") {
 }
 
 const apiSecurityHeaders = [
+  {
+    key: "Content-Security-Policy",
+    value:
+      "default-src 'self'; connect-src 'self' http://localhost:5000 https://vitals.vercel-insights.com;",
+  },
   {
     key: "X-Content-Type-Options",
     value: "nosniff",
