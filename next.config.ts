@@ -156,21 +156,19 @@ const securityHeaders = [
   {
     key: "Content-Security-Policy",
     value: `
-      default-src 'self';
-      script-src 'self' 'unsafe-eval' 'unsafe-inline' ${
-        config.NODE_ENV === "development" ? "'unsafe-eval'" : ""
-      };
-      style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-      img-src 'self' data: https: blob:;
-      font-src 'self' https://fonts.gstatic.com;
-      connect-src 'self' http://localhost:5000/;
-      frame-ancestors 'none';
-      frame-src 'none',
-      object-src 'none',
-      base-uri 'self';
-      form-action 'self';
-      upgrade-insecure-requests;
-    `
+    default-src 'self';
+    script-src 'self' 'unsafe-inline' ${config.NODE_ENV === "development" ? "'unsafe-eval'" : ""};
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+    img-src 'self' data: https: blob:;
+    font-src 'self' https://fonts.gstatic.com;
+    connect-src 'self' http://localhost:5000 https://vitals.vercel-insights.com;
+    frame-ancestors 'none';
+    frame-src 'none';
+    object-src 'none';
+    base-uri 'self';
+    form-action 'self';
+    upgrade-insecure-requests;
+  `
       .replace(/\s{2,}/g, " ")
       .trim(),
   },

@@ -64,6 +64,8 @@ interface BackendUser {
   isEmailVerified: boolean;
   profilePicture?: string;
 }
+// console.log("GOOGLE_CLIENT_ID: env", envConfig.GOOGLE_CLIENT_ID);
+// console.log("GOOGLE_CLIENT_SECRET:env ", envConfig.GOOGLE_CLIENT_SECRET);
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -157,7 +159,9 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async signIn({ user, account, profile }) {
       if (account?.provider !== "google") return true;
-
+      console.log("account google", account);
+      console.log("profile == ", profile);
+      console.log("user == ", user);
       try {
         const userFromDB = await fetch(`${envConfig.BACKEND_API_URL}/auth/login`, {
           method: "POST",
@@ -168,12 +172,15 @@ export const authOptions: NextAuthOptions = {
           body: JSON.stringify({
             email: user.email,
             googleId: profile?.sub,
+            firstName: profile?.given_name,
+            lastName: profile?.family_name,
+            profilePicture: profile?.picture,
           }),
         });
 
         if (!userFromDB.ok) {
-          console.error("Google verification failed");
-          return false;
+          console.error("Google verification failed because user not found in backend");
+          return "/auth/register";
         }
 
         const result = await userFromDB.json();

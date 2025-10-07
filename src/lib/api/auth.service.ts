@@ -104,12 +104,12 @@ export const authService = {
 
   // === Logout from current device ===
   async logoutCurrentDevice() {
-    return apiClient.post("/auth/logout-current-device");
+    return apiClient.post("/auth/logout");
   },
 
   // === Logout from all devices ===
   async logoutAllDevices(email: string) {
-    return apiClient.post("/auth/logout-all-devices", { email });
+    return apiClient.post("/auth/logout-all", { email });
   },
 
   // Refresh access token (automatic via cookies)
