@@ -113,13 +113,43 @@ const nextConfig: NextConfig = {
   },
 
   // === API Security ===
+  // async rewrites() {
+  //   // No rewrites to external domains in production
+  //   if (config.NODE_ENV === "production") {
+  //     return [];
+  //   }
+
+  //   return [
+  //     {
+  //       source: "/api/users/:path*",
+  //       destination: "http://localhost:5000/api/users/:path*",
+  //     },
+  //     {
+  //       source: "/api/courses/:path*",
+  //       destination: "http://localhost:5000/api/courses/:path*",
+  //     },
+
+  //     {
+  //       source: "/sitemap.xml",
+  //       destination: "/api/sitemap",
+  //     },
+  //   ];
+  // },
   async rewrites() {
-    // No rewrites to external domains in production
     if (config.NODE_ENV === "production") {
       return [];
     }
 
     return [
+      // Rewrite only your custom backend API endpoints, NOT /api/auth
+      {
+        source: "/api/users/:path*",
+        destination: "http://localhost:5000/api/users/:path*",
+      },
+      {
+        source: "/api/courses/:path*",
+        destination: "http://localhost:5000/api/courses/:path*",
+      },
       {
         source: "/sitemap.xml",
         destination: "/api/sitemap",
@@ -156,21 +186,19 @@ const securityHeaders = [
   {
     key: "Content-Security-Policy",
     value: `
-      default-src 'self';
-      script-src 'self' 'unsafe-eval' 'unsafe-inline' ${
-        config.NODE_ENV === "development" ? "'unsafe-eval'" : ""
-      };
-      style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-      img-src 'self' data: https: blob:;
-      font-src 'self' https://fonts.gstatic.com;
-      connect-src 'self' http://localhost:5000/;
-      frame-ancestors 'none';
-      frame-src 'none',
-      object-src 'none',
-      base-uri 'self';
-      form-action 'self';
-      upgrade-insecure-requests;
-    `
+    default-src 'self';
+    script-src 'self' 'unsafe-inline' ${config.NODE_ENV === "development" ? "'unsafe-eval'" : ""};
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+    img-src 'self' data: https: blob:;
+    font-src 'self' https://fonts.gstatic.com;
+    connect-src 'self' http://localhost:5000 https://vitals.vercel-insights.com;
+    frame-ancestors 'none';
+    frame-src 'none';
+    object-src 'none';
+    base-uri 'self';
+    form-action 'self';
+    upgrade-insecure-requests;
+  `
       .replace(/\s{2,}/g, " ")
       .trim(),
   },
@@ -210,6 +238,11 @@ if (config.NODE_ENV === "production") {
 }
 
 const apiSecurityHeaders = [
+  {
+    key: "Content-Security-Policy",
+    value:
+      "default-src 'self'; connect-src 'self' http://localhost:5000 https://vitals.vercel-insights.com;",
+  },
   {
     key: "X-Content-Type-Options",
     value: "nosniff",

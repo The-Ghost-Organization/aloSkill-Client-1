@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-"use client"
 
 import { useSession } from "next-auth/react";
 
