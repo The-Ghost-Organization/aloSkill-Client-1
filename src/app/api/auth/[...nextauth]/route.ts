@@ -112,7 +112,7 @@ export const authOptions: NextAuthOptions = {
             role: user.role,
             profilePicture: user.profilePicture as string,
             accessToken,
-            if(accessTokenExpires) && accessTokenExpires,
+            accessTokenExpires: accessTokenExpires
           };
         } catch (error: unknown) {
           console.error("Login error:", error);
@@ -166,6 +166,8 @@ export const authOptions: NextAuthOptions = {
           body: JSON.stringify({
             email: user.email,
             googleId: profile?.sub,
+            firstName: profile?.given_name,
+            lastName: profile?.family_name,
           }),
         });
 
@@ -190,7 +192,9 @@ export const authOptions: NextAuthOptions = {
           user.lastName = backendUser.lastName;
           user.profilePicture = backendUser.profilePicture;
           user.accessToken = accessToken;
-          if(accessTokenExpires) && user.accessTokenExpires = accessTokenExpires;
+          if (accessTokenExpires) {
+            user.accessTokenExpires = accessTokenExpires;
+          }
 
           return true;
         } else {
