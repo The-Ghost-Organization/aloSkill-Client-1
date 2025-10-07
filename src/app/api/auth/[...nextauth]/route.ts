@@ -30,8 +30,7 @@ declare module "next-auth" {
     lastName: string;
     profilePicture?: string;
     accessToken: string;
-    refreshToken: string;
-    accessTokenExpires: number;
+    accessTokenExpires?: number;
   }
   interface Profile {
     given_name: string;
@@ -100,7 +99,7 @@ export const authOptions: NextAuthOptions = {
 
           // Extract user data and tokens from backend response
           const user: BackendUser = data.data;
-          const { accessToken, refreshToken, accessTokenExpires } = data.data;
+          const { accessToken, accessTokenExpires } = data.data;
 
           // Return user object with tokens for NextAuth to manage
           return {
@@ -113,8 +112,7 @@ export const authOptions: NextAuthOptions = {
             role: user.role,
             profilePicture: user.profilePicture as string,
             accessToken,
-            refreshToken,
-            accessTokenExpires,
+            if(accessTokenExpires) && accessTokenExpires,
           };
         } catch (error: unknown) {
           console.error("Login error:", error);
@@ -173,14 +171,14 @@ export const authOptions: NextAuthOptions = {
 
         if (!userFromDB.ok) {
           console.error("Google verification failed");
-          return false;
+          return "/auth/register";
         }
 
         const result = await userFromDB.json();
 
         if (result.success) {
           const backendUser = result.data;
-          const { accessToken, refreshToken, accessTokenExpires } = result.data;
+          const { accessToken, accessTokenExpires } = result.data;
 
           // Attach backend data and tokens to user object for JWT callback
           user.id = backendUser.id; // Override Google ID with backend ID
@@ -192,8 +190,7 @@ export const authOptions: NextAuthOptions = {
           user.lastName = backendUser.lastName;
           user.profilePicture = backendUser.profilePicture;
           user.accessToken = accessToken;
-          user.refreshToken = refreshToken;
-          user.accessTokenExpires = accessTokenExpires;
+          if(accessTokenExpires) && user.accessTokenExpires = accessTokenExpires;
 
           return true;
         } else {
@@ -213,7 +210,6 @@ export const authOptions: NextAuthOptions = {
         token["userId"] = user.id || user.userId;
         // Store access token and expiration from backend (prioritize backend tokens over OAuth tokens)
         token["accessToken"] = user.accessToken || account.access_token;
-        token["refreshToken"] = user.refreshToken || account.refresh_token; // Consider encrypting this in production
 
         // Set expiration time (backend provides this, fallback to OAuth or default)
         if (user.accessTokenExpires) {
@@ -221,7 +217,7 @@ export const authOptions: NextAuthOptions = {
         } else if (account.expires_at) {
           token["accessTokenExpires"] = account.expires_at * 1000;
         } else {
-          token["accessTokenExpires"] = Date.now() + 60 * 60 * 1000;
+          token["accessTokenExpires"] = Date.now() + 15 * 60 * 1000;
         }
 
         // Store user profile data in JWT
@@ -240,7 +236,7 @@ export const authOptions: NextAuthOptions = {
         !token["accessTokenExpires"] ||
         Date.now() > Number(token["accessTokenExpires"]) - 60 * 1000;
 
-      if (shouldRefresh && token["refreshToken"]) {
+      if (shouldRefresh) {
         try {
           console.log("Attempting to refresh access token");
 
@@ -251,9 +247,6 @@ export const authOptions: NextAuthOptions = {
               "Content-Type": "application/json",
             },
             credentials: "include",
-            body: JSON.stringify({
-              refreshToken: token["refreshToken"],
-            }),
           });
 
           if (refreshResponse.ok) {
@@ -262,7 +255,6 @@ export const authOptions: NextAuthOptions = {
             if (refreshData.success) {
               // Update token with new access token and expiration
               token["accessToken"] = refreshData.data.accessToken;
-              token["refreshToken"] = refreshData.data.refreshToken || token["refreshToken"];
               token["accessTokenExpires"] = refreshData.data.accessTokenExpires;
 
               console.log("Access token refreshed successfully");
@@ -274,7 +266,6 @@ export const authOptions: NextAuthOptions = {
                 ...token,
                 error: "RefreshAccessTokenError",
                 accessToken: null,
-                refreshToken: null,
               };
             }
           } else {
