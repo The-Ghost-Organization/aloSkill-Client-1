@@ -181,6 +181,54 @@ const nextConfig: NextConfig = {
   // },
 };
 
+// const securityHeaders = [
+//   // Content Security Policy
+//   {
+//     key: "Content-Security-Policy",
+//     value: `
+//     default-src 'self';
+//     script-src 'self' 'unsafe-inline' ${config.NODE_ENV === "development" ? "'unsafe-eval'" : ""};
+//     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+//     img-src 'self' data: https: blob:;
+//     font-src 'self' https://fonts.gstatic.com;
+//     connect-src 'self' http://localhost:5000 https://vitals.vercel-insights.com;
+//     frame-ancestors 'none';
+//     frame-src 'none';
+//     object-src 'none';
+//     base-uri 'self';
+//     form-action 'self';
+//     upgrade-insecure-requests;
+//   `
+//       .replace(/\s{2,}/g, " ")
+//       .trim(),
+//   },
+//   // "connect-src 'self' https://your-api.com https://checkout.sslcommerz.com wss://your-websocket.com",
+//   // XSS Protection
+//   {
+//     key: "X-XSS-Protection",
+//     value: "1; mode=block",
+//   },
+//   // MIME Type Sniffing Protection
+//   {
+//     key: "X-Content-Type-Options",
+//     value: "nosniff",
+//   },
+//   // Frame Options
+//   {
+//     key: "X-Frame-Options",
+//     value: "DENY",
+//   },
+//   // Referrer Policy
+//   {
+//     key: "Referrer-Policy",
+//     value: "strict-origin-when-cross-origin",
+//   },
+//   // Permissions Policy
+//   {
+//     key: "Permissions-Policy",
+//     value: "camera=(), microphone=(), geolocation=(), interest-cohort=()",
+//   },
+// ];
 const securityHeaders = [
   // Content Security Policy
   {
@@ -191,18 +239,21 @@ const securityHeaders = [
     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
     img-src 'self' data: https: blob:;
     font-src 'self' https://fonts.gstatic.com;
-    connect-src 'self' http://localhost:5000 https://vitals.vercel-insights.com;
+    connect-src 'self' ${
+      config.NODE_ENV === "development"
+        ? "http://localhost:5000"
+        : process.env["NEXT_PUBLIC_API_URL "] || ""
+    } https://vitals.vercel-insights.com;
     frame-ancestors 'none';
     frame-src 'none';
     object-src 'none';
     base-uri 'self';
     form-action 'self';
-    upgrade-insecure-requests;
+    ${config.NODE_ENV === "production" ? "upgrade-insecure-requests;" : ""}
   `
       .replace(/\s{2,}/g, " ")
       .trim(),
   },
-  // "connect-src 'self' https://your-api.com https://checkout.sslcommerz.com wss://your-websocket.com",
   // XSS Protection
   {
     key: "X-XSS-Protection",
@@ -229,7 +280,6 @@ const securityHeaders = [
     value: "camera=(), microphone=(), geolocation=(), interest-cohort=()",
   },
 ];
-
 if (config.NODE_ENV === "production") {
   securityHeaders.push({
     key: "Strict-Transport-Security",
@@ -241,7 +291,7 @@ const apiSecurityHeaders = [
   {
     key: "Content-Security-Policy",
     value:
-      "default-src 'self'; connect-src 'self' http://localhost:5000 https://vitals.vercel-insights.com;",
+      "default-src 'self'; connect-src 'self' http://localhost:5000/ https://vitals.vercel-insights.com;",
   },
   {
     key: "X-Content-Type-Options",

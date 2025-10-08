@@ -165,6 +165,8 @@ export const authOptions: NextAuthOptions = {
           body: JSON.stringify({
             email: user.email,
             googleId: profile?.sub,
+            firstName: profile?.given_name,
+            lastName: profile?.family_name,
           }),
         });
 

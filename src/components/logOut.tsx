@@ -4,21 +4,23 @@ import { authService } from "@/lib/api/auth.service.ts";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Toast from "./toast/successToast.tsx";
-
+import {signOut} from 'next-auth/react';
 
 export default function LogoutButton() {
-  const router = useRouter();
+  // const router = useRouter();
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
 
   const handleLogout = async () => {
     const response = await authService.logoutCurrentDevice();
-
+  
+  
     if (response.success) {
+      signOut( { callbackUrl: '/auth/signin' });
       setToast({ message: "Logged out successfully!", type: "success" });
 
-      setTimeout(() => {
-        router.push("/auth/signin");
-      }, 1500);
+      // setTimeout(() => {
+      //   router.push("/auth/signin");
+      // }, 1500);
     } else {
       setToast({ message: response.message || "Logout failed!", type: "error" });
     }
