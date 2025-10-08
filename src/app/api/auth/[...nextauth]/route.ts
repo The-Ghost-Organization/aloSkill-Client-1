@@ -6,7 +6,6 @@ import NextAuth, { type NextAuthOptions, type User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 
-// Extend the Session type to include custom user properties
 declare module "next-auth" {
   interface Session {
     user: {
@@ -139,12 +138,12 @@ export const authOptions: NextAuthOptions = {
 
   session: {
     strategy: "jwt",
-    maxAge: 7 * 24 * 60 * 60, // 7 days (same as refresh token)
-    updateAge: 15 * 60, // every 15 mins, refresh if needed
+    maxAge: 7 * 24 * 60 * 60,
+    updateAge: 15 * 60,
   },
 
   jwt: {
-    maxAge: 15 * 60, // 15 mins (same as backend access token)
+    maxAge: 15 * 60,
   },
 
   pages: {

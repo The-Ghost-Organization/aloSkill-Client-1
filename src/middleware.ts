@@ -620,7 +620,7 @@ function addAdvancedSecurityHeaders(response: NextResponse, _request: NextReques
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "img-src 'self' data: https: blob:",
     "font-src 'self' https://fonts.gstatic.com",
-    "connect-src 'self' https://vitals.vercel-insights.com",
+    "connect-src 'self' http://localhost:5000/ https://vitals.vercel-insights.com",
     "media-src 'self' blob: https:",
     "object-src 'none'",
     "base-uri 'self'",
@@ -808,7 +808,7 @@ async function updateSessionActivity(token: any, request: NextRequest) {
   try {
     // In production: Update user session in database with current timestamp
     // Mock: Log activity
-    console.log(`Session activity updated for user ${token.id} at ${new Date().toISOString()}`);
+    console.log(`Session activity updated for user ${token.userId} at ${new Date().toISOString()}`);
     // token.lastActivity = Date.now(); // Update token if using JWT
   } catch (error) {
     console.error("Error updating session activity:", error);

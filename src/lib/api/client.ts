@@ -30,7 +30,7 @@ class ApiClient {
       const response = await fetch(`${this.baseURL}${endpoint}`, {
         ...options,
         headers,
-        credentials: "include", // 🔑 THIS IS THE KEY - Sends cookies automatically
+        credentials: "include",
       });
 
       const data = await response.json();

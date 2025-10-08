@@ -104,10 +104,7 @@ export const authService = {
 
   // === Logout from current device ===
   async logoutCurrentDevice() {
-    return apiClient.post("/auth/logout", {
-      method: "POST",
-      credentials: "include",
-    });
+    return apiClient.post("/auth/logout");
   },
 
   // === Logout from all devices ===
