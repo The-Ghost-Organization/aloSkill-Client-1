@@ -156,16 +156,13 @@ export const authOptions: NextAuthOptions = {
       if (account?.provider !== "google") return true;
 
       try {
-        // Step 1: Try login with backend
         const userFromDB = await fetch(`${envConfig.BACKEND_API_URL}/auth/login`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
           body: JSON.stringify({
             email: user.email,
-            googleId: profile?.sub,
-            firstName: profile?.given_name,
-            lastName: profile?.family_name,
+            googleId: profile?.sub
           }),
         });
 
@@ -179,12 +176,11 @@ export const authOptions: NextAuthOptions = {
             headers: { "Content-Type": "application/json" },
             credentials: "include",
             body: JSON.stringify({
-              firstName: user.name?.split(" ")[0],
-              lastName: user.name?.split(" ").slice(1).join(" ") || "",
+              firstName: profile?.given_name || "",
+              lastName: profile?.family_name || "",
               email: user.email,
               googleId: profile?.sub,
               profilePicture: user.image,
-              // provider: "google",
             }),
           });
 
