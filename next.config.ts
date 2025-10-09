@@ -135,27 +135,35 @@ const nextConfig: NextConfig = {
   //     },
   //   ];
   // },
-  async rewrites() {
-    if (config.NODE_ENV === "production") {
-      return [];
-    }
+  // async rewrites() {
+  //   if (config.NODE_ENV === "production") {
+  //     return [];
+  //   }
 
-    return [
-      // Rewrite only your custom backend API endpoints, NOT /api/auth
-      {
-        source: "/api/users/:path*",
-        destination: "http://localhost:5000/api/users/:path*",
-      },
-      {
-        source: "/api/courses/:path*",
-        destination: "http://localhost:5000/api/courses/:path*",
-      },
-      {
-        source: "/sitemap.xml",
-        destination: "/api/sitemap",
-      },
-    ];
-  },
+  //   return [
+  //     // ✅ Auth API proxy
+  //     {
+  //       source: "/api/v1/auth/:path*", // Let NextAuth and backend both use same route
+  //       destination: "http://localhost:5000/api/v1/auth/:path*",
+  //     },
+
+  //     // ✅ Other backend routes
+  //     {
+  //       source: "/api/v1/users/:path*",
+  //       destination: "http://localhost:5000/api/v1/users/:path*",
+  //     },
+  //     {
+  //       source: "/api/v1/courses/:path*",
+  //       destination: "http://localhost:5000/api/v1/courses/:path*",
+  //     },
+
+  //     // ✅ Sitemap (Next.js API)
+  //     {
+  //       source: "/sitemap.xml",
+  //       destination: "/api/sitemap",
+  //     },
+  //   ];
+  // },
 
   // === Environment Variables ===
   env: {
