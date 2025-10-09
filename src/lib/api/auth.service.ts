@@ -56,6 +56,10 @@ export const authService = {
   // Current user data (cached in memory)
   currentUser: null as UserData | null,
 
+
+
+
+  
   // Register new user
   async register(payload: RegisterPayload) {
     const response = await apiClient.post<AuthResponse>("/auth/register", payload);
