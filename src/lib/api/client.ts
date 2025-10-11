@@ -1,6 +1,6 @@
 // lib/api/client.ts - FOR COOKIE-BASED AUTH
 
-const API_BASE_URL = process.env["NEXT_PUBLIC_BACKEND_API_URL"] || "http://localhost:5000/api/v1";
+const API_BASE_URL = process.env["BACKEND_API_URL"] || "http://localhost:5000/api/v1";
 
 interface ApiResponse<T = unknown> {
   success: boolean;
@@ -23,7 +23,7 @@ class ApiClient {
   private async request<T>(endpoint: string, options: RequestInit = {}): Promise<ApiResponse<T>> {
     const headers: HeadersInit = {
       "Content-Type": "application/json",
-      ...options.headers,
+      ...(options.headers || {}),
     };
 
     try {
@@ -64,10 +64,15 @@ class ApiClient {
   }
 
   // POST request
-  async post<T>(endpoint: string, body?: unknown): Promise<ApiResponse<T>> {
+  async post<T>(
+    endpoint: string,
+    body?: unknown,
+    customHeaders?: Record<string, string>
+  ): Promise<ApiResponse<T>> {
     return this.request<T>(endpoint, {
       method: "POST",
       body: JSON.stringify(body),
+      headers: customHeaders || {},
     });
   }
 
