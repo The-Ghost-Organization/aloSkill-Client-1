@@ -56,10 +56,6 @@ export const authService = {
   // Current user data (cached in memory)
   currentUser: null as UserData | null,
 
-
-
-
-  
   // Register new user
   async register(payload: RegisterPayload) {
     const response = await apiClient.post<AuthResponse>("/auth/register", payload);
@@ -107,8 +103,15 @@ export const authService = {
   },
 
   // === Logout from current device ===
-  async logoutCurrentDevice() {
-    return apiClient.post("/auth/logout");
+  async logoutCurrentDevice(accessToken?: string) {
+    const headers: Record<string, string> = {};
+
+    // Add Authorization header if token is provided
+    if (accessToken) {
+      headers["Authorization"] = `Bearer ${accessToken}`;
+    }
+
+    return apiClient.post("/auth/logout", undefined, headers);
   },
 
   // === Logout from all devices ===

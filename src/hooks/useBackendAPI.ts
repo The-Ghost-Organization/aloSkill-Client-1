@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { config } from "@/config/env.ts";
@@ -21,8 +22,8 @@ export function useBackendAPI() {
       };
 
       // Add JWT token if authenticated
-      if (useAuth && session?.accessToken) {
-        headers["Authorization"] = `Bearer ${session.accessToken}`;
+      if (useAuth && (session as any)?.accessToken) {
+        headers["Authorization"] = `Bearer ${(session as any).accessToken}`;
       }
 
       const response = await fetch(`${config.BACKEND_API_URL}${endpoint}`, {
