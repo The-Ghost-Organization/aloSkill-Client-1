@@ -59,7 +59,7 @@ export default withAuth(
         req: request,
         secret: secret,
       });
-      // console.log("token", token);
+      console.log("token", token);
     } catch (error) {
       console.error("Error retrieving token:", error);
       // Continue without token, let withAuth handle authentication
@@ -73,6 +73,13 @@ export default withAuth(
       pathname.startsWith("/about")
     ) {
       return NextResponse.next();
+    }
+
+    if (!token) {
+      return NextResponse.redirect(new URL(`/auth/signin`, request.url));
+    }
+    if (token && token?.["error"] == "RefreshAccessTokenError") {
+      return NextResponse.redirect(new URL(`/auth/signin`, request.url));
     }
 
     // Role-based access control

@@ -139,7 +139,7 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
     maxAge: 7 * 24 * 60 * 60, // 7 days (same as refresh token)
-    updateAge: 1 * 60, // every 15 mins, refresh if needed
+    updateAge: 15 * 60, // every 15 mins, refresh if needed
   },
 
   jwt: {
@@ -286,6 +286,7 @@ export const authOptions: NextAuthOptions = {
             }
           } else {
             console.error("Token refresh request failed with status:", refreshResponse.status);
+            token["error"] = "RefreshAccessTokenError";
           }
         } catch (error) {
           console.error("Error refreshing access token:", error);

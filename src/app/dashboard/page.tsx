@@ -1,12 +1,10 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import LogoutButton from "@/components/logOut.tsx";
 import LogoutAllDevicesButton from "@/components/logoutAll.tsx";
-import { useGetUser } from "@/lib/auth/getUser.ts";
+import { getUser } from "@/lib/auth/getUser.ts";
 
 const Dashboard = async () => {
-  const user = await useGetUser();
-  console.log(user, "i am session in dashboard page");
-  const { email = "mail@mail.com" } = user || {};
+  const user = await getUser();
+  const { email } = user as {email:string};
   return (
     <div className='flex flex-col items-center justify-center h-screen '>
       <h3>hello I am Dashboard page</h3>
