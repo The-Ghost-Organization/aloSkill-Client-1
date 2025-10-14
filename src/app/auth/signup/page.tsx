@@ -92,7 +92,7 @@ export default function SignupPage() {
         lastName: data.lastName,
         email: data.email,
         password: data.password,
-        phoneNumber: data.phoneNumber || undefined,
+        phoneNumber: String(data.phoneNumber),
         role: data.role,
         bio: data.bio || undefined,
       });

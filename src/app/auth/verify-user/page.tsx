@@ -19,8 +19,8 @@ export default function VerifyEmailPage() {
   const token = searchParams.get("token");
 
   useEffect(() => {
+    let timer: NodeJS.Timeout | undefined;
     const verifyEmail = async () => {
-      // Validate URL parameters
       if (!id || !token) {
         setStatus("invalid");
         setMessage("Invalid verification link. Please check your email and try again.");
@@ -28,7 +28,6 @@ export default function VerifyEmailPage() {
       }
 
       try {
-        // Call backend verification endpoint
         const response = await apiClient.post("/auth/verify-user", {
           id,
           token,
@@ -38,11 +37,9 @@ export default function VerifyEmailPage() {
           setStatus("success");
           setMessage(response.message || "Your email has been verified successfully!");
 
-          // Start countdown to redirect
-          const timer = setInterval(() => {
+          timer = setInterval(() => {
             setCountdown(prev => {
               if (prev <= 1) {
-                clearInterval(timer);
                 router.push("/auth/signin");
                 return 0;
               }
@@ -50,7 +47,6 @@ export default function VerifyEmailPage() {
             });
           }, 1000);
 
-          return () => clearInterval(timer);
         } else {
           setStatus("error");
           setMessage(
@@ -65,6 +61,12 @@ export default function VerifyEmailPage() {
     };
 
     verifyEmail();
+
+    return () => {
+      if (timer) {
+        clearInterval(timer);
+      }
+    };
   }, [id, token, router]);
 
   return (

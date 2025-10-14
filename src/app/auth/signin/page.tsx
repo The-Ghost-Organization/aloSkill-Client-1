@@ -1,4 +1,3 @@
-// app/auth/signin/page.tsx
 "use client";
 
 import { AlertCircle, Eye, EyeOff, Lock, Mail } from "lucide-react";
@@ -32,13 +31,13 @@ export default function SignInPage() {
 
       if (result?.error) {
         setError(result.error);
+        setIsLoading(false);
       } else if (result?.ok) {
         router.push(callbackUrl);
         router.refresh();
       }
-    } catch (err) {
-      setError("An unexpected error occurred");
-      // console.log(err);
+    } catch (_err) {
+      setError("Unexpected error, please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -47,9 +46,9 @@ export default function SignInPage() {
   const handleGoogleSignIn = async () => {
     setIsLoading(true);
     try {
-      await signIn("google", { callbackUrl });
-    } catch (err) {
-      console.log(err);
+      await signIn("google", { redirect: true, callbackUrl });
+      setIsLoading(false);
+    } catch (_err) {
       setError("Google sign-in failed");
       setIsLoading(false);
     }
