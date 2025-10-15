@@ -47,9 +47,8 @@ export default function SignInPage() {
   const handleGoogleSignIn = async () => {
     setIsLoading(true);
     try {
-      await signIn("google", { callbackUrl });
+      await signIn("google");
     } catch (err) {
-      console.log(err);
       setError("Google sign-in failed");
       setIsLoading(false);
     }
@@ -61,6 +60,7 @@ export default function SignInPage() {
         {/* Header */}
         <div className='text-center mb-8'>
           <h1 className='text-4xl font-bold text-gray-900 mb-2'>Welcome Back</h1>
+
           <p className='text-gray-600'>Sign in to continue your learning journey</p>
         </div>
 

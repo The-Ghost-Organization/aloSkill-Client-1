@@ -1,21 +1,25 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+
+import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import AuthProvider from "./providers/session-provider.tsx";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
   subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const playfair = Playfair_Display({
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-playfair",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
   title: "AloSkill",
-  description: "Created By Sumaiya",
+  description: "Created By ZB",
 };
 
 export default function RootLayout({
@@ -25,9 +29,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}><AuthProvider>
-        {children}
-      </AuthProvider></body>
+      <body className={`${inter.variable} ${playfair.variable}  antialiased`}>
+        <AuthProvider>{children}</AuthProvider>
+      </body>
     </html>
   );
 }

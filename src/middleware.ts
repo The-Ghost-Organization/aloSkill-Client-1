@@ -80,11 +80,7 @@ export default withAuth(
       return NextResponse.redirect(new URL("/unauthorized", request.url));
     }
 
-    if (
-      pathname.startsWith("/dashboard/instructor") &&
-      token?.["role"] !== "INSTRUCTOR" &&
-      token?.["role"] !== "ADMIN"
-    ) {
+    if (pathname.startsWith("/dashboard/instructor") && token?.["role"] !== "INSTRUCTOR") {
       return NextResponse.redirect(new URL("/unauthorized", request.url));
     }
 

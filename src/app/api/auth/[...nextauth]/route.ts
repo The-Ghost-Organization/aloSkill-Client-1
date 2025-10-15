@@ -158,6 +158,7 @@ export const authOptions: NextAuthOptions = {
       if (account?.provider !== "google") return true;
 
       try {
+
         // Step 1: Try login with backend
         //${envConfig.BACKEND_API_URL}
         const userFromDB = await fetch("http://localhost:5000/api/v1/auth/login", {
@@ -197,6 +198,7 @@ export const authOptions: NextAuthOptions = {
           }
 
           result = await registerResponse.json();
+          return "/dashboard/"; // Redirect to dashboard after successful registration
         } else {
           result = await userFromDB.json();
         }
