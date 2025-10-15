@@ -3,62 +3,53 @@
 import { getSession, signOut } from "next-auth/react";
 import { useState } from "react";
 import Toast from "./toast/successToast.tsx";
+import { redirect } from "next/navigation";
 
 export default function LogoutButton() {
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
 
   const handleLogout = async () => {
-    console.log("Logout button clicked");
-
-    // Get session to access the access token
     const session = await getSession();
-    console.log("Current session token:", session?.accessToken);
 
     try {
-      // Ensure accessToken is available
-      if (!session?.accessToken) {
-        throw new Error("No access token found. Please log in again.");
+      if (session?.error) {
+        setToast({
+          message: session.error,
+          type: "error",
+        });
+        redirect("/auth/signin");
       }
+      if (!session?.accessToken) {
+        setToast({
+          message: "You are not logged in.",
+          type: "error",
+        });
+        redirect("/auth/signin");
+      };
 
-      // Call the backend logout API with the Authorization header
-      const response = await fetch(`${process.env["BACKEND_API_URL"]}/auth/logout`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${session?.accessToken}`, // Pass access token here
-        },
+      const response = await fetch('/api/logout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({logoutAll: false }),
       });
 
       const data = await response.json();
-      console.log("Backend logout response:", data);
-
-      if (data.success) {
-        setToast({
-          message: data.message || "Logged out successfully!",
-          type: "success",
-        });
-
-        // Call NextAuth's signOut to remove the session
+      
+      if (response.ok) {
         await signOut({ callbackUrl: "/auth/signin" });
+        setToast({ message: "You have been logged out!", type: "success" });
+        redirect("/auth/signin");
       } else {
-        setToast({
-          message: data.message || "Logout failed!",
-          type: "error",
-        });
+        await signOut({ callbackUrl: "/auth/signin" });
+        setToast({ message: data.message || "Logout failed, but local session cleared.", type: "error" });
       }
-    } catch (error) {
-      console.error("Logout error:", error);
+      
+    } catch (_err) {
+      await signOut({ callbackUrl: "/auth/signin" });
       setToast({
-        message: "Network error while logging out.",
+        message: "Error while logging out.",
         type: "error",
       });
-
-      // Even if backend logout fails, still try to sign out from NextAuth
-      try {
-        await signOut({ callbackUrl: "/auth/signin" });
-      } catch (signOutError) {
-        console.error("NextAuth signOut error:", signOutError);
-      }
     }
   };
 

@@ -59,7 +59,7 @@ export default withAuth(
         req: request,
         secret: secret,
       });
-      // console.log("token", token);
+      console.log("token", token);
     } catch (error) {
       console.error("Error retrieving token:", error);
       // Continue without token, let withAuth handle authentication
@@ -73,6 +73,13 @@ export default withAuth(
       pathname.startsWith("/about")
     ) {
       return NextResponse.next();
+    }
+
+    if (!token) {
+      return NextResponse.redirect(new URL(`/auth/signin`, request.url));
+    }
+    if (token && token?.["error"] == "RefreshAccessTokenError") {
+      return NextResponse.redirect(new URL(`/auth/signin`, request.url));
     }
 
     // Role-based access control
@@ -622,8 +629,8 @@ function addAdvancedSecurityHeaders(response: NextResponse, _request: NextReques
     "base-uri 'self'",
     "form-action 'self'",
     "frame-ancestors 'none'",
-    "block-all-mixed-content",
-    "upgrade-insecure-requests",
+    // "block-all-mixed-content",
+    // "upgrade-insecure-requests",
   ];
 
   response.headers.set("Content-Security-Policy", cspDirectives.join("; "));
@@ -804,7 +811,7 @@ async function updateSessionActivity(token: any, request: NextRequest) {
   try {
     // In production: Update user session in database with current timestamp
     // Mock: Log activity
-    console.log(`Session activity updated for user ${token.id} at ${new Date().toISOString()}`);
+    console.log(`Session activity updated for user ${token.userId} at ${new Date().toISOString()}`);
     // token.lastActivity = Date.now(); // Update token if using JWT
   } catch (error) {
     console.error("Error updating session activity:", error);

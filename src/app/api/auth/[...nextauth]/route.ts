@@ -1,11 +1,12 @@
 /* eslint-disable no-console */
 
 import { config as envConfig } from "@/config/env";
+import { authService } from "@/lib/api/auth.service.ts";
 import NextAuth, { type NextAuthOptions, type User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
+import { jwtDecode } from "jwt-decode";
 
-// Extend the Session type to include custom user properties
 declare module "next-auth" {
   interface Session {
     user: {
@@ -19,19 +20,18 @@ declare module "next-auth" {
       profilePicture?: string | null;
       name?: string | null;
       image?: string | null;
+      provider: string;
     };
     accessToken: string | null;
     accessTokenExpires?: number | undefined;
     error?: string | null;
   }
   interface User {
-    userId: string;
+    email: string;
     role: string;
-    firstName: string;
-    lastName: string;
     profilePicture?: string;
     accessToken: string;
-    accessTokenExpires?: number;
+    refreshToken: string;
   }
   interface Profile {
     given_name: string;
@@ -54,17 +54,6 @@ export enum UserStatus {
   PENDING_VERIFICATION = "PENDING_VERIFICATION",
 }
 
-interface BackendUser {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  role: UserRole;
-  status: UserStatus;
-  isEmailVerified: boolean;
-  profilePicture?: string;
-}
-
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -78,45 +67,32 @@ export const authOptions: NextAuthOptions = {
         if (!credentials?.email || !credentials?.password) {
           throw new Error("Email and password required");
         }
-        //`${process.env["BACKEND_API_URL"]}/auth/login`
+
+        const { email, password } = credentials;
+
+        const apiRes = await authService.login({ email, password });
+
+        if (!apiRes.success) {
+          return null;
+        }
+
+        const user = apiRes.data;
+
+        if (!user) {
+          return null;
+        }
+
         try {
-          const response = await fetch("http://localhost:5000/api/v1/auth/login", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
-            body: JSON.stringify({
-              email: credentials.email,
-              password: credentials.password,
-            }),
-          });
-
-          const data = await response.json();
-
-          if (!response.ok) {
-            throw new Error(data.message || "Invalid credentials");
-          }
-
-          // Extract user data and tokens from backend response
-          const user: BackendUser = data.data;
-          const { accessToken, accessTokenExpires } = data.data;
-
-          // Return user object with tokens for NextAuth to manage
           return {
             id: user.id,
-            userId: user.id,
             email: user.email,
             name: `${user.firstName} ${user.lastName}`,
-            firstName: user.firstName,
-            lastName: user.lastName,
             role: user.role,
             profilePicture: user.profilePicture as string,
-            accessToken,
-            accessTokenExpires: accessTokenExpires,
+            accessToken: user.accessToken,
+            refreshToken: user.refreshToken,
           };
         } catch (error: unknown) {
-          console.error("Login error:", error);
           if (error instanceof Error) {
             throw new Error(error.message || "Authentication failed");
           }
@@ -140,12 +116,12 @@ export const authOptions: NextAuthOptions = {
 
   session: {
     strategy: "jwt",
-    maxAge: 7 * 24 * 60 * 60, // 7 days (same as refresh token)
-    updateAge: 1 * 60, // every 15 mins, refresh if needed
+    maxAge: 7 * 24 * 60 * 60,
+    updateAge: 15 * 60,
   },
 
   jwt: {
-    maxAge: 15 * 60, // 15 mins (same as backend access token)
+    maxAge: 15 * 60,
   },
 
   pages: {
@@ -158,65 +134,45 @@ export const authOptions: NextAuthOptions = {
       if (account?.provider !== "google") return true;
 
       try {
-
-        // Step 1: Try login with backend
-        //${envConfig.BACKEND_API_URL}
-        const userFromDB = await fetch("http://localhost:5000/api/v1/auth/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({
-            email: user.email,
-            googleId: profile?.sub,
-            firstName: profile?.given_name,
-            lastName: profile?.family_name,
-          }),
+        const userFromDB = await authService.login({
+          email: user.email,
+          googleId: profile?.sub as string,
         });
 
-        // Step 2: If user not found → register automatically
         let result;
-        if (!userFromDB.ok) {
+        if (!userFromDB.success) {
           console.log(`User ${user.email} not found, creating new user...`);
-
-          const registerResponse = await fetch(`${envConfig.BACKEND_API_URL}/auth/register`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-            body: JSON.stringify({
-              firstName: user.name?.split(" ")[0],
-              lastName: user.name?.split(" ").slice(1).join(" ") || "",
-              email: user.email,
-              googleId: profile?.sub,
-              profilePicture: user.image,
-              // provider: "google",
-            }),
+          
+          const registerResponse = await authService.register({
+            firstName: profile?.given_name || "",
+            lastName: profile?.family_name || "",
+            email: user.email,
+            googleId: profile?.sub || "",
+            profilePicture: user?.image ?? null,
           });
 
-          if (!registerResponse.ok) {
-            console.error("Failed to register user automatically");
+          if (!registerResponse.success) {
+            result = {
+              success: false,
+              message: `Registration failed for ${user.email}`,
+              data: null,
+            }
             return "/auth/error?error=AutoRegisterFailed";
           }
 
-          result = await registerResponse.json();
-          return "/dashboard/"; // Redirect to dashboard after successful registration
+          result = registerResponse.data;
         } else {
-          result = await userFromDB.json();
+          result = userFromDB.data;
         }
 
-        if (result.success) {
-          const backendUser = result.data;
-          const { accessToken, accessTokenExpires } = result.data;
-
-          user.id = backendUser.id;
-          user.userId = backendUser.id;
-          user.email = backendUser.email;
-          user.role = backendUser.role;
-          user.name = `${backendUser.firstName} ${backendUser.lastName}`;
-          user.firstName = backendUser.firstName;
-          user.lastName = backendUser.lastName;
-          user.profilePicture = backendUser.profilePicture;
-          user.accessToken = accessToken;
-          if (accessTokenExpires) user.accessTokenExpires = accessTokenExpires;
+        if (result) {
+          user.id = result.id;
+          user.email = result.email;
+          user.role = result.role;
+          user.name = `${result.firstName} ${result.lastName}`;
+          user.profilePicture = result.profilePicture ?? "";
+          user.accessToken = result.accessToken;
+          user.refreshToken = result.refreshToken;
 
           return true;
         }
@@ -229,23 +185,23 @@ export const authOptions: NextAuthOptions = {
       }
     },
 
-    // START: Enhanced JWT callback for proper token management and refresh
     async jwt({ token, user, account }) {
-      // Initial sign-in: Store user data and tokens
+      if (token["accessToken"]) {
+        const decodedToken = jwtDecode(token["accessToken"] as string);
+        if(decodedToken.exp){
+          token["accessTokenExpires"] = decodedToken.exp * 1000;
+        } else {
+          token["accessTokenExpires"] = Date.now() + 15 * 60 * 1000;
+        }
+      }
       if (account && user) {
-        token["userId"] = user.id || user.userId;
+        token["id"] = user.id;
         token["accessToken"] = user.accessToken || account.access_token;
+        token["refreshToken"] = user.refreshToken || account.refresh_token;
 
-        // Set expiration time (fallback to OAuth or default)
-        token["accessTokenExpires"] =
-          user.accessTokenExpires || account.expires_at || Date.now() + 15 * 60 * 1000;
-
-        // Store user profile data in JWT
         if (user) {
           token["name"] = user.name as string;
           token["email"] = user.email as string;
-          token["firstName"] = user.firstName;
-          token["lastName"] = user.lastName;
           token["role"] = user.role;
           token["profilePicture"] = user.profilePicture;
         }
@@ -257,40 +213,39 @@ export const authOptions: NextAuthOptions = {
 
       if (shouldRefresh) {
         try {
-          console.log("Attempting to refresh access token");
+          console.log("Attempting to refresh access token with : ", {
+            time: new Date().toLocaleTimeString(),
+            token: token["refreshToken"],
+          });
+          const refreshResponse = await authService.refreshToken(
+            token["refreshToken"] as string
+          );
 
-          // Call backend refresh endpoint
-          const refreshResponse = await fetch(`${envConfig.BACKEND_API_URL}/auth/refresh`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
+          console.log("Refreshed successfully at: ", {
+            time: new Date().toLocaleTimeString(),
+            data: refreshResponse.data,
           });
 
-          if (refreshResponse.ok) {
-            const refreshData = await refreshResponse.json();
+          if (refreshResponse.success) {
+            token["accessToken"] = refreshResponse.data?.accessToken;
+            token["refreshToken"] = refreshResponse.data?.refreshToken;
 
-            if (refreshData.success) {
-              // Update token with new access token and expiration
-              token["accessToken"] = refreshData.data.accessToken;
-              token["accessTokenExpires"] = refreshData.data.accessTokenExpires;
-              console.log("Access token refreshed successfully");
+            const decodedNewToken = jwtDecode(token["accessToken"] as string);
+            if (decodedNewToken.exp) {
+              token["accessTokenExpires"] = decodedNewToken.exp * 1000;
             } else {
-              console.error("Token refresh failed:", refreshData.message);
-              // Token refresh failed - user may need to re-authenticate
-              return {
-                ...token,
-                error: "RefreshAccessTokenError",
-                accessToken: null,
-              };
+              token["accessTokenExpires"] = Date.now() + 15 * 60 * 1000;
             }
           } else {
-            console.error("Token refresh request failed with status:", refreshResponse.status);
+            token["error"] = "RefreshAccessTokenError";
+            return {
+              ...token,
+              error: "RefreshAccessTokenError",
+              accessToken: null,
+            };
           }
         } catch (error) {
           console.error("Error refreshing access token:", error);
-          // Allow session to continue with expired token
           token["error"] = "RefreshAccessTokenError";
         }
       }
@@ -298,24 +253,16 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
 
-    // START: Enhanced session callback to properly populate user data and expose necessary tokens
     async session({ session, token }) {
+      console.log("Session token refreshed successfully token : ", token["refreshToken"]);
       if (token) {
-        session.user.id = token["userId"] as string;
+        session.user.id = token["id"] as string;
         session.user.email = token.email as string;
         session.user.name = token.name as string;
-        session.user.firstName = token["firstName"] as string;
-        session.user.lastName = token["lastName"] as string;
         session.user.role = token["role"] as UserRole;
         session.user.profilePicture =
           typeof token["profilePicture"] === "string" ? token["profilePicture"] : null;
-
-        // Ensure accessToken is a string
-        session.accessToken = (token["accessToken"] as string) || null;
-
-        // Ensure accessTokenExpires is a number, or set it to undefined if not available
-        session.accessTokenExpires = (token["accessTokenExpires"] as number) || undefined;
-        // Handle any errors
+        session.accessToken = (token["accessToken"] as string);
         if (token["error"]) {
           session.error = (token["error"] as string) || null;
         }
@@ -334,25 +281,6 @@ export const authOptions: NextAuthOptions = {
   events: {
     async signIn({ user, account }) {
       console.log(`✅ User ${user.email} signed in via ${account?.provider}`);
-
-      // if (account?.provider !== "credentials") {
-      //   try {
-      //     await fetch(`${envConfig.BACKEND_API_URL}/auth/track-login`, {
-      //       method: "POST",
-      //       headers: {
-      //         "Content-Type": "application/json",
-      //       },
-      //       credentials: "include",
-      //       body: JSON.stringify({
-      //         userId: user.id,
-      //         provider: account?.provider,
-      //         isNewUser,
-      //       }),
-      //     });
-      //   } catch (error) {
-      //     console.error("Failed to track login:", error);
-      //   }
-      // }
     },
 
     async signOut({ token }) {
