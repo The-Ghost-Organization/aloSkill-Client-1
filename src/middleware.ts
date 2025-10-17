@@ -70,6 +70,7 @@ export default withAuth(
       pathname === "/" ||
       pathname.startsWith("/auth") ||
       pathname.startsWith("/courses") ||
+      pathname.startsWith("/test-error") ||
       pathname.startsWith("/about")
     ) {
       return NextResponse.next();

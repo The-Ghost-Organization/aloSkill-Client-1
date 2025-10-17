@@ -1,5 +1,6 @@
 "use client";
 
+import AuthButton from "@/components/buttons/AuthButton.tsx";
 import { apiClient } from "@/lib/api/client";
 import { AlertCircle, CheckCircle2, Loader2, Mail, XCircle } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -46,7 +47,6 @@ export default function VerifyEmailPage() {
               return prev - 1;
             });
           }, 1000);
-
         } else {
           setStatus("error");
           setMessage(
@@ -79,7 +79,7 @@ export default function VerifyEmailPage() {
               <div className='w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse'>
                 <Loader2 className='w-10 h-10 text-blue-600 animate-spin' />
               </div>
-              <h1 className='text-2xl font-bold text-gray-900 mb-3'>Verifying Your Email</h1>
+              <h4 className='text-2xl font-bold text-gray-900 mb-3'>Verifying Your Email</h4>
               <p className='text-gray-600'>Please wait while we verify your email address...</p>
             </>
           )}
@@ -100,12 +100,18 @@ export default function VerifyEmailPage() {
                 </p>
               </div>
 
-              <button
+              <AuthButton
+                onClick={() => router.push("/auth/signin")}
+                className='mt-4 w-full  disabled:opacity-50 disabled:cursor-not-allowed shadow-lg'
+              >
+                Sign In Now
+              </AuthButton>
+              {/* <button
                 onClick={() => router.push("/auth/signin")}
                 className='w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all shadow-lg'
               >
                 Sign In Now
-              </button>
+              </button> */}
             </>
           )}
 
@@ -115,7 +121,7 @@ export default function VerifyEmailPage() {
               <div className='w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6'>
                 <XCircle className='w-10 h-10 text-red-600' />
               </div>
-              <h1 className='text-2xl font-bold text-gray-900 mb-3'>Verification Failed</h1>
+              <h4 className='text-2xl font-bold text-gray-900 mb-3'>Verification Failed</h4>
               <p className='text-gray-600 mb-6'>{message}</p>
 
               <div className='bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-6'>
@@ -133,12 +139,18 @@ export default function VerifyEmailPage() {
               </div>
 
               <div className='space-y-3'>
-                <button
+                <AuthButton
+                  onClick={() => router.push("/auth/resend-verification")}
+                  className='mt-4 w-full  disabled:opacity-50 disabled:cursor-not-allowed shadow-lg'
+                >
+                  Resend Verification Email
+                </AuthButton>
+                {/* <button
                   onClick={() => router.push("/auth/resend-verification")}
                   className='w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all shadow-lg'
                 >
                   Resend Verification Email
-                </button>
+                </button> */}
 
                 <button
                   onClick={() => router.push("/auth/signin")}

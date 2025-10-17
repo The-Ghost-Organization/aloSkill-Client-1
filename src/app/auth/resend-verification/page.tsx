@@ -1,5 +1,6 @@
 "use client";
 
+import AuthButton from "@/components/buttons/AuthButton.tsx";
 import { apiClient } from "@/lib/api/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertCircle, CheckCircle2, Loader2, Mail } from "lucide-react";
@@ -55,8 +56,8 @@ export default function ResendVerificationPage() {
             <div className='w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6'>
               <CheckCircle2 className='w-10 h-10 text-green-600' />
             </div>
-            <h1 className='text-2xl font-bold text-gray-900 mb-3'>Email Sent! 📧</h1>
-            <p className='text-gray-600 mb-6'>
+            <h4 className='text-2xl font-bold text-gray-900 mb-3'>Email Sent! 📧</h4>
+            <p className='text-gray-600 mb-6 text-sm'>
               We have sent a new verification link to your email address. Please check your inbox
               and spam folder.
             </p>
@@ -66,13 +67,18 @@ export default function ResendVerificationPage() {
                 The verification link will expire in 24 hours.
               </p>
             </div>
-
-            <button
+            <AuthButton
+              onClick={() => router.push("/auth/signin")}
+              className='mt-4 w-full shadow-lg'
+            >
+              Back to Sign In
+            </AuthButton>
+            {/* <button
               onClick={() => router.push("/auth/signin")}
               className='w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all shadow-lg'
             >
               Back to Sign In
-            </button>
+            </button> */}
           </div>
         </div>
       </div>
@@ -88,8 +94,10 @@ export default function ResendVerificationPage() {
             <div className='w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4'>
               <Mail className='w-8 h-8 text-blue-600' />
             </div>
-            <h1 className='text-3xl font-bold text-gray-900 mb-2'>Resend Verification</h1>
-            <p className='text-gray-600'>Enter your email to receive a new verification link</p>
+            <h4 className='text-3xl font-bold text-gray-900 mb-2'>Resend Verification</h4>
+            <p className='text-gray-600 text-sm'>
+              Enter your email to receive a new verification link
+            </p>
           </div>
 
           {/* Error Alert */}
@@ -141,7 +149,21 @@ export default function ResendVerificationPage() {
             </div>
 
             {/* Submit Button */}
-            <button
+            <AuthButton
+              type='submit'
+              disabled={isSubmitting}
+              className='mt-4 w-full  disabled:opacity-50 disabled:cursor-not-allowed shadow-lg'
+            >
+              {isSubmitting ? (
+                <span className='flex items-center justify-center gap-2'>
+                  <Loader2 className='w-5 h-5 animate-spin' />
+                  Sending...
+                </span>
+              ) : (
+                "Send Verification Email"
+              )}
+            </AuthButton>
+            {/* <button
               type='submit'
               disabled={isSubmitting}
               className='w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg'
@@ -154,7 +176,7 @@ export default function ResendVerificationPage() {
               ) : (
                 "Send Verification Email"
               )}
-            </button>
+            </button> */}
           </form>
 
           {/* Footer Links */}

@@ -18,8 +18,16 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "AloSkill",
-  description: "Created By ZB",
+  title: "আলো স্কিল - Start Learning Today",
+  description: "Master in-demand skills and discover great books — all in one platform, in Bangla.",
+  keywords: ["learning", "education", "bangla", "courses", "books"],
+  authors: [{ name: "Alo Skill" }],
+  openGraph: {
+    title: "আলো স্কিল - Start Learning Today",
+    description:
+      "Master in-demand skills and discover great books — all in one platform, in Bangla.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -29,7 +37,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className={`${inter.variable} ${playfair.variable}  antialiased`}>
+      <body
+        className={`antialiased ${inter.variable} ${playfair.variable}`}
+        style={
+          {
+            "--font-body": "var(--font-inter)",
+            "--font-heading": "var(--font-playfair)",
+          } as React.CSSProperties
+        }
+      >
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>

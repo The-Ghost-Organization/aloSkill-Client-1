@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import AuthButton from "@/components/buttons/AuthButton.tsx";
 import { authService } from "@/lib/api/auth.service";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertCircle, CheckCircle2, Loader2, Mail } from "lucide-react";
@@ -48,10 +49,10 @@ export default function ForgotPasswordPage() {
     <div className='min-h-screen flex items-center justify-center p-4 bg-white'>
       <div className='w-full max-w-md bg-white/80 backdrop-blur-xl border border-white/20 rounded-3xl p-8 shadow-lg'>
         <div className='text-center mb-6'>
-          <div className='w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 mx-auto flex items-center justify-center mb-3'>
+          <div className='w-14 h-14 rounded-xl bg-gradient-to-br from-orange-400 to-orange-700 mx-auto flex items-center justify-center mb-3 shadow-orange-800 shadow-md'>
             <Mail className='w-6 h-6 text-white' />
           </div>
-          <h1 className='text-2xl font-bold'>Forgot Password</h1>
+          <h4 className=' font-bold'>Forgot Password</h4>
           <p className='text-sm text-gray-600'>Enter your email and we will send a reset link.</p>
         </div>
 
@@ -99,7 +100,20 @@ export default function ForgotPasswordPage() {
               {errors.email && <p className='mt-1 text-sm text-red-600'>{errors.email.message}</p>}
             </div>
 
-            <button
+            <AuthButton
+              type='submit'
+              disabled={isSubmitting}
+              className='mt-4 w-full  disabled:opacity-50 disabled:cursor-not-allowed shadow-lg'
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className='w-5 h-5 animate-spin mr-2' /> Sending...
+                </>
+              ) : (
+                "Send Reset Link"
+              )}
+            </AuthButton>
+            {/* <button
               type='submit'
               disabled={isSubmitting}
               className='w-full py-3 rounded-xl text-white font-semibold bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center'
@@ -111,7 +125,7 @@ export default function ForgotPasswordPage() {
               ) : (
                 "Send Reset Link"
               )}
-            </button>
+            </button> */}
           </form>
         )}
 

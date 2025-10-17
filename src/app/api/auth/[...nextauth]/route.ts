@@ -2,10 +2,10 @@
 
 import { config as envConfig } from "@/config/env";
 import { authService } from "@/lib/api/auth.service.ts";
+import { jwtDecode } from "jwt-decode";
 import NextAuth, { type NextAuthOptions, type User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
-import { jwtDecode } from "jwt-decode";
 
 declare module "next-auth" {
   interface Session {
@@ -142,7 +142,7 @@ export const authOptions: NextAuthOptions = {
         let result;
         if (!userFromDB.success) {
           console.log(`User ${user.email} not found, creating new user...`);
-          
+
           const registerResponse = await authService.register({
             firstName: profile?.given_name || "",
             lastName: profile?.family_name || "",
@@ -156,7 +156,7 @@ export const authOptions: NextAuthOptions = {
               success: false,
               message: `Registration failed for ${user.email}`,
               data: null,
-            }
+            };
             return "/auth/error?error=AutoRegisterFailed";
           }
 
@@ -188,7 +188,7 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user, account }) {
       if (token["accessToken"]) {
         const decodedToken = jwtDecode(token["accessToken"] as string);
-        if(decodedToken.exp){
+        if (decodedToken.exp) {
           token["accessTokenExpires"] = decodedToken.exp * 1000;
         } else {
           token["accessTokenExpires"] = Date.now() + 15 * 60 * 1000;
@@ -217,9 +217,7 @@ export const authOptions: NextAuthOptions = {
             time: new Date().toLocaleTimeString(),
             token: token["refreshToken"],
           });
-          const refreshResponse = await authService.refreshToken(
-            token["refreshToken"] as string
-          );
+          const refreshResponse = await authService.refreshToken(token["refreshToken"] as string);
 
           console.log("Refreshed successfully at: ", {
             time: new Date().toLocaleTimeString(),
@@ -262,7 +260,7 @@ export const authOptions: NextAuthOptions = {
         session.user.role = token["role"] as UserRole;
         session.user.profilePicture =
           typeof token["profilePicture"] === "string" ? token["profilePicture"] : null;
-        session.accessToken = (token["accessToken"] as string);
+        session.accessToken = token["accessToken"] as string;
         if (token["error"]) {
           session.error = (token["error"] as string) || null;
         }

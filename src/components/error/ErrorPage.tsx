@@ -82,12 +82,12 @@ export default function ErrorPage({
             >
               <div className='relative'>
                 <div
-                  className={`text-8xl md:text-9xl font-bold text-transparent bg-clip-text bg-gradient-to-r ${colorScheme.gradient}`}
+                  className={`text-3xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r ${colorScheme.gradient}`}
                 >
                   {statusCode}
                 </div>
                 <div
-                  className={`absolute inset-0 text-8xl md:text-9xl font-bold ${colorScheme.text} opacity-20 animate-pulse`}
+                  className={`absolute inset-0 text-3xl md:text-3xl font-bold ${colorScheme.text} opacity-20 animate-pulse`}
                 >
                   {statusCode}
                 </div>
@@ -111,12 +111,12 @@ export default function ErrorPage({
 
           {/* Title & message */}
           <div
-            className={`text-center space-y-4 mb-8 transition-all duration-500 delay-500 ${
+            className={`text-center space-y-4 mb-8 transition-all overflow-hidden duration-500 delay-500 ${
               mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
             }`}
           >
-            <h1 className='text-3xl md:text-4xl font-bold text-gray-900'>{finalTitle}</h1>
-            <p className='text-lg text-gray-600 max-w-md mx-auto'>{finalMessage}</p>
+            <h3 className=' '>{finalTitle}</h3>
+            <p className='text-sm mx-auto'>{finalMessage}</p>
           </div>
 
           {/* Buttons */}

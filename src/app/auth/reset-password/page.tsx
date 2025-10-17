@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import AuthButton from "@/components/buttons/AuthButton.tsx";
 import { authService } from "@/lib/api/auth.service";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertCircle, CheckCircle2, Eye, EyeOff, Loader2, Lock } from "lucide-react";
@@ -78,10 +79,10 @@ export default function ResetPasswordPage() {
     <div className='min-h-screen flex items-center justify-center p-4 bg-white'>
       <div className='w-full max-w-md bg-white/80 backdrop-blur-xl border border-white/20 rounded-3xl p-8 shadow-lg'>
         <div className='text-center mb-6'>
-          <div className='w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 mx-auto flex items-center justify-center mb-3'>
+          <div className='w-14 h-14 rounded-xl bg-gradient-to-br from-orange-400 to-orange-700 mx-auto flex items-center justify-center mb-3 shadow-orange-800 shadow-md'>
             <Lock className='w-6 h-6 text-white' />
           </div>
-          <h1 className='text-2xl font-bold'>Reset Password</h1>
+          <h4 className='text-2xl font-bold'>Reset Password</h4>
           <p className='text-sm text-gray-600'>Set a new password for your account.</p>
         </div>
 
@@ -155,7 +156,20 @@ export default function ResetPasswordPage() {
               )}
             </div>
 
-            <button
+            <AuthButton
+              type='submit'
+              disabled={isSubmitting}
+              className='mt-4 w-full  disabled:opacity-50 disabled:cursor-not-allowed shadow-lg'
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className='w-5 h-5 animate-spin mr-2' /> Resetting...
+                </>
+              ) : (
+                "Reset Password"
+              )}
+            </AuthButton>
+            {/* <button
               type='submit'
               disabled={isSubmitting}
               className='w-full py-3 rounded-xl text-white font-semibold bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center'
@@ -167,7 +181,7 @@ export default function ResetPasswordPage() {
               ) : (
                 "Reset Password"
               )}
-            </button>
+            </button> */}
           </form>
         )}
 
