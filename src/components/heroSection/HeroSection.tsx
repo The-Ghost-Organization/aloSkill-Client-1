@@ -58,12 +58,13 @@ export default function HeroSection() {
         </h1>
 
         {/* Subheading */}
-        <p className='text-lg md:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed'>
-          Master in-demand skills and discover great books — all in one platform, in Bangla.
+        <p className='text-lg md:text-xl text-gray-600 max-w-2xl bangla mx-auto leading-relaxed'>
+          চাহিদাসম্পন্ন দক্ষতা অর্জন করুন এবং অসাধারণ বই আবিষ্কার করুন — সব এক প্ল্যাটফর্মে,
+          বাংলায়।
         </p>
 
         {/* Primary Action Buttons */}
-        <div className='flex flex-col sm:flex-row items-center justify-center gap-4'>
+        <div className='flex flex-col  sm:flex-row items-center justify-center gap-4'>
           <button className='group relative px-8 py-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-full hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold text-lg overflow-hidden'>
             <span className='relative z-10 flex items-center gap-2'>
               Free Registration

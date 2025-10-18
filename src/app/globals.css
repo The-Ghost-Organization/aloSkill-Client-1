@@ -24,6 +24,8 @@
   --color-orange: #e0600e;
   --color-orange-dark: #d15100;
   --color-orange-light: #fc9759;
+
+
 }
 
 /* =======================================================
@@ -46,6 +48,10 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* .bangla {
+  font-family: var(--font-bangla);
+} */
+
 /* =======================================================
  🧠 Typography
 ======================================================= */
@@ -61,14 +67,10 @@ h6 {
   line-height: 1.2;
 }
 
-/* === Scalable Heading Sizes === */
-/* h1 {
-  font-size: var(--font-size-4xl);
-}
 
-h2 {
-  font-size: var(--font-size-3xl);
-} */
+
+/* === Scalable Heading Sizes === */
+
 
 h1 {
   font-size: var(--font-size-2xl);
@@ -84,6 +86,14 @@ h3 {
 
 h4 {
   font-size: var(--font-size-base);
+}
+
+h5 {
+  font-size: var(--font-size-sm);
+}
+
+h6 {
+  font-size: var(--font-size-xs);
 }
 
 /* =======================================================
@@ -111,24 +121,34 @@ h4 {
   --font-mono: var(--font-geist-mono);
 }
 
-/* =======================================================
- 💡 Example Usage (for reference)
-======================================================= */
-/*
-<h1 className="font-[var(--font-heading)] text-[var(--font-size-4xl)]">
-  Learn Without Limits
-</h1>
-
-<p className="font-[var(--font-body)] text-[var(--font-size-base)] text-[var(--color-text-dark)]">
-  Explore courses crafted by expert instructors across diverse topics.
-</p>
-*/
-
 /* ========== 🌙 Dark Mode ========== */
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+  }
+}
+
+/* ===============================
+ 🇧🇩 Bangla Font Auto Detection
+=============================== */
+
+/* Any element containing Bangla characters (Unicode range) */
+:lang(bn),
+[lang="bn"],
+.bangla,
+*:has(:lang(bn)) {
+  font-family: var(--font-bangla) !important;
+}
+
+/* Optional: Detect Bangla Unicode Range directly */
+@supports (font-family: var(--font-bangla)) {
+
+  *:not(code, pre):lang(bn),
+  [lang="bn"],
+  [class*="bangla"],
+  *:where(:lang(bn)) {
+    font-family: var(--font-bangla) !important;
   }
 }
 

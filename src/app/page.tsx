@@ -1,33 +1,94 @@
 "use client";
 
+import BackToTop from "@/components/BackToTop.tsx";
+import CategoryCard from "@/components/cards/CategoryCard.tsx";
+import FeatureCard from "@/components/cards/FeatureCard.tsx";
+import InstructorCard from "@/components/cards/InstructorCard.tsx";
+import TestimonialCard from "@/components/cards/TestimonialCard.tsx";
+import Footer from "@/components/footer/Footer.tsx";
+import Newsletter from "@/components/footer/Newsletter.tsx";
 import Header from "@/components/header/Header.tsx";
 import LeftSidebar from "@/components/header/LeftSidebar.tsx";
+import MobileMenu from "@/components/header/menu/MobileMenu.tsx";
+import TabletDrawer from "@/components/header/menu/TabletDrawer.tsx";
 import RightSidebar from "@/components/header/RightSidebar.tsx";
 import HeroSection from "@/components/heroSection/HeroSection.tsx";
+import { DiscoverBooksSectionCarousel } from "@/components/home/DiscoverBooksSectionCarousel.tsx";
+import PopularCoursesSection from "@/components/home/PopularCoursesSection.tsx";
+import { PopularCoursesSectionCompact } from "@/components/home/PopularCoursesSectionCompact.tsx";
+import { WhyLearnSectionAnimated } from "@/components/home/WhyLearnSectionAnimated.tsx";
+import StatsSection from "@/components/StatsSection.tsx";
 import { useState } from "react";
 const HomePage = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   return (
-    <div className='min-h-screen w-full bg-gradient-radial from-pink-100 via-purple-50 to-orange-50'>
+    <div className='min-h-screen bg-gradient-radial from-pink-100 via-purple-50 to-orange-50'>
       {/* Fixed Header */}
-      <Header onMenuToggle={() => setIsSidebarOpen(!isSidebarOpen)} />
+      <Header onMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)} />
 
       {/* Main Layout Container */}
       <div className='flex pt-16 lg:pt-20'>
-        {/* Left Sidebar */}
+        {/* Left Sidebar - Desktop */}
         <LeftSidebar
           isOpen={isSidebarOpen}
           onClose={() => setIsSidebarOpen(false)}
         />
 
         {/* Main Content Area */}
-        <main className='flex-1 lg:px-8'>
+        <main className=' flex-1 lg:px-6 mx-auto'>
           <HeroSection />
+          <StatsSection />
+          <WhyLearnSectionAnimated />
+          <PopularCoursesSection />
+          <PopularCoursesSectionCompact />
+          <DiscoverBooksSectionCarousel />
+          <CategoryCard
+            icon={undefined}
+            title={"i am category card"}
+            courseCount={100}
+            gradient={"red"}
+          />
+          <FeatureCard
+            icon={undefined}
+            title={"i am feature card"}
+            description={"here is my description"}
+            gradient={"blue}"}
+          />
+          <InstructorCard
+            name={"mr.Instructor"}
+            title={"Hi, I am instructor"}
+            avatar={"https://images.unsplash.com"}
+            students={10}
+            courses={110}
+            rating={5}
+          />
+          <TestimonialCard
+            name={"mr.reviewer"}
+            role={"Student"}
+            avatar={"https://images.unsplash.com"}
+            rating={5}
+            comment={"no comments i am mr. reviewer"}
+          />
         </main>
 
-        {/* Right Sidebar */}
+        {/* Right Sidebar - Large Desktop Only */}
         <RightSidebar />
       </div>
+
+      {/* Mobile Menu */}
+      <MobileMenu
+        isOpen={isMobileMenuOpen}
+        onClose={() => setIsMobileMenuOpen(false)}
+      />
+
+      {/* Tablet Quick Access Drawer */}
+      <TabletDrawer />
+      <BackToTop />
+      <Newsletter />
+      <Footer />
+
+      {/* Back to Top Button */}
     </div>
     // <div className='flex flex-col items-center justify-center '>
 
