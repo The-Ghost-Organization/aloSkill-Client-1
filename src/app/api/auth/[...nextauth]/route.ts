@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-console */
 
 import { config as envConfig } from "@/config/env";
@@ -40,6 +41,15 @@ declare module "next-auth" {
   }
 }
 
+interface NextAuthCallbackContext {
+  req: {
+    headers: {
+      "user-agent"?: string;
+      [key: string]: string | string[] | undefined;
+    };
+  };
+}
+
 // Type definitions
 export enum UserRole {
   STUDENT = "STUDENT",
@@ -63,7 +73,8 @@ export const authOptions: NextAuthOptions = {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials): Promise<User | null> {
+      async authorize(credentials, req): Promise<User | null> {
+        console.log("Credials Request : ", req);
         if (!credentials?.email || !credentials?.password) {
           throw new Error("Email and password required");
         }
@@ -131,6 +142,8 @@ export const authOptions: NextAuthOptions = {
 
   callbacks: {
     async signIn({ user, account, profile }) {
+      const context = this as any as NextAuthCallbackContext;
+      console.log("Request in callback : ", context);
       if (account?.provider !== "google") return true;
 
       try {
