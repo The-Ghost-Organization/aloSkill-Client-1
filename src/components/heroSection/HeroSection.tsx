@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, Star } from "lucide-react";
+import { ArrowRight, Send, Star } from "lucide-react";
 import Image from "next/image";
 
 const avatars = [
@@ -71,6 +71,13 @@ export default function HeroSection() {
               <ArrowRight className='w-5 h-5 group-hover:translate-x-1 transition-transform' />
             </span>
           </button>
+           <button className='relative inline-flex h-12 active:scale-95 transition overflow-hidden rounded-lg p-[3px] focus:outline-none'>
+                      <span className='absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#e7029a_0%,#f472b6_50%,#bd5fff_100%)]'></span>
+                      <span className='inline-flex h-full w-full cursor-pointer items-center justify-center rounded-lg bg-[var(--color-orange)] px-7 text-sm font-medium text-white backdrop-blur-3xl gap-2'>
+                        Contact me
+                        <Send className='w-4 h-4' />
+                      </span>
+                    </button>
 
           <button className='px-8 py-4 bg-white text-gray-800 border-2 border-gray-300 rounded-full hover:border-orange-500 hover:text-orange-500 transition-all duration-300 font-semibold text-lg shadow-md hover:shadow-lg'>
             Become an Instructor
@@ -79,13 +86,13 @@ export default function HeroSection() {
 
         {/* Secondary Pill Buttons */}
         <div className='flex flex-wrap items-center justify-center gap-3'>
-          <button className='px-5 py-2.5 bg-white/80 backdrop-blur-sm text-gray-700 rounded-full hover:bg-white hover:shadow-md transition-all duration-300 text-sm font-medium border border-gray-200'>
+          <button className='px-5 py-2.5 bg-orange-500 backdrop-blur-sm text-gray-700 rounded-full hover:bg-white hover:shadow-md transition-all duration-300 text-sm font-medium border border-gray-200'>
             Start learning & Get certificated
           </button>
-          <button className='px-5 py-2.5 bg-white/80 backdrop-blur-sm text-gray-700 rounded-full hover:bg-white hover:shadow-md transition-all duration-300 text-sm font-medium border border-gray-200'>
+          <button className='px-5 py-2.5 bg-orange-600 backdrop-blur-sm text-gray-700 rounded-full hover:bg-white hover:shadow-md transition-all duration-300 text-sm font-medium border border-gray-200'>
             Career on aloskill
           </button>
-          <button className='px-5 py-2.5 bg-white/80 backdrop-blur-sm text-gray-700 rounded-full hover:bg-white hover:shadow-md transition-all duration-300 text-sm font-medium border border-gray-200'>
+          <button className='px-5 py-2.5 bg-orange-400 backdrop-blur-sm text-gray-700 rounded-full hover:bg-white hover:shadow-md transition-all duration-300 text-sm font-medium border border-gray-200'>
             Learn & Earn Together
           </button>
         </div>
