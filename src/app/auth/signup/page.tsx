@@ -24,9 +24,7 @@ const signupSchema = z
       .max(50, "Last name is too long")
       .regex(/^[a-zA-Z\s]+$/, "Only letters and spaces allowed"),
 
-    email: z
-      .email("Please enter a valid email address")
-      .toLowerCase(),
+    email: z.email("Please enter a valid email address").toLowerCase(),
 
     password: z
       .string()
@@ -199,7 +197,7 @@ export default function SignupPage() {
       )}
 
       {/* Main Container */}
-      <div className='relative z-10 w-full max-w-md'>
+      <div className='relative z-10 w-full lg:w-[60%] mx-auto'>
         {/* Glassmorphism Card */}
         <div className='backdrop-blur-xl bg-white/80 border border-white/20 rounded-3xl shadow-2xl p-8 md:p-10'>
           {/* Header */}
@@ -207,7 +205,7 @@ export default function SignupPage() {
             <div className='w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg'>
               <User className='w-8 h-8 text-white' />
             </div>
-            <h1 className='text-3xl font-bold text-gray-900 mb-2'>Create Account</h1>
+            <h3 className='text-3xl font-bold text-gray-900 mb-2'>Create Account</h3>
             <p className='text-gray-600'>Join us today and start your journey</p>
           </div>
 
@@ -279,10 +277,11 @@ export default function SignupPage() {
                     type='text'
                     {...register("firstName")}
                     placeholder='John'
-                    className={`w-full pl-10 pr-4 py-3 bg-white/50 border-2 rounded-xl outline-none transition-all ${errors.firstName
-                      ? "border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100"
-                      : "border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                      }`}
+                    className={`w-full pl-10 pr-4 py-3 bg-white/50 border-2 rounded-xl outline-none transition-all ${
+                      errors.firstName
+                        ? "border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100"
+                        : "border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                    }`}
                   />
                 </div>
                 {errors.firstName && (
@@ -306,10 +305,11 @@ export default function SignupPage() {
                     type='text'
                     {...register("lastName")}
                     placeholder='Doe'
-                    className={`w-full pl-10 pr-4 py-3 bg-white/50 border-2 rounded-xl outline-none transition-all ${errors.lastName
-                      ? "border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100"
-                      : "border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                      }`}
+                    className={`w-full pl-10 pr-4 py-3 bg-white/50 border-2 rounded-xl outline-none transition-all ${
+                      errors.lastName
+                        ? "border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100"
+                        : "border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                    }`}
                   />
                 </div>
                 {errors.lastName && (
@@ -321,126 +321,133 @@ export default function SignupPage() {
             </div>
 
             {/* Email */}
-            <div>
-              <label
-                htmlFor='email'
-                className='block text-sm font-semibold text-gray-700 mb-2'
-              >
-                Email Address
-              </label>
-              <div className='relative'>
-                <Mail className='absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none' />
-                <input
-                  id='email'
-                  type='email'
-                  {...register("email")}
-                  placeholder='you@example.com'
-                  className={`w-full pl-10 pr-4 py-3 bg-white/50 border-2 rounded-xl outline-none transition-all ${errors.email
-                    ? "border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100"
-                    : "border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+            <div className='grid grid-cols-2 gap-4'>
+              <div>
+                <label
+                  htmlFor='email'
+                  className='block text-sm font-semibold text-gray-700 mb-2'
+                >
+                  Email Address
+                </label>
+                <div className='relative'>
+                  <Mail className='absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none' />
+                  <input
+                    id='email'
+                    type='email'
+                    {...register("email")}
+                    placeholder='you@example.com'
+                    className={`w-full pl-10 pr-4 py-3 bg-white/50 border-2 rounded-xl outline-none transition-all ${
+                      errors.email
+                        ? "border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100"
+                        : "border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
                     }`}
-                />
+                  />
+                </div>
+                {errors.email && (
+                  <p className='mt-1.5 text-sm text-red-600 font-medium'>{errors.email.message}</p>
+                )}
               </div>
-              {errors.email && (
-                <p className='mt-1.5 text-sm text-red-600 font-medium'>{errors.email.message}</p>
-              )}
+              <div>
+                <label
+                  htmlFor='phoneNumber'
+                  className='block text-sm font-semibold text-gray-700 mb-2'
+                >
+                  Phone Number (Optional)
+                </label>
+                <input
+                  id='phoneNumber'
+                  type='tel'
+                  {...register("phoneNumber")}
+                  placeholder='+8801XXXXXXXXX'
+                  className={`w-full px-4 py-3 bg-white/50 border-2 rounded-xl outline-none transition-all ${
+                    errors.phoneNumber
+                      ? "border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100"
+                      : "border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                  }`}
+                />
+                {errors.phoneNumber && (
+                  <p className='mt-1.5 text-sm text-red-600 font-medium'>
+                    {errors.phoneNumber.message}
+                  </p>
+                )}
+              </div>
             </div>
 
             {/* Password */}
-            <div>
-              <label
-                htmlFor='password'
-                className='block text-sm font-semibold text-gray-700 mb-2'
-              >
-                Password
-              </label>
-              <div className='relative'>
-                <Lock className='absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none' />
-                <input
-                  id='password'
-                  type={showPassword ? "text" : "password"}
-                  {...register("password")}
-                  placeholder='••••••••'
-                  className={`w-full pl-10 pr-12 py-3 bg-white/50 border-2 rounded-xl outline-none transition-all ${errors.password
-                    ? "border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100"
-                    : "border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                    }`}
-                />
-                <button
-                  type='button'
-                  onClick={() => setShowPassword(!showPassword)}
-                  className='absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors'
+            <div className='grid grid-cols-2 gap-4'>
+              <div>
+                <label
+                  htmlFor='password'
+                  className='block text-sm font-semibold text-gray-700 mb-2'
                 >
-                  {showPassword ? <EyeOff className='w-5 h-5' /> : <Eye className='w-5 h-5' />}
-                </button>
-              </div>
-              {errors.password && (
-                <p className='mt-1.5 text-sm text-red-600 font-medium'>{errors.password.message}</p>
-              )}
-            </div>
-
-            {/* Confirm Password */}
-            <div>
-              <label
-                htmlFor='confirmPassword'
-                className='block text-sm font-semibold text-gray-700 mb-2'
-              >
-                Confirm Password
-              </label>
-              <div className='relative'>
-                <Lock className='absolute left-3 top-1/2 -translate--y-1/2 w-5 h-5 text-gray-400 pointer-events-none' />
-                <input
-                  id='confirmPassword'
-                  type={showConfirmPassword ? "text" : "password"}
-                  {...register("confirmPassword")}
-                  placeholder='••••••••'
-                  className={`w-full pl-10 pr-12 py-3 bg-white/50 border-2 rounded-xl outline-none transition-all ${errors.confirmPassword
-                    ? "border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100"
-                    : "border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                  Password
+                </label>
+                <div className='relative'>
+                  <Lock className='absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none' />
+                  <input
+                    id='password'
+                    type={showPassword ? "text" : "password"}
+                    {...register("password")}
+                    placeholder='••••••••'
+                    className={`w-full pl-10 pr-12 py-3 bg-white/50 border-2 rounded-xl outline-none transition-all ${
+                      errors.password
+                        ? "border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100"
+                        : "border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
                     }`}
-                />
-                <button
-                  type='button'
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className='absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors'
-                >
-                  {showConfirmPassword ? (
-                    <EyeOff className='w-5 h-5' />
-                  ) : (
-                    <Eye className='w-5 h-5' />
-                  )}
-                </button>
+                  />
+                  <button
+                    type='button'
+                    onClick={() => setShowPassword(!showPassword)}
+                    className='absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors'
+                  >
+                    {showPassword ? <EyeOff className='w-5 h-5' /> : <Eye className='w-5 h-5' />}
+                  </button>
+                </div>
+                {errors.password && (
+                  <p className='mt-1.5 text-sm text-red-600 font-medium'>
+                    {errors.password.message}
+                  </p>
+                )}
               </div>
-              {errors.confirmPassword && (
-                <p className='mt-1.5 text-sm text-red-600 font-medium'>
-                  {errors.confirmPassword.message}
-                </p>
-              )}
-            </div>
-
-            {/* Phone Number */}
-            <div>
-              <label
-                htmlFor='phoneNumber'
-                className='block text-sm font-semibold text-gray-700 mb-2'
-              >
-                Phone Number (Optional)
-              </label>
-              <input
-                id='phoneNumber'
-                type='tel'
-                {...register("phoneNumber")}
-                placeholder='+8801XXXXXXXXX'
-                className={`w-full px-4 py-3 bg-white/50 border-2 rounded-xl outline-none transition-all ${errors.phoneNumber
-                  ? "border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100"
-                  : "border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                  }`}
-              />
-              {errors.phoneNumber && (
-                <p className='mt-1.5 text-sm text-red-600 font-medium'>
-                  {errors.phoneNumber.message}
-                </p>
-              )}
+              {/* Confirm Password */}
+              <div>
+                <label
+                  htmlFor='confirmPassword'
+                  className='block text-sm font-semibold text-gray-700 mb-2'
+                >
+                  Confirm Password
+                </label>
+                <div className='relative'>
+                  <Lock className='absolute left-3 top-1/2 -translate--y-1/2 w-5 h-5 text-gray-400 pointer-events-none' />
+                  <input
+                    id='confirmPassword'
+                    type={showConfirmPassword ? "text" : "password"}
+                    {...register("confirmPassword")}
+                    placeholder='••••••••'
+                    className={`w-full pl-10 pr-12 py-3 bg-white/50 border-2 rounded-xl outline-none transition-all ${
+                      errors.confirmPassword
+                        ? "border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100"
+                        : "border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                    }`}
+                  />
+                  <button
+                    type='button'
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className='absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors'
+                  >
+                    {showConfirmPassword ? (
+                      <EyeOff className='w-5 h-5' />
+                    ) : (
+                      <Eye className='w-5 h-5' />
+                    )}
+                  </button>
+                </div>
+                {errors.confirmPassword && (
+                  <p className='mt-1.5 text-sm text-red-600 font-medium'>
+                    {errors.confirmPassword.message}
+                  </p>
+                )}
+              </div>
             </div>
 
             {/* Bio */}
@@ -456,10 +463,11 @@ export default function SignupPage() {
                 {...register("bio")}
                 placeholder='Tell us a little about yourself...'
                 rows={3}
-                className={`w-full px-4 py-3 bg-white/50 border-2 rounded-xl outline-none resize-none transition-all ${errors.bio
-                  ? "border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100"
-                  : "border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                  }`}
+                className={`w-full px-4 py-3 bg-white/50 border-2 rounded-xl outline-none resize-none transition-all ${
+                  errors.bio
+                    ? "border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100"
+                    : "border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                }`}
               />
               {errors.bio && (
                 <p className='mt-1.5 text-sm text-red-600 font-medium'>{errors.bio.message}</p>

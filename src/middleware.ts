@@ -70,6 +70,7 @@ export default withAuth(
       pathname === "/" ||
       pathname.startsWith("/auth") ||
       pathname.startsWith("/courses") ||
+      pathname.startsWith("/test-error") ||
       pathname.startsWith("/about")
     ) {
       return NextResponse.next();
@@ -87,11 +88,7 @@ export default withAuth(
       return NextResponse.redirect(new URL("/unauthorized", request.url));
     }
 
-    if (
-      pathname.startsWith("/dashboard/instructor") &&
-      token?.["role"] !== "INSTRUCTOR" &&
-      token?.["role"] !== "ADMIN"
-    ) {
+    if (pathname.startsWith("/dashboard/instructor") && token?.["role"] !== "INSTRUCTOR") {
       return NextResponse.redirect(new URL("/unauthorized", request.url));
     }
 

@@ -26,6 +26,11 @@ const nextConfig: NextConfig = {
         hostname: "images.unsplash.com",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "api.dicebear.com",
+        pathname: "/**",
+      },
     ],
 
     unoptimized: false,
@@ -164,14 +169,14 @@ const nextConfig: NextConfig = {
   //     },
   //   ];
   // },
-async rewrites() {
-  return [
-    {
-      source: '/api/v1/:path*',
-      destination: 'http://localhost:5000/api/v1/:path*',
-    },
-  ];
-},
+  async rewrites() {
+    return [
+      {
+        source: "/api/v1/:path*",
+        destination: "http://localhost:5000/api/v1/:path*",
+      },
+    ];
+  },
   // === Environment Variables ===
   env: {
     APP_VERSION: process.env["npm_package_version"],

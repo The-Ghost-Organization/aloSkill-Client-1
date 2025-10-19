@@ -56,15 +56,29 @@ export default function SignInPage() {
 
   return (
     <div className='min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center px-4'>
-      <div className='max-w-md w-full'>
+      <div className='max-w-md mx-auto w-full'>
         {/* Header */}
-        <div className='text-center mb-8'>
-          <h1 className='text-4xl font-bold text-gray-900 mb-2'>Welcome Back</h1>
-          <p className='text-gray-600'>Sign in to continue your learning journey</p>
-        </div>
+        {/* <div className='text-center mb-8 text-[var(--color-text-dark)]'>
+          <h3 className='mb-2'>Welcome Back</h3>
+
+          <p className=''>Sign in to continue your learning journey</p>
+        </div> */}
 
         {/* Card */}
         <div className='bg-white rounded-2xl shadow-xl p-8'>
+          {/* Sign Up Link */}
+          <div className='flex justify-between items-center  mb-12'>
+            <h5 className='gradient-text-animated font-bold'>SIGN IN</h5>
+            <p className='text-sm text-gray-600'>
+              Dont have an account?{" "}
+              <Link
+                href='/auth/signup'
+                className=' text-[var(--color-text-dark)] blue-600 hover:text-[var(--color-orange-light)] font-semibold'
+              >
+                Sign up
+              </Link>
+            </p>
+          </div>
           {/* Error Alert */}
           {error && (
             <div className='mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3'>
@@ -74,7 +88,7 @@ export default function SignInPage() {
           )}
 
           {/* Google Sign In */}
-          <button
+          {/* <button
             onClick={handleGoogleSignIn}
             disabled={isLoading}
             className='w-full flex items-center justify-center gap-3 px-4 py-3 border-2 border-gray-200 rounded-xl hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed mb-6'
@@ -101,6 +115,45 @@ export default function SignInPage() {
               />
             </svg>
             <span className='font-medium text-gray-700'>Continue with Google</span>
+          </button> */}
+          <button
+            onClick={handleGoogleSignIn}
+            disabled={isLoading}
+            className='relative group w-full flex items-center justify-center text-[var(--color-text-dark)] transition-all  whitespace-nowrap rounded-lg  will-change-transform duration-300 h-12 text-lg pl-[5rem] px-4 py-3 mb-6 border-4 border-[var(--color-orange)]  shadow-[var(--color-orange)/30] hover:shadow-[var(--color-orange-light)/40]'
+          >
+            <div className='absolute left-0 top-0  bg-white text-slate-950 p-[0.35rem] bottom-1 group-hover:w-[calc(100%-0.5rem)] transition-all rounded-md duration-300 h-10 w-10'>
+              <svg
+                className='h-full w-full'
+                xmlns='http://www.w3.org/2000/svg'
+                viewBox='0 0 128 128'
+              >
+                <path
+                  fill='#fff'
+                  d='M44.59 4.21a63.28 63.28 0 004.33 120.9 67.6 67.6 0 0032.36.35 57.13 57.13 0 0025.9-13.46 57.44 57.44 0 0016-26.26 74.33 74.33 0 001.61-33.58H65.27v24.69h34.47a29.72 29.72 0 01-12.66 19.52 36.16 36.16 0 01-13.93 5.5 41.29 41.29 0 01-15.1 0A37.16 37.16 0 0144 95.74a39.3 39.3 0 01-14.5-19.42 38.31 38.31 0 010-24.63 39.25 39.25 0 019.18-14.91A37.17 37.17 0 0176.13 27a34.28 34.28 0 0113.64 8q5.83-5.8 11.64-11.63c2-2.09 4.18-4.08 6.15-6.22A61.22 61.22 0 0087.2 4.59a64 64 0 00-42.61-.38z'
+                />
+                <path
+                  fill='#e33629'
+                  d='M44.59 4.21a64 64 0 0142.61.37 61.22 61.22 0 0120.35 12.62c-2 2.14-4.11 4.14-6.15 6.22Q95.58 29.23 89.77 35a34.28 34.28 0 00-13.64-8 37.17 37.17 0 00-37.46 9.74 39.25 39.25 0 00-9.18 14.91L8.76 35.6A63.53 63.53 0 0144.59 4.21z'
+                />
+                <path
+                  fill='#f8bd00'
+                  d='M3.26 51.5a62.93 62.93 0 015.5-15.9l20.73 16.09a38.31 38.31 0 000 24.63q-10.36 8-20.73 16.08a63.33 63.33 0 01-5.5-40.9z'
+                />
+                <path
+                  fill='#587dbd'
+                  d='M65.27 52.15h59.52a74.33 74.33 0 01-1.61 33.58 57.44 57.44 0 01-16 26.26c-6.69-5.22-13.41-10.4-20.1-15.62a29.72 29.72 0 0012.66-19.54H65.27c-.01-8.22 0-16.45 0-24.68z'
+                />
+                <path
+                  fill='#319f43'
+                  d='M8.75 92.4q10.37-8 20.73-16.08A39.3 39.3 0 0044 95.74a37.16 37.16 0 0014.08 6.08 41.29 41.29 0 0015.1 0 36.16 36.16 0 0013.93-5.5c6.69 5.22 13.41 10.4 20.1 15.62a57.13 57.13 0 01-25.9 13.47 67.6 67.6 0 01-32.36-.35 63 63 0 01-23-11.59A63.73 63.73 0 018.75 92.4z'
+                />
+              </svg>
+              {/* <ArrowBigRight className='h-full w-full' /> */}
+              {/* <Play className='h-full w-full' /> */}
+            </div>
+            <div>Continue with Google</div>
+            <div className='bg-[var(--color-orange)] absolute flex rounded-full animate-ping opacity-75 h-5 w-5 -top-2 -right-2' />
+            <div className='bg-[var(--color-orange-dark)] absolute flex rounded-full scale-[90%] h-5 w-5 -top-2 -right-2' />
           </button>
 
           {/* Divider */}
@@ -183,7 +236,7 @@ export default function SignInPage() {
             <button
               type='submit'
               disabled={isLoading}
-              className='w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-blue-500/30'
+              className='w-full h-12 bg-gradient-to-r from-orange-600 to-orange-400 text-white py-3 rounded-xl font-semibold bg-[length:200%_200%] hover:bg-right-bottom hover:from-orange-400 hover:to-orange-600 transition-all duration-700 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-blue-500/30'
             >
               {isLoading ? (
                 <span className='flex items-center justify-center gap-2'>
@@ -213,17 +266,6 @@ export default function SignInPage() {
               )}
             </button>
           </form>
-
-          {/* Sign Up Link */}
-          <p className='mt-6 text-center text-sm text-gray-600'>
-            Dont have an account?{" "}
-            <Link
-              href='/auth/signup'
-              className='text-blue-600 hover:text-blue-700 font-semibold'
-            >
-              Sign up for free
-            </Link>
-          </p>
         </div>
 
         {/* Footer */}
