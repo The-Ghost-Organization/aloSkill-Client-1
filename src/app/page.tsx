@@ -1,10 +1,6 @@
 "use client";
 
 import BackToTop from "@/components/BackToTop.tsx";
-import CategoryCard from "@/components/cards/CategoryCard.tsx";
-import FeatureCard from "@/components/cards/FeatureCard.tsx";
-import InstructorCard from "@/components/cards/InstructorCard.tsx";
-import TestimonialCard from "@/components/cards/TestimonialCard.tsx";
 import Footer from "@/components/footer/Footer.tsx";
 import Newsletter from "@/components/footer/Newsletter.tsx";
 import Header from "@/components/header/Header.tsx";
@@ -43,7 +39,7 @@ const HomePage = () => {
           <PopularCoursesSection />
           <PopularCoursesSectionCompact />
           <DiscoverBooksSectionCarousel />
-          <CategoryCard
+          {/* <CategoryCard
             icon={undefined}
             title={"i am category card"}
             courseCount={100}
@@ -69,7 +65,7 @@ const HomePage = () => {
             avatar={"https://images.unsplash.com"}
             rating={5}
             comment={"no comments i am mr. reviewer"}
-          />
+          /> */}
         </main>
 
         {/* Right Sidebar - Large Desktop Only */}

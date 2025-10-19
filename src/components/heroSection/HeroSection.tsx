@@ -14,7 +14,7 @@ const avatars = [
 export default function HeroSection() {
   return (
     <section className='min-h-screen flex items-center justify-center px-4 py-20 lg:py-0'>
-      <div className='max-w-4xl mx-auto text-center space-y-8'>
+      <div className='max-w-4xl mx-auto text-center '>
         {/* Social Proof */}
         <div className='flex items-center justify-center gap-4 flex-wrap'>
           <div className='flex items-center'>
