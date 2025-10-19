@@ -3,6 +3,7 @@
 import BackToTop from "@/components/BackToTop.tsx";
 import FooterSimple from "@/components/footer/FooterSimple.tsx";
 import Newsletter from "@/components/footer/Newsletter.tsx";
+import AnnouncementBar from "@/components/header/AnnouncementBar.tsx";
 import Header from "@/components/header/Header.tsx";
 import LeftSidebar from "@/components/header/LeftSidebar.tsx";
 import MobileMenu from "@/components/header/menu/MobileMenu.tsx";
@@ -24,10 +25,13 @@ const HomePage = () => {
   return (
     <div className='min-h-screen bg-gradient-radial from-pink-100 via-purple-50 to-orange-50'>
       {/* Fixed Header */}
+      <AnnouncementBar />
+      {/* <Navigation /> */}
+
       <Header onMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)} />
 
       {/* Main Layout Container */}
-      <div className='flex pt-16 lg:pt-20'>
+      <div className='flex pt-16 lg:pt-0'>
         {/* Left Sidebar - Desktop */}
         <LeftSidebar
           isOpen={isSidebarOpen}
