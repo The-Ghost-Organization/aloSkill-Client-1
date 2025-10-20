@@ -19,7 +19,7 @@ const features = ["1000+ Courses Available", "Expert Instructors", "Lifetime Acc
 
 export default function HeroSection() {
   return (
-    <section className='relative min-h-screen flex items-center justify-center px-4 py-24 lg:py-32 overflow-hidden bg-gradient-to-br from-orange-50 via-purple-50 to-pink-50'>
+    <section className='relative min-h-screen flex items-center justify-center px-4 py-4 lg:py-32 overflow-hidden bg-gradient-to-br from-orange-50 via-purple-50 to-pink-50'>
       {/* Decorative Blobs */}
       <div className='absolute inset-0 overflow-hidden pointer-events-none'>
         <div className='absolute top-20 left-10 w-72 h-72 bg-gradient-to-br from-purple-300 to-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob'></div>
@@ -27,7 +27,7 @@ export default function HeroSection() {
         <div className='absolute -bottom-20 left-1/2 w-72 h-72 bg-gradient-to-br from-pink-300 to-rose-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000'></div>
       </div>
 
-      <div className='relative z-10 max-w-5xl mx-auto text-center space-y-8'>
+      <div className='relative z-10 max-w-5xl mx-auto text-center space-y-2'>
         {/* Social Proof - Top */}
         <div className='flex items-center justify-center gap-4 flex-wrap animate-fade-in'>
           {/* Avatars */}

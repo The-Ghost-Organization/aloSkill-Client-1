@@ -1,24 +1,24 @@
 "use client";
 
-import BackToTop from "@/components/BackToTop.tsx";
-import FooterSimple from "@/components/footer/FooterSimple.tsx";
-import Newsletter from "@/components/footer/Newsletter.tsx";
-import AnnouncementBar from "@/components/header/AnnouncementBar.tsx";
-import LeftSidebar from "@/components/header/LeftSidebar.tsx";
-import MobileMenu from "@/components/header/menu/MobileMenu.tsx";
-import TabletDrawer from "@/components/header/menu/TabletDrawer.tsx";
-import NavBar from "@/components/header/NavBar.tsx";
-import RightSidebar from "@/components/header/RightSidebar.tsx";
-import HeroSection from "@/components/heroSection/HeroSection.tsx";
 import { CategoriesSectionAnimated } from "@/components/home/CategoriesSectionAnimated.tsx";
 import { CertificateSectionSimple } from "@/components/home/CertificateSectionSimple.tsx";
 import ConsultationSection from "@/components/home/ConsultationSection.tsx";
 import { DiscoverBooksSectionCarousel } from "@/components/home/DiscoverBooksSectionCarousel.tsx";
+import HeroSection from "@/components/home/HeroSection";
 import InstructorsSection from "@/components/home/InstructorsSection.tsx";
 import { InstructorsSectionAdvanced } from "@/components/home/InstructorsSectionAdvanced.tsx";
 import PopularCoursesSection from "@/components/home/PopularCoursesSection.tsx";
 import { PopularCoursesSectionCompact } from "@/components/home/PopularCoursesSectionCompact.tsx";
 import { WhyLearnSectionAnimated } from "@/components/home/WhyLearnSectionAnimated.tsx";
+import BackToTop from "@/components/shared/BackToTop";
+import FooterSimple from "@/components/shared/footer/FooterSimple";
+import Newsletter from "@/components/shared/footer/Newsletter";
+import AnnouncementBar from "@/components/shared/header/AnnouncementBar";
+import LeftSidebar from "@/components/shared/header/LeftSidebar";
+import MobileMenu from "@/components/shared/header/menu/MobileMenu";
+import TabletDrawer from "@/components/shared/header/menu/TabletDrawer";
+import NavBar from "@/components/shared/header/NavBar";
+import RightSidebar from "@/components/shared/header/RightSidebar";
 import StatsSection from "@/components/StatsSection.tsx";
 import { useState } from "react";
 const HomePage = () => {
@@ -26,15 +26,13 @@ const HomePage = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   return (
     <div className='min-h-screen bg-gradient-radial from-pink-100 via-purple-50 to-orange-50'>
-      <div className='sticky top-0 z-50'>
+      
         <AnnouncementBar />
         <NavBar onMenuToggle={() => setIsSidebarOpen(!isSidebarOpen)} />
-      </div>
-
-      {/* <Header onMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)} /> */}
+      
 
       {/* Main Layout Container */}
-      <div className='flex pt-16 lg:pt-0'>
+      <div className='flex pt-16 lg:pt-0 '>
         {/* Left Sidebar - Desktop */}
         <LeftSidebar
           isOpen={isSidebarOpen}
@@ -57,7 +55,7 @@ const HomePage = () => {
 
           <CertificateSectionSimple />
           <ConsultationSection />
-
+          <Newsletter />
           {/* <CategoryCard
             icon={undefined}
             title={"i am category card"}
@@ -100,7 +98,6 @@ const HomePage = () => {
       {/* Tablet Quick Access Drawer */}
       <TabletDrawer />
       <BackToTop />
-      <Newsletter />
       <FooterSimple />
 
       {/* Back to Top Button */}

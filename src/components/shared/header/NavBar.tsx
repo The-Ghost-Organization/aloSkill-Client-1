@@ -15,8 +15,8 @@ export default function NavBar({ onMenuToggle }: HeaderProps) {
   const [cartCount, setCartCount] = useState(2);
 
   return (
-    <header className=' left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200/50 shadow-sm'>
-      <div className='flex items-center justify-between px-4 md:px-6 py-3 max-w-[1920px] mx-auto'>
+    <header className='sticky top-11 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200/50 shadow-sm'>
+      <div className=' flex items-center justify-between px-4 md:px-6 py-3 max-w-full mx-auto'>
         {/* Mobile Menu Button */}
         <button
           onClick={onMenuToggle}
