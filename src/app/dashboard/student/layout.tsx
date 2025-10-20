@@ -26,10 +26,10 @@ export default function StudentLayout({
         <div className="min-h-screen bg-gradient-to-br from-pink-100 via-purple-100 to-pink-100">
             <div className="max-w-7xl mx-auto px-4 py-8">
                 {/* Header Card - Shared across all pages */}
-                <div className="bg-white rounded-lg shadow-sm px-6 pt-6 mb-6">
-                    <div className="flex items-center justify-between mb-6">
+                <div className="bg-white rounded shadow-sm px-6 pt-6 mb-6">
+                    <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center gap-4">
-                            <div className="w-20 h-20 rounded-full bg-gray-300 overflow-hidden">
+                            <div className="w-16 h-16 rounded-full bg-gray-300 overflow-hidden">
                                 <Image
                                     width={80}
                                     height={80}
@@ -39,15 +39,15 @@ export default function StudentLayout({
                                 />
                             </div>
                             <div>
-                                <h1 className="text-2xl font-semibold text-gray-900">
+                                <h2 className="font-semibold text-gray-900">
                                     Kevin Gilbert
-                                </h1>
+                                </h2>
                                 <p className="text-gray-500 text-sm">
                                     Web Designer & Best-Selling Instructor
                                 </p>
                             </div>
                         </div>
-                        <button className="px-6 py-3 bg-orange-50 text-orange-500 rounded-lg font-medium hover:bg-orange-100 transition-colors flex items-center gap-2">
+                        <button className="px-4 py-2 bg-orange-50 text-orange-500 rounded font-medium hover:bg-orange-100 transition-colors flex items-center gap-2">
                             Become Instructor
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
