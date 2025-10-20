@@ -10,12 +10,12 @@ interface HeaderProps {
   onMenuToggle?: () => void;
 }
 
-export default function Header({ onMenuToggle }: HeaderProps) {
+export default function NavBar({ onMenuToggle }: HeaderProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [cartCount, setCartCount] = useState(2);
 
   return (
-    <header className='sticky top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200/50 shadow-sm'>
+    <header className=' left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200/50 shadow-sm'>
       <div className='flex items-center justify-between px-4 md:px-6 py-3 max-w-[1920px] mx-auto'>
         {/* Mobile Menu Button */}
         <button

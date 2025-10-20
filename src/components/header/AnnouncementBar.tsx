@@ -21,7 +21,7 @@ export default function AnnouncementBar() {
   const [selectedCurrency, setSelectedCurrency] = useState("USD");
 
   return (
-    <div className='bg-[var(--color-orange)] text-white'>
+    <div className='bg-[var(--color-orange)]  text-white'>
       <div className='max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='flex items-center justify-between py-2 text-sm'>
           {/* Left: Announcement Text */}

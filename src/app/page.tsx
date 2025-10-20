@@ -4,13 +4,15 @@ import BackToTop from "@/components/BackToTop.tsx";
 import FooterSimple from "@/components/footer/FooterSimple.tsx";
 import Newsletter from "@/components/footer/Newsletter.tsx";
 import AnnouncementBar from "@/components/header/AnnouncementBar.tsx";
-import Header from "@/components/header/Header.tsx";
 import LeftSidebar from "@/components/header/LeftSidebar.tsx";
 import MobileMenu from "@/components/header/menu/MobileMenu.tsx";
 import TabletDrawer from "@/components/header/menu/TabletDrawer.tsx";
+import NavBar from "@/components/header/NavBar.tsx";
 import RightSidebar from "@/components/header/RightSidebar.tsx";
 import HeroSection from "@/components/heroSection/HeroSection.tsx";
 import { CategoriesSectionAnimated } from "@/components/home/CategoriesSectionAnimated.tsx";
+import { CertificateSectionSimple } from "@/components/home/CertificateSectionSimple.tsx";
+import ConsultationSection from "@/components/home/ConsultationSection.tsx";
 import { DiscoverBooksSectionCarousel } from "@/components/home/DiscoverBooksSectionCarousel.tsx";
 import InstructorsSection from "@/components/home/InstructorsSection.tsx";
 import { InstructorsSectionAdvanced } from "@/components/home/InstructorsSectionAdvanced.tsx";
@@ -24,11 +26,12 @@ const HomePage = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   return (
     <div className='min-h-screen bg-gradient-radial from-pink-100 via-purple-50 to-orange-50'>
-      {/* Fixed Header */}
-      <AnnouncementBar />
-      {/* <Navigation /> */}
+      <div className='sticky top-0 z-50'>
+        <AnnouncementBar />
+        <NavBar onMenuToggle={() => setIsSidebarOpen(!isSidebarOpen)} />
+      </div>
 
-      <Header onMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)} />
+      {/* <Header onMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)} /> */}
 
       {/* Main Layout Container */}
       <div className='flex pt-16 lg:pt-0'>
@@ -51,6 +54,10 @@ const HomePage = () => {
           <DiscoverBooksSectionCarousel />
           <InstructorsSection />
           <InstructorsSectionAdvanced />
+
+          <CertificateSectionSimple />
+          <ConsultationSection />
+
           {/* <CategoryCard
             icon={undefined}
             title={"i am category card"}
