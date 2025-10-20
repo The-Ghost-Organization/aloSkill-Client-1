@@ -1,18 +1,24 @@
 "use client";
 
-import BackToTop from "@/components/BackToTop.tsx";
-import Footer from "@/components/footer/Footer.tsx";
-import Newsletter from "@/components/footer/Newsletter.tsx";
-import Header from "@/components/header/Header.tsx";
-import LeftSidebar from "@/components/header/LeftSidebar.tsx";
-import MobileMenu from "@/components/header/menu/MobileMenu.tsx";
-import TabletDrawer from "@/components/header/menu/TabletDrawer.tsx";
-import RightSidebar from "@/components/header/RightSidebar.tsx";
-import HeroSection from "@/components/heroSection/HeroSection.tsx";
+import { CategoriesSectionAnimated } from "@/components/home/CategoriesSectionAnimated.tsx";
+import { CertificateSectionSimple } from "@/components/home/CertificateSectionSimple.tsx";
+import ConsultationSection from "@/components/home/ConsultationSection.tsx";
 import { DiscoverBooksSectionCarousel } from "@/components/home/DiscoverBooksSectionCarousel.tsx";
+import HeroSection from "@/components/home/HeroSection";
+import InstructorsSection from "@/components/home/InstructorsSection.tsx";
+import { InstructorsSectionAdvanced } from "@/components/home/InstructorsSectionAdvanced.tsx";
 import PopularCoursesSection from "@/components/home/PopularCoursesSection.tsx";
 import { PopularCoursesSectionCompact } from "@/components/home/PopularCoursesSectionCompact.tsx";
 import { WhyLearnSectionAnimated } from "@/components/home/WhyLearnSectionAnimated.tsx";
+import BackToTop from "@/components/shared/BackToTop";
+import FooterSimple from "@/components/shared/footer/FooterSimple";
+import Newsletter from "@/components/shared/footer/Newsletter";
+import AnnouncementBar from "@/components/shared/header/AnnouncementBar";
+import LeftSidebar from "@/components/shared/header/LeftSidebar";
+import MobileMenu from "@/components/shared/header/menu/MobileMenu";
+import TabletDrawer from "@/components/shared/header/menu/TabletDrawer";
+import NavBar from "@/components/shared/header/NavBar";
+import RightSidebar from "@/components/shared/header/RightSidebar";
 import StatsSection from "@/components/StatsSection.tsx";
 import { useState } from "react";
 const HomePage = () => {
@@ -20,11 +26,13 @@ const HomePage = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   return (
     <div className='min-h-screen bg-gradient-radial from-pink-100 via-purple-50 to-orange-50'>
-      {/* Fixed Header */}
-      <Header onMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)} />
+      
+        <AnnouncementBar />
+        <NavBar onMenuToggle={() => setIsSidebarOpen(!isSidebarOpen)} />
+      
 
       {/* Main Layout Container */}
-      <div className='flex pt-16 lg:pt-20'>
+      <div className='flex pt-16 lg:pt-0 '>
         {/* Left Sidebar - Desktop */}
         <LeftSidebar
           isOpen={isSidebarOpen}
@@ -34,11 +42,20 @@ const HomePage = () => {
         {/* Main Content Area */}
         <main className=' flex-1 lg:px-6 mx-auto'>
           <HeroSection />
+
+          <CategoriesSectionAnimated />
+
           <StatsSection />
           <WhyLearnSectionAnimated />
           <PopularCoursesSection />
           <PopularCoursesSectionCompact />
           <DiscoverBooksSectionCarousel />
+          <InstructorsSection />
+          <InstructorsSectionAdvanced />
+
+          <CertificateSectionSimple />
+          <ConsultationSection />
+          <Newsletter />
           {/* <CategoryCard
             icon={undefined}
             title={"i am category card"}
@@ -81,8 +98,7 @@ const HomePage = () => {
       {/* Tablet Quick Access Drawer */}
       <TabletDrawer />
       <BackToTop />
-      <Newsletter />
-      <Footer />
+      <FooterSimple />
 
       {/* Back to Top Button */}
     </div>
@@ -145,13 +161,13 @@ const HomePage = () => {
     //       <p className='mt-4 text-gray-600'>Subtle dreamy background</p>
     //       <OrgButton />
 
-    //       <button className='relative inline-flex h-12 active:scale-95 transition overflow-hidden rounded-lg p-[3px] focus:outline-none'>
-    //         <span className='absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#e7029a_0%,#f472b6_50%,#bd5fff_100%)]'></span>
-    //         <span className='inline-flex h-full w-full cursor-pointer items-center justify-center rounded-lg bg-[var(--color-orange)] px-7 text-sm font-medium text-white backdrop-blur-3xl gap-2'>
-    //           Contact me
-    //           <Send className='w-4 h-4' />
-    //         </span>
-    //       </button>
+    // <button className='relative inline-flex h-12 active:scale-95 transition overflow-hidden rounded-lg p-[3px] focus:outline-none'>
+    //   <span className='absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#e7029a_0%,#f472b6_50%,#bd5fff_100%)]'></span>
+    //   <span className='inline-flex h-full w-full cursor-pointer items-center justify-center rounded-lg bg-[var(--color-orange)] px-7 text-sm font-medium text-white backdrop-blur-3xl gap-2'>
+    //     Contact me
+    //     <Send className='w-4 h-4' />
+    //   </span>
+    // </button>
     //     </div>
     //   </div>
     //   <div className='relative min-h-screen w-full bg-grad-conic-blob flex justify-center items-center'>
