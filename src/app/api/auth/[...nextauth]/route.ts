@@ -41,15 +41,6 @@ declare module "next-auth" {
   }
 }
 
-interface NextAuthCallbackContext {
-  req: {
-    headers: {
-      "user-agent"?: string;
-      [key: string]: string | string[] | undefined;
-    };
-  };
-}
-
 // Type definitions
 export enum UserRole {
   STUDENT = "STUDENT",
@@ -84,13 +75,13 @@ export const authOptions: NextAuthOptions = {
         const apiRes = await authService.login({ email, password });
 
         if (!apiRes.success) {
-          return null;
+          throw new Error(apiRes.message);
         }
 
         const user = apiRes.data;
 
         if (!user) {
-          return null;
+          throw new Error(apiRes.message|| "Authentication failed");
         }
 
         try {
@@ -142,8 +133,6 @@ export const authOptions: NextAuthOptions = {
 
   callbacks: {
     async signIn({ user, account, profile }) {
-      const context = this as any as NextAuthCallbackContext;
-      console.log("Request in callback : ", context);
       if (account?.provider !== "google") return true;
 
       try {
@@ -209,8 +198,8 @@ export const authOptions: NextAuthOptions = {
       }
       if (account && user) {
         token["id"] = user.id;
-        token["accessToken"] = user.accessToken || account.access_token;
-        token["refreshToken"] = user.refreshToken || account.refresh_token;
+        token["accessToken"] = user.accessToken;
+        token["refreshToken"] = user.refreshToken;
 
         if (user) {
           token["name"] = user.name as string;
