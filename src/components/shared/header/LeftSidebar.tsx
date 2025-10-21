@@ -44,7 +44,7 @@ export default function LeftSidebar({ isOpen = true, onClose }: LeftSidebarProps
       {/* Mobile Overlay */}
       {isOpen && (
         <div
-          className='fixed top-0 inset-0 bg-black/50 z-40 lg:hidden'
+          className='fixed top-0 inset-0 bg-black/50 z-40 md:hidden shrink-0'
           onClick={onClose}
         />
       )}
@@ -52,7 +52,7 @@ export default function LeftSidebar({ isOpen = true, onClose }: LeftSidebarProps
       {/* Sidebar */}
       <aside
         className={`
-          sticky top-16 lg:top-30 left-0 h-[calc(100vh-5rem)] bg-white border-r border-gray-200 z-50 overflow-y-auto
+          fixed lg:sticky top-16 lg:top-30 left-0 h-[calc(100vh-5rem)] bg-white border-r border-gray-200 z-50 overflow-y-auto
           transition-transform duration-300 ease-in-out
           ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
           w-64 flex flex-col

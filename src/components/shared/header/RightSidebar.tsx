@@ -35,7 +35,7 @@ const cards = [
 
 export default function RightSidebar() {
   return (
-    <aside className='hidden xl:block sticky top-20 right-0 w-64 h-[calc(100vh-5rem)] overflow-y-auto py-6 px-4'>
+    <aside className='hidden md:block sticky top-20 right-0 w-64 h-[calc(100vh-5rem)] overflow-y-auto py-6 px-4'>
       <div className='space-y-4'>
         {cards.map(card => {
           const Icon = card.icon;

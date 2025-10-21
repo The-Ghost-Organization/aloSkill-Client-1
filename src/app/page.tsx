@@ -28,10 +28,8 @@ const HomePage = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   return (
     <div className='min-h-screen w-screen bg-gradient-radial from-pink-100 via-purple-50 to-orange-50'>
-
       <AnnouncementBar />
       <NavBar onMenuToggle={() => setIsSidebarOpen(!isSidebarOpen)} />
-
 
       {/* Main Layout Container */}
       <div className='w-full flex pt-16 lg:pt-0 '>
@@ -42,7 +40,7 @@ const HomePage = () => {
         />
 
         {/* Main Content Area */}
-        <main className='flex-1 lg:px-6'>
+        <main className='flex-1 lg:px-6 px-4'>
           <HeroSection />
 
           <CategoriesSectionAnimated />

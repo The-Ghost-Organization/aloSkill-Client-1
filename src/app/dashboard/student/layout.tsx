@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Suspense } from 'react';
+import { ChevronLeft } from 'lucide-react';
 
 export default function StudentLayout({
     children,
@@ -24,7 +25,12 @@ export default function StudentLayout({
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-pink-100 via-purple-100 to-pink-100">
-            <div className="max-w-7xl mx-auto px-4 py-8">
+            <div className="w-full px-4 pt-4">
+                <Link href="/" className='hover:text-orange-dark'>
+                    <p className='flex gap-2 items-center'> <ChevronLeft />  Back to the Home</p>
+                </Link>
+            </div>
+            <div className="w-full px-4 py-4">
                 {/* Header Card - Shared across all pages */}
                 <div className="bg-white rounded shadow-sm px-6 pt-6 mb-6">
                     <div className="flex items-center justify-between mb-4">
