@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-console */
 
 import { config as envConfig } from "@/config/env";
@@ -63,7 +64,8 @@ export const authOptions: NextAuthOptions = {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials): Promise<User | null> {
+      async authorize(credentials, req): Promise<User | null> {
+        console.log("Credials Request : ", req);
         if (!credentials?.email || !credentials?.password) {
           throw new Error("Email and password required");
         }
@@ -73,13 +75,13 @@ export const authOptions: NextAuthOptions = {
         const apiRes = await authService.login({ email, password });
 
         if (!apiRes.success) {
-          return null;
+          throw new Error(apiRes.message);
         }
 
         const user = apiRes.data;
 
         if (!user) {
-          return null;
+          throw new Error(apiRes.message|| "Authentication failed");
         }
 
         try {
@@ -196,8 +198,8 @@ export const authOptions: NextAuthOptions = {
       }
       if (account && user) {
         token["id"] = user.id;
-        token["accessToken"] = user.accessToken || account.access_token;
-        token["refreshToken"] = user.refreshToken || account.refresh_token;
+        token["accessToken"] = user.accessToken;
+        token["refreshToken"] = user.refreshToken;
 
         if (user) {
           token["name"] = user.name as string;

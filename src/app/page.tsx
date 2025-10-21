@@ -27,12 +27,14 @@ const HomePage = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   return (
-    <div className='min-h-screen bg-gradient-radial from-pink-100 via-purple-50 to-orange-50'>
+    <div className='min-h-screen w-screen bg-gradient-radial from-pink-100 via-purple-50 to-orange-50'>
+
       <AnnouncementBar />
       <NavBar onMenuToggle={() => setIsSidebarOpen(!isSidebarOpen)} />
 
+
       {/* Main Layout Container */}
-      <div className='flex pt-16 lg:pt-0 '>
+      <div className='w-full flex pt-16 lg:pt-0 '>
         {/* Left Sidebar - Desktop */}
         <LeftSidebar
           isOpen={isSidebarOpen}
@@ -40,7 +42,7 @@ const HomePage = () => {
         />
 
         {/* Main Content Area */}
-        <main className=' flex-1 lg:px-6 mx-auto'>
+        <main className='flex-1 lg:px-6'>
           <HeroSection />
 
           <CategoriesSectionAnimated />

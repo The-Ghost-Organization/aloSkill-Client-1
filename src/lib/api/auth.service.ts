@@ -43,7 +43,6 @@ export interface AuthResponse {
   profilePicture?: string | null;
   accessToken: string;
   refreshToken: string;
-  // Note: Tokens are in cookies, not in response body
 }
 
 export interface VerifyEmailPayload {
