@@ -2,8 +2,10 @@
 
 import { CategoriesSectionAnimated } from "@/components/home/CategoriesSectionAnimated.tsx";
 import { CertificateSectionSimple } from "@/components/home/CertificateSectionSimple.tsx";
+import CommunitySection from "@/components/home/CommunitySection.tsx";
 import ConsultationSection from "@/components/home/ConsultationSection.tsx";
 import { DiscoverBooksSectionCarousel } from "@/components/home/DiscoverBooksSectionCarousel.tsx";
+import GCommunitySection from "@/components/home/GCommunitySection.tsx";
 import HeroSection from "@/components/home/HeroSection";
 import InstructorsSection from "@/components/home/InstructorsSection.tsx";
 import { InstructorsSectionAdvanced } from "@/components/home/InstructorsSectionAdvanced.tsx";
@@ -26,10 +28,8 @@ const HomePage = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   return (
     <div className='min-h-screen bg-gradient-radial from-pink-100 via-purple-50 to-orange-50'>
-      
-        <AnnouncementBar />
-        <NavBar onMenuToggle={() => setIsSidebarOpen(!isSidebarOpen)} />
-      
+      <AnnouncementBar />
+      <NavBar onMenuToggle={() => setIsSidebarOpen(!isSidebarOpen)} />
 
       {/* Main Layout Container */}
       <div className='flex pt-16 lg:pt-0 '>
@@ -52,7 +52,8 @@ const HomePage = () => {
           <DiscoverBooksSectionCarousel />
           <InstructorsSection />
           <InstructorsSectionAdvanced />
-
+          <CommunitySection />
+          <GCommunitySection />
           <CertificateSectionSimple />
           <ConsultationSection />
           <Newsletter />
