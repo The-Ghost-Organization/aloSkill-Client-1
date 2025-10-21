@@ -1,4 +1,4 @@
-import { Bell, BookOpen, Search, Users } from 'lucide-react';
+import { BookOpen, Users } from 'lucide-react';
 import Link from 'next/link';
 
 // Mock data
@@ -22,32 +22,8 @@ const activities = [
 
 const Dashboard = () => {
   return (
-    <div className="flex h-screen">
-      <div className="flex-1 flex flex-col gap-4 overflow-auto">
-        {/* Header */}
-        <header className="bg-white border-b border-gray-200 px-4 py-2">
-          <div className="flex items-center justify-between">
-            <h3 className="font-semibold">Dashboard</h3>
-            <div className="flex items-center space-x-4">
-              <div className="relative rounded">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  className="pl-10 pr-4 py-1 border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-orange-light"
-                />
-              </div>
-              <button className="relative p-2 hover:bg-gray-100 rounded">
-                <Bell className="w-5 h-5 text-gray-500" />
-                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-              </button>
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center">
-                <span className="text-white">VS</span>
-              </div>
-            </div>
-          </div>
-        </header>
-
+    <div className="">
+      <div className="flex flex-col gap-4 overflow-auto">
         {/* Stats Grid */}
         <div className="w-full grid grid-cols-4 gap-4">
           {stats.map((stat, idx) => (
@@ -204,49 +180,3 @@ const Dashboard = () => {
 
 export default Dashboard;
 
-
-{/* <div className="mb-4">
-                <div className="flex justify-between items-end h-48">
-                  {[45, 72, 88, 65, 92, 78, 85, 58, 95, 70, 82, 68].map((height, idx) => (
-                    <div key={idx} className="flex-1 mx-1">
-                      <div
-                        className="bg-gradient-to-t from-green-400 to-green-500 rounded-t"
-                        style={{ height: `${height}%` }}
-                      ></div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-gray-800">$7,443</div>
-                <div className="text-sm text-gray-500 mt-1">Total Views</div>
-              </div>
-
-              <div className="mt-8">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-lg font-semibold text-gray-800">Course Overview</h3>
-                  <a href="#" className="text-sm text-orange-500 hover:text-orange-600">This week →</a>
-                </div>
-                <div className="h-32">
-                  <svg viewBox="0 0 300 100" className="w-full h-full">
-                    <polyline
-                      points="0,80 30,65 60,70 90,55 120,60 150,45 180,50 210,35 240,45 270,30 300,40"
-                      fill="none"
-                      stroke="#3b82f6"
-                      strokeWidth="2"
-                    />
-                    <polyline
-                      points="0,60 30,50 60,55 90,40 120,48 150,35 180,42 210,28 240,38 270,25 300,35"
-                      fill="none"
-                      stroke="#8b5cf6"
-                      strokeWidth="2"
-                    />
-                    <polyline
-                      points="0,40 30,55 60,45 90,60 120,50 150,65 180,55 210,70 240,60 270,75 300,65"
-                      fill="none"
-                      stroke="#ef4444"
-                      strokeWidth="2"
-                    />
-                  </svg>
-                </div>
-              </div> */}
