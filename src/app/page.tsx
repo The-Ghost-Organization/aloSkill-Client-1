@@ -27,12 +27,14 @@ const HomePage = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   return (
-    <div className='min-h-screen w-screen bg-gradient-radial from-pink-100 via-purple-50 to-orange-50'>
-      <AnnouncementBar />
-      <NavBar onMenuToggle={() => setIsSidebarOpen(!isSidebarOpen)} />
+    <div className='min-h-screen bg-white'>
+      <div className='fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm'>
+        <AnnouncementBar />
+        <NavBar onMenuToggle={() => setIsSidebarOpen(!isSidebarOpen)} />
+      </div>
 
       {/* Main Layout Container */}
-      <div className='w-full flex pt-16 lg:pt-0 '>
+      <div className=' pt-16 '>
         {/* Left Sidebar - Desktop */}
         <LeftSidebar
           isOpen={isSidebarOpen}
@@ -40,24 +42,25 @@ const HomePage = () => {
         />
 
         {/* Main Content Area */}
-        <main className='flex-1 lg:px-6 px-4'>
-          <HeroSection />
+        <main className='min-h-screen lg:ml-64 xl:mr-64 px-4 sm:px-6 md:px-8 lg:px-1 py-8'>
+          <div className='max-w-6xl mx-auto bg-opacity-90'>
+            <HeroSection />
 
-          <CategoriesSectionAnimated />
+            <CategoriesSectionAnimated />
 
-          <StatsSection />
-          <WhyLearnSectionAnimated />
-          <PopularCoursesSection />
-          <PopularCoursesSectionCompact />
-          <DiscoverBooksSectionCarousel />
-          <InstructorsSection />
-          <InstructorsSectionAdvanced />
-          <CommunitySection />
-          <GCommunitySection />
-          <CertificateSectionSimple />
-          <ConsultationSection />
-          <Newsletter />
-          {/* <CategoryCard
+            <StatsSection />
+            <WhyLearnSectionAnimated />
+            <PopularCoursesSection />
+            <PopularCoursesSectionCompact />
+            <DiscoverBooksSectionCarousel />
+            <InstructorsSection />
+            <InstructorsSectionAdvanced />
+            <CommunitySection />
+            <GCommunitySection />
+            <CertificateSectionSimple />
+            <ConsultationSection />
+            <Newsletter />
+            {/* <CategoryCard
             icon={undefined}
             title={"i am category card"}
             courseCount={100}
@@ -84,6 +87,7 @@ const HomePage = () => {
             rating={5}
             comment={"no comments i am mr. reviewer"}
           /> */}
+          </div>
         </main>
 
         {/* Right Sidebar - Large Desktop Only */}

@@ -107,7 +107,7 @@ h6 {
   /* === Gradient Backgrounds === */
   --background-image-gradient-bpy: linear-gradient(135deg, #faffbd, #ffbbf8, #5b61ff);
   --background-image-gradient-bpyg: radial-gradient(circle at 40% 20%, rgba(91, 97, 255, 0.2) 0%, rgba(255, 187, 248, 0.5) 30%, rgba(250, 255, 189, 0.3) 60%, rgba(234, 255, 255, 1) 100%);
-  --background-image-gradient-soft-hero: radial-gradient(ellipse at 50% 10%, rgba(91, 97, 255, 0.2) 0%, rgba(255, 187, 248, 0.5) 30%, rgba(250, 255, 189, 0.4) 60%, rgba(234, 255, 255, 1) 100%);
+  --background-image-gradient-soft-hero: radial-gradient(ellipse at 50% 10%, rgba(91, 97, 255, 0.2) 0%, rgba(255, 187, 248, 0.3) 30%, rgba(250, 255, 189, 0.2) 60%, rgba(234, 255, 255, 1) 100%);
   --background-image-gradient-blob: radial-gradient(ellipse at 40% 20%, rgba(255, 187, 248, 0.45) 0%, rgba(250, 255, 189, 0.35) 25%, rgba(187, 255, 255, 0.35) 50%, rgba(255, 229, 189, 0.35) 75%, rgba(255, 255, 255, 0.7) 100%);
 }
 

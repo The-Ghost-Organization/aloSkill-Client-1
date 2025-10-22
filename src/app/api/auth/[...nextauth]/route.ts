@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-console */
 
 import { config as envConfig } from "@/config/env";
@@ -81,7 +80,7 @@ export const authOptions: NextAuthOptions = {
         const user = apiRes.data;
 
         if (!user) {
-          throw new Error(apiRes.message|| "Authentication failed");
+          throw new Error(apiRes.message || "Authentication failed");
         }
 
         try {
@@ -133,6 +132,9 @@ export const authOptions: NextAuthOptions = {
 
   callbacks: {
     async signIn({ user, account, profile }) {
+      console.log(
+        `signIn callback called for ${user.email}, account: ${JSON.stringify(account)}\n\n`
+      );
       if (account?.provider !== "google") return true;
 
       try {
