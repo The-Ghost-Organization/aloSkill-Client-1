@@ -1,6 +1,6 @@
 "use client"
 
-import { BarChart3, BookIcon, BookOpen, DollarSign, LogOut, MessageSquare, Settings } from 'lucide-react';
+import { BarChart3, Bell, BookIcon, BookOpen, DollarSign, LogOut, MessageSquare, Search, Settings } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Suspense } from "react";
@@ -45,7 +45,30 @@ const InstructorsLayout = ({ children }: { children: React.ReactNode }) => {
                     ))}
                 </nav>
             </div>
-            <div className="flex-1">
+            <div className="flex-1 h-full flex flex-col gap-4 overflow-y-auto">
+                {/* Header */}
+                <header className="bg-white border-b border-gray-200 px-4 py-2">
+                    <div className="flex items-center justify-between">
+                        <h3 className="font-semibold">Dashboard</h3>
+                        <div className="flex items-center space-x-4">
+                            <div className="relative rounded">
+                                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                <input
+                                    type="text"
+                                    placeholder="Search..."
+                                    className="pl-10 pr-4 py-1 border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-orange-light"
+                                />
+                            </div>
+                            <button className="relative p-2 hover:bg-gray-100 rounded">
+                                <Bell className="w-5 h-5 text-gray-500" />
+                                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                            </button>
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center">
+                                <span className="text-white">VS</span>
+                            </div>
+                        </div>
+                    </div>
+                </header>
                 <Suspense fallback={<LoadingFallback />}>
                     {children}
                 </Suspense>
