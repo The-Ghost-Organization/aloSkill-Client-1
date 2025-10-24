@@ -51,7 +51,7 @@ export default function LeftSidebar({ isOpen = true, onClose }: LeftSidebarProps
 
       {/* Sidebar */}
       <aside
-        className={`
+        className={`sidebar
           fixed top-24 left-0 z-40
           h-[calc(100vh-4rem)] w-60
           bg-transparent

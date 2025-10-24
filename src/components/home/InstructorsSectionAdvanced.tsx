@@ -3,17 +3,9 @@
 import { ArrowRight, Award, Share2, Star } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+import type { InstructorAdvanced } from "../instructor/instructorCard.types.ts";
 
-interface InstructorAdvanced {
-  id: number;
-  name: string;
-  title: string;
-  image: string;
-  borderColor: string;
-  students: number;
-  courses: number;
-  rating: number;
-}
+
 
 const instructorsAdvanced: InstructorAdvanced[] = [
   {

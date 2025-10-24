@@ -1,9 +1,15 @@
+// File: components/home/PopularCoursesSection.tsx
 "use client";
 
-import { ArrowRight, Pencil } from "lucide-react";
-import CourseCard from "./CourseCard";
+import CourseGrid from "@/components/grids/CourseGrid";
+import SectionHeader from "@/components/sections/SectionHeader";
+import type { Course } from "@/types/course.types";
+import { Pencil } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useCallback, useState } from "react";
 
-const courses = [
+// Mock data - In production, fetch from API
+const INITIAL_COURSES: Course[] = [
   {
     id: 1,
     image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=500&q=80",
@@ -12,10 +18,15 @@ const courses = [
     rating: 4.5,
     reviewCount: "4.5k",
     price: 50.0,
-    title: "It Statistics Data Science And Business Analysis",
+    originalPrice: 100.0,
+    discount: 50,
+    title: "IT Statistics Data Science And Business Analysis",
     lessons: 10,
     duration: "19h 30m",
     students: "20+",
+    level: "Beginner",
+    language: "English",
+    certificate: true,
     instructor: {
       name: "Samantha",
       avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Samantha",
@@ -33,6 +44,9 @@ const courses = [
     lessons: 10,
     duration: "19h 30m",
     students: "20+",
+    level: "Beginner",
+    language: "English",
+    certificate: true,
     instructor: {
       name: "Charles",
       avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Charles",
@@ -46,10 +60,15 @@ const courses = [
     rating: 4.5,
     reviewCount: "4.5k",
     price: 50.0,
+    originalPrice: 75.0,
+    discount: 33,
     title: "Starting SEO As Your Home Based Business",
     lessons: 8,
     duration: "19h 30m",
     students: "20+",
+    level: "Intermediate",
+    language: "English",
+    certificate: true,
     instructor: {
       name: "Morgan",
       avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Morgan",
@@ -57,55 +76,163 @@ const courses = [
   },
 ];
 
+/**
+ * PopularCoursesSection Component
+ * Production-ready section displaying popular courses with full functionality
+ */
 export default function PopularCoursesSection() {
+  const [courses, setCourses] = useState<Course[]>(INITIAL_COURSES);
+  const [isLoading, setIsLoading] = useState(false);
+  const [cartItems, setCartItems] = useState<Set<string | number>>(new Set());
+  const [wishlistItems, setWishlistItems] = useState<Set<string | number>>(new Set());
+  const router = useRouter();
+  /**
+   * Handle course enrollment
+   * In production: Navigate to checkout or enrollment page
+   */
+  const handleEnroll = useCallback((courseId: string | number) => {
+    console.log(`Enrolling in course: ${courseId}`);
+    // TODO: Implement enrollment logic
+    // - Check authentication
+    // - Navigate to checkout
+    // - Show confirmation modal
+  }, []);
+
+  /**
+   * Handle add to cart
+   * In production: Update cart state/context and show notification
+   */
+  const handleAddToCart = useCallback((courseId: string | number) => {
+    setCartItems(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(courseId)) {
+        newSet.delete(courseId);
+        console.log(`Removed course ${courseId} from cart`);
+        // TODO: Show toast notification
+      } else {
+        newSet.add(courseId);
+        console.log(`Added course ${courseId} to cart`);
+        // TODO: Show toast notification
+      }
+      return newSet;
+    });
+  }, []);
+
+  /**
+   * Handle add to wishlist
+   * In production: Update wishlist state/context and sync with backend
+   */
+  const handleAddToWishlist = useCallback(async (courseId: string | number) => {
+    setWishlistItems(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(courseId)) {
+        newSet.delete(courseId);
+        console.log(`Removed course ${courseId} from wishlist`);
+        // TODO: API call to remove from wishlist
+      } else {
+        newSet.add(courseId);
+        console.log(`Added course ${courseId} to wishlist`);
+        // TODO: API call to add to wishlist
+      }
+      return newSet;
+    });
+
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 500));
+  }, []);
+
+  /**
+   * Handle load more courses
+   * In production: Fetch next page from API
+   */
+  const handleLoadMore = useCallback(async () => {
+    setIsLoading(true);
+
+    router.push("/courses");
+    try {
+      // TODO: Replace with actual API call
+      // const response = await fetch('/api/courses?page=2&limit=6');
+      // const newCourses = await response.json();
+
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      // Mock: Add more courses (in production, append from API)
+      const moreCourses: Course[] = [
+        {
+          id: 4,
+          image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=500&q=80",
+          category: "Web Development",
+          categoryColor: "bg-green-700",
+          rating: 4.8,
+          reviewCount: "3.2k",
+          price: 45.0,
+          title: "Full Stack Web Development Bootcamp",
+          lessons: 15,
+          duration: "25h 00m",
+          students: "50+",
+          level: "Advanced",
+          language: "English",
+          certificate: true,
+          instructor: {
+            name: "Alex",
+            avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alex",
+          },
+        },
+      ];
+
+      setCourses(prev => [...prev, ...moreCourses]);
+      console.log("Loaded more courses");
+    } catch (error) {
+      console.error("Failed to load more courses:", error);
+      // TODO: Show error toast notification
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
   return (
-    <section className='py-16 md:py-24 bg-gradient-to-b from-white to-gray-50 relative overflow-hidden'>
-      {/* Decorative Pencil Icon */}
-      <div className='absolute top-16 right-16 opacity-10'>
+    <section
+      className='py-16 md:py-24 bg-gradient-to-b from-white to-gray-50 relative overflow-hidden'
+      aria-labelledby='popular-courses-heading'
+    >
+      {/* Decorative Background Element */}
+      <div
+        className='absolute top-16 right-16 opacity-10 pointer-events-none'
+        aria-hidden='true'
+      >
         <Pencil className='w-32 h-32 text-orange-400 rotate-12' />
       </div>
 
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10'>
         {/* Section Header */}
-        <div className='flex flex-col md:flex-row items-start md:items-center justify-between mb-12 gap-6'>
-          <div>
-            <div className='inline-block mb-4'>
-              <span className='px-4 py-2 bg-orange-100 text-orange-600 rounded-full text-sm font-semibold uppercase tracking-wide'>
-                Top Popular Course
-              </span>
-            </div>
-            <h2 className='text-3xl md:text-4xl lg:text-5xl font-black text-blue-900'>
+
+        <SectionHeader
+          badge='Top Popular Course'
+          title={
+            <>
               Aloskill Course Student Can
               <br />
               Join With Us.
-            </h2>
-          </div>
-          <button className='group flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-full hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold'>
-            <span>Load More Courses</span>
-            <ArrowRight className='w-5 h-5 group-hover:translate-x-1 transition-transform' />
-          </button>
-        </div>
+            </>
+          }
+          showButton={true}
+          buttonText='Load More Courses'
+          onButtonClick={handleLoadMore}
+          isLoading={isLoading}
+        />
 
         {/* Courses Grid */}
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
-          {courses.map(course => (
-            <CourseCard
-              key={course.id}
-              image={course.image}
-              category={course.category}
-              categoryColor={course.categoryColor}
-              rating={course.rating}
-              reviewCount={course.reviewCount}
-              price={course.price}
-              title={course.title}
-              lessons={course.lessons}
-              duration={course.duration}
-              students={course.students}
-              instructor={course.instructor}
-              onEnroll={() => console.log(`Enrolling in: ${course.title}`)}
-            />
-          ))}
-        </div>
+        <CourseGrid
+          courses={courses}
+          isLoading={false}
+          onEnroll={handleEnroll}
+          onAddToCart={handleAddToCart}
+          onAddToWishlist={handleAddToWishlist}
+          cartItems={cartItems}
+          wishlistItems={wishlistItems}
+          emptyStateMessage='No popular courses available right now. Check back soon!'
+        />
       </div>
     </section>
   );

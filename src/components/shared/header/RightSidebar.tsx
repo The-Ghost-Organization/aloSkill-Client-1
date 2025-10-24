@@ -39,7 +39,7 @@ export default function RightSidebar() {
       className='hidden xl:block
         fixed top-28 py-6 right-0
         w-60 h-[calc(100vh-4rem)]
-        bg-transparent 
+        bg-transparent
         overflow-y-auto
         z-40'
     >
@@ -50,9 +50,9 @@ export default function RightSidebar() {
             <div
               key={card.id}
               className={`
-                bg-gradient-to-br ${card.gradient} 
-                rounded-2xl p-6 shadow-sm hover:shadow-md 
-                transition-all duration-300 hover:scale-105 
+                bg-gradient-to-br ${card.gradient}
+                rounded-2xl p-6 shadow-sm hover:shadow-md
+                transition-all duration-300 hover:scale-105
                 cursor-pointer border border-gray-100
               `}
             >

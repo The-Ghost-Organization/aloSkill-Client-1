@@ -71,7 +71,10 @@ export default withAuth(
       pathname.startsWith("/auth") ||
       pathname.startsWith("/courses") ||
       pathname.startsWith("/test-error") ||
-      pathname.startsWith("/about")
+      pathname.startsWith("/about") ||
+      pathname.startsWith("/cart") ||
+      pathname.startsWith("/checkout") ||
+      pathname.startsWith("/watch-video")
     ) {
       return NextResponse.next();
     }

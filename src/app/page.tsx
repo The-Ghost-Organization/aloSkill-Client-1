@@ -7,10 +7,8 @@ import ConsultationSection from "@/components/home/ConsultationSection.tsx";
 import { DiscoverBooksSectionCarousel } from "@/components/home/DiscoverBooksSectionCarousel.tsx";
 import GCommunitySection from "@/components/home/GCommunitySection.tsx";
 import HeroSection from "@/components/home/HeroSection";
-import InstructorsSection from "@/components/home/InstructorsSection.tsx";
 import { InstructorsSectionAdvanced } from "@/components/home/InstructorsSectionAdvanced.tsx";
 import PopularCoursesSection from "@/components/home/PopularCoursesSection.tsx";
-import { PopularCoursesSectionCompact } from "@/components/home/PopularCoursesSectionCompact.tsx";
 import { WhyLearnSectionAnimated } from "@/components/home/WhyLearnSectionAnimated.tsx";
 import BackToTop from "@/components/shared/BackToTop";
 import FooterSimple from "@/components/shared/footer/FooterSimple";
@@ -20,7 +18,7 @@ import LeftSidebar from "@/components/shared/header/LeftSidebar";
 import MobileMenu from "@/components/shared/header/menu/MobileMenu";
 import TabletDrawer from "@/components/shared/header/menu/TabletDrawer";
 import NavBar from "@/components/shared/header/NavBar";
-import RightSidebar from "@/components/shared/header/RightSidebar";
+// import RightSidebar from "@/components/shared/header/RightSidebar";
 import StatsSection from "@/components/StatsSection.tsx";
 import { useState } from "react";
 const HomePage = () => {
@@ -51,9 +49,9 @@ const HomePage = () => {
             <StatsSection />
             <WhyLearnSectionAnimated />
             <PopularCoursesSection />
-            <PopularCoursesSectionCompact />
+
             <DiscoverBooksSectionCarousel />
-            <InstructorsSection />
+
             <InstructorsSectionAdvanced />
             <CommunitySection />
             <GCommunitySection />
@@ -70,7 +68,7 @@ const HomePage = () => {
             icon={undefined}
             title={"i am feature card"}
             description={"here is my description"}
-            gradient={"blue}"}
+            gradient={"blue"}
           />
           <InstructorCard
             name={"mr.Instructor"}
@@ -91,7 +89,7 @@ const HomePage = () => {
         </main>
 
         {/* Right Sidebar - Large Desktop Only */}
-        <RightSidebar />
+        {/* <RightSide /> */}
       </div>
 
       {/* Mobile Menu */}
