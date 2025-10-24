@@ -3,8 +3,7 @@
 import { CreditCard, Send, X } from 'lucide-react';
 import { useState } from 'react';
 
-const PaymentModal = () => {
-    const [isOpen, setIsOpen] = useState(true);
+const PaymentModal = ({setModalOpen}:{setModalOpen: React.Dispatch<React.SetStateAction<boolean>>}) => {
     const [formData, setFormData] = useState({
         name: '',
         cardNumber: '',
@@ -14,6 +13,7 @@ const PaymentModal = () => {
 
     const handleSubmit = () => {
         // Handle form submission logic here
+        setModalOpen(false);
     };
 
     const handleChange = (field: string, value: HTMLInputElement['value']) => {
@@ -22,8 +22,6 @@ const PaymentModal = () => {
             [field]: value
         }));
     };
-
-    if (!isOpen) return null;
 
     return (
         <>
@@ -37,7 +35,7 @@ const PaymentModal = () => {
                             New Payment Card
                         </h3>
                         <button
-                            onClick={() => setIsOpen(false)}
+                            onClick={() => setModalOpen(false)}
                             className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
                         >
                             <X className="w-5 h-5 text-gray-500" />
@@ -116,14 +114,14 @@ const PaymentModal = () => {
                         {/* Action Buttons */}
                         <div className="flex items-center justify-between pt-2">
                             <button
-                                onClick={() => setIsOpen(false)}
+                                onClick={() => setModalOpen(false)}
                                 className="px-4 py-1.5 text-gray-700 font-medium hover:bg-gray-100 rounded transition-colors"
                             >
                                 Cancel
                             </button>
                             <button
                                 onClick={handleSubmit}
-                                className="px-4 py-1.5 bg-orange-500 text-white font-medium rounded hover:bg-orange-600 transition-colors flex items-center"
+                                className="px-4 py-1.5 bg-orange-500 text-white font-medium rounded hover:bg-orange-600 transition-colors flex items-center gap-2"
                             >
                                 <span>Send Message</span>
                                 <Send className="w-4 h-4" />

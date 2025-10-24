@@ -45,9 +45,9 @@ const InstructorsLayout = ({ children }: { children: React.ReactNode }) => {
                     ))}
                 </nav>
             </div>
-            <div className="flex-1 h-full flex flex-col gap-4 overflow-y-auto">
+            <div className="flex-1 h-full flex flex-col gap-4 overflow-x-hidden overflow-y-auto">
                 {/* Header */}
-                <header className="bg-white border-b border-gray-200 px-4 py-2">
+                <header className="bg-white border-b border-gray-200 px-4 py-2 w-full">
                     <div className="flex items-center justify-between">
                         <h3 className="font-semibold">Dashboard</h3>
                         <div className="flex items-center space-x-4">

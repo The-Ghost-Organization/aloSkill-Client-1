@@ -235,7 +235,7 @@ const WithdrawalPage = () => {
                             {/* Add new Card */}
 
                             <div className='w-full border border-dashed'>
-                                <button onClick={() => setModalOpen(!modalOpen)} className="w-full py-2 bg-white rounded flex items-center justify-center hover:bg-gray-50 transition-colors cursor-pointer">
+                                <button onClick={() => setModalOpen(true)} className="w-full py-2 bg-white rounded flex items-center justify-center hover:bg-gray-50 transition-colors cursor-pointer">
                                     <Plus className="w-5 h-5 text-gray-600 mr-3" />
                                     Add New Card
                                 </button>
@@ -342,7 +342,7 @@ const WithdrawalPage = () => {
             </div>
 
             {/* Modal */}
-            {modalOpen && <PaymentModal />}
+            {modalOpen && <PaymentModal setModalOpen={setModalOpen} />}
         </div>
     );
 };
