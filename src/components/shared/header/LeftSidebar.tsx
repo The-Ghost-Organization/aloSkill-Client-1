@@ -44,18 +44,20 @@ export default function LeftSidebar({ isOpen = true, onClose }: LeftSidebarProps
       {/* Mobile Overlay */}
       {isOpen && (
         <div
-          className='fixed top-0 inset-0 bg-black/50 z-40 lg:hidden'
+          className='fixed top-0 inset-0 bg-black/50 z-40 md:hidden shrink-0'
           onClick={onClose}
         />
       )}
 
       {/* Sidebar */}
       <aside
-        className={`
-          sticky top-16 lg:top-30 left-0 h-[calc(100vh-5rem)] bg-white border-r border-gray-200 z-50 overflow-y-auto
+        className={`sidebar
+          fixed top-24 left-0 z-40
+          h-[calc(100vh-4rem)] w-60
+          bg-transparent
           transition-transform duration-300 ease-in-out
+          overflow-y-auto
           ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
-          w-64 flex flex-col
         `}
       >
         {/* Mobile Close Button */}
@@ -69,7 +71,7 @@ export default function LeftSidebar({ isOpen = true, onClose }: LeftSidebarProps
         </div>
 
         {/* Navigation */}
-        <nav className='flex-1 px-4 py-6 space-y-2 overflow-y-auto pt-20 lg:pt-6'>
+        <nav className='px-4 py-6 space-y-2'>
           {navItems.map(item => {
             const Icon = item.icon;
             const isActive = pathname === item.href;

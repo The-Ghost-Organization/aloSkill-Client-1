@@ -115,7 +115,7 @@ export function CategoriesSectionAnimated() {
               <div
                 key={category.id}
                 className={`
-                  group relative ${category.bgColor} rounded-2xl p-6 
+                  group relative ${category.bgColor} rounded-2xl px-6 py-4
                   transition-all duration-300 
                   hover:shadow-xl hover:-translate-y-2
                   cursor-pointer border border-transparent hover:border-gray-200
@@ -144,14 +144,14 @@ export function CategoriesSectionAnimated() {
 
                 {/* Content */}
                 <div className='space-y-1 mb-3'>
-                  <h3
+                  <h4
                     className={`
                     text-xl font-bold transition-colors
                     ${isHovered ? "text-orange-600" : "text-gray-900"}
                   `}
                   >
                     {category.title}
-                  </h3>
+                  </h4>
                   <p className='text-sm text-gray-500 font-medium'>{category.subtitle}</p>
                 </div>
 
@@ -186,10 +186,17 @@ export function CategoriesSectionAnimated() {
 
         {/* View All Button */}
         <div className='text-center mt-12'>
-          <button className='group inline-flex items-center gap-2 px-8 py-4 bg-white border-2 border-gray-300 text-gray-700 rounded-full hover:border-orange-500 hover:text-orange-500 hover:bg-orange-50 transition-all duration-300 shadow-md hover:shadow-lg font-semibold'>
+          <button className='w-full sm:w-auto relative inline-flex h-14 active:scale-95 transition-all duration-700 overflow-hidden rounded-full p-[2px] focus:outline-none shadow-md hover:shadow-lg '>
+            <span className='absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#DA7C36_0%,#f472b6_50%,#bd5fff_100%)]'></span>
+            <span className='inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-white px-8 text-sm font-semibold text-gray-900 backdrop-blur-3xl gap-2 hover:bg-[var(--color-orange)] hover:text-white transition-colors'>
+              <span>Browse All Categories</span>
+              <ArrowRight className='w-5 h-5 group-hover:translate-x-1 transition-transform' />
+            </span>
+          </button>
+          {/* <button className='group inline-flex items-center gap-2 px-8 py-4 bg-white border-2 border-gray-300 text-gray-700 rounded-full hover:border-orange-500 hover:text-orange-500 hover:bg-orange-50 transition-all duration-300 shadow-md hover:shadow-lg font-semibold'>
             <span>Browse All Categories</span>
             <ArrowRight className='w-5 h-5 group-hover:translate-x-1 transition-transform' />
-          </button>
+          </button> */}
         </div>
       </div>
     </section>

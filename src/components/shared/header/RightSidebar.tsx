@@ -35,7 +35,14 @@ const cards = [
 
 export default function RightSidebar() {
   return (
-    <aside className='hidden xl:block sticky top-20 right-0 w-64 h-[calc(100vh-5rem)] overflow-y-auto py-6 px-4'>
+    <aside
+      className='hidden xl:block
+        fixed top-28 py-6 right-0
+        w-60 h-[calc(100vh-4rem)]
+        bg-transparent
+        overflow-y-auto
+        z-40'
+    >
       <div className='space-y-4'>
         {cards.map(card => {
           const Icon = card.icon;
@@ -43,9 +50,9 @@ export default function RightSidebar() {
             <div
               key={card.id}
               className={`
-                bg-gradient-to-br ${card.gradient} 
-                rounded-2xl p-6 shadow-sm hover:shadow-md 
-                transition-all duration-300 hover:scale-105 
+                bg-gradient-to-br ${card.gradient}
+                rounded-2xl p-6 shadow-sm hover:shadow-md
+                transition-all duration-300 hover:scale-105
                 cursor-pointer border border-gray-100
               `}
             >
