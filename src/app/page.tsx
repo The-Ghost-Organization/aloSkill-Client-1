@@ -1,5 +1,6 @@
 "use client";
 
+import BonusesSection from "@/components/home/BonusSection.tsx";
 import { CategoriesSectionAnimated } from "@/components/home/CategoriesSectionAnimated.tsx";
 import { CertificateSectionSimple } from "@/components/home/CertificateSectionSimple.tsx";
 import CommunitySection from "@/components/home/CommunitySection.tsx";
@@ -47,6 +48,7 @@ const HomePage = () => {
             <CategoriesSectionAnimated />
 
             <StatsSection />
+            <BonusesSection />
             <WhyLearnSectionAnimated />
             <PopularCoursesSection />
 

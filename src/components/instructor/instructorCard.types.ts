@@ -7,10 +7,13 @@ export interface Instructor {
   students: number;
   courses: number;
   rating: number;
+  category: "leadership" | "field";
+  featured: boolean;
 }
 export interface InstructorCardProps {
   instructor: Instructor;
   isHovered: boolean;
   onHover: () => void;
   onLeave: () => void;
+  animationDelay?: number;
 }
