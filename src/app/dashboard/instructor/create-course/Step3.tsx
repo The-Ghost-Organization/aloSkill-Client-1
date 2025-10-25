@@ -4,8 +4,7 @@ import StepHeader from './StepHeader.tsx';
 import SectionNameEditModal from './SectionNameEditModal.tsx';
 import LectureVideoUploadModal from './LectureVideoUploadModal.tsx';
 
-export default function Step3() {
-    const [currentStep, setCurrentStep] = useState(3);
+export default function Step3({ currentStep, setCurrentStep }: { currentStep: number, setCurrentStep: (step: number) => void }) {
     const [sectionNameEditModal, setSectionNameEditModal] = useState(false);
     const [lectureVideoUploadModal, setLectureVideoUploadModal] = useState(false);
     const [sections, setSections] = useState([

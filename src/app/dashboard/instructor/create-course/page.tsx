@@ -62,7 +62,7 @@ export default function CourseCreationForm() {
                 )}
 
                 {currentStep === 3 && (
-                    <Step3/>
+                    <Step3 currentStep={currentStep} setCurrentStep={setCurrentStep} />
                 )}
 
                 {currentStep === 4 && (
