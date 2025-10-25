@@ -4,6 +4,7 @@
 "use client";
 
 import { Bell, Heart, Menu, Search, ShoppingCart, User } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 interface HeaderProps {
@@ -13,7 +14,12 @@ interface HeaderProps {
 export default function NavBar({ onMenuToggle }: HeaderProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [cartCount, setCartCount] = useState(2);
-
+  const router = useRouter();
+  const handleSignIn = () => {
+    router.push("/auth/signin");
+    // Implement your sign-in logic here
+    console.log("Sign-in button clicked");
+  };
   return (
     <header className='w-full bg-white/80 backdrop-blur-md border-b border-gray-200/50 shadow-sm'>
       <div className=' flex items-center justify-between px-4 md:px-6 py-3 max-w-full mx-auto'>
@@ -97,7 +103,10 @@ export default function NavBar({ onMenuToggle }: HeaderProps) {
           </button>
 
           {/* Login Button */}
-          <button className='px-4 md:px-6 py-2 bg-gradient-to-r from-[var(--color-orange)] to-[#B85C1A] text-white rounded-full hover:from-[#B85C1A] hover:to-[var(--color-orange)] transition-all duration-300 shadow-md hover:shadow-lg font-medium text-sm'>
+          <button
+            onClick={handleSignIn}
+            className='px-4 md:px-6 py-2 bg-gradient-to-r from-[var(--color-orange)] to-[#B85C1A] text-white rounded-full hover:from-[#B85C1A] hover:to-[var(--color-orange)] transition-all duration-300 shadow-md hover:shadow-lg font-medium text-sm'
+          >
             Login account
           </button>
         </div>
