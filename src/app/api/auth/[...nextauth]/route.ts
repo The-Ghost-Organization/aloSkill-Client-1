@@ -133,7 +133,7 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async signIn({ user, account, profile }) {
       console.log(
-        `signIn callback called for ${user.email}, account: ${JSON.stringify(account)}\n\n`
+        `signIn callback called for ${user.email}, account: ${JSON.stringify(account)}, profile: ${JSON.stringify(profile)}`
       );
       if (account?.provider !== "google") return true;
 
@@ -148,10 +148,10 @@ export const authOptions: NextAuthOptions = {
           console.log(`User ${user.email} not found, creating new user...`);
 
           const registerResponse = await authService.register({
-            firstName: profile?.given_name || "",
-            lastName: profile?.family_name || "",
+            firstName: profile?.given_name || profile?.given_name || "",
+            lastName: profile?.family_name || profile?.family_name || "",
             email: user.email,
-            googleId: profile?.sub || "",
+            googleId: profile?.sub || account.providerAccountId || "",
             profilePicture: user?.image ?? null,
           });
 
