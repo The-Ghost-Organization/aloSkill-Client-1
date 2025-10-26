@@ -1,9 +1,14 @@
 "use client";
 
-import { Mail } from "lucide-react";
+import { Facebook, Instagram, Mail } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 
-const socialLinks = [{ icon: Mail, href: "mailto:info@aloskill.com", label: "Email" }];
+const socialLinks = [
+  { icon: Mail, href: "mailto:info@aloskill.com", label: "Email" },
+  { icon: Facebook, href: "facebook.com", label: "Facebook" },
+  { icon: Instagram, href: "facebook.com", label: "Instagram" },
+];
 
 const languages = [
   { code: "en", label: "Eng" },
@@ -37,7 +42,7 @@ export default function AnnouncementBar() {
               {socialLinks.map(social => {
                 const Icon = social.icon;
                 return (
-                  <a
+                  <Link
                     key={social.label}
                     href={social.href}
                     target='_blank'
@@ -50,7 +55,7 @@ export default function AnnouncementBar() {
                       className='w-4 h-4'
                       aria-hidden='true'
                     />
-                  </a>
+                  </Link>
                 );
               })}
             </div>

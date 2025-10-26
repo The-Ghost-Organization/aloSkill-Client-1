@@ -1,6 +1,7 @@
 "use client";
 
 import BonusesSection from "@/components/home/BonusSection.tsx";
+import ButtonTest from "@/components/home/ButtonTest.tsx";
 import { CategoriesSectionAnimated } from "@/components/home/CategoriesSectionAnimated.tsx";
 import { CertificateSectionSimple } from "@/components/home/CertificateSectionSimple.tsx";
 import CommunitySection from "@/components/home/CommunitySection.tsx";
@@ -44,7 +45,7 @@ const HomePage = () => {
         <main className='min-h-screen lg:ml-64 xl:mr-64 px-4 sm:px-6 md:px-8 lg:px-1 py-8'>
           <div className='max-w-6xl mx-auto bg-opacity-90'>
             <HeroSection />
-
+            <ButtonTest />
             <CategoriesSectionAnimated />
 
             <StatsSection />
