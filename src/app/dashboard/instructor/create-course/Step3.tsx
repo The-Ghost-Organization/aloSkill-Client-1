@@ -3,10 +3,12 @@ import { useState } from 'react';
 import StepHeader from './StepHeader.tsx';
 import SectionNameEditModal from './SectionNameEditModal.tsx';
 import LectureVideoUploadModal from './LectureVideoUploadModal.tsx';
+import AttachFileModal from './AttachFileModal.tsx';
 
 export default function Step3({ currentStep, setCurrentStep }: { currentStep: number, setCurrentStep: (step: number) => void }) {
     const [sectionNameEditModal, setSectionNameEditModal] = useState(false);
     const [lectureVideoUploadModal, setLectureVideoUploadModal] = useState(false);
+    const [attachFileModal, setAttachFileModal] = useState(false);
     const [sections, setSections] = useState([
         {
             id: 1,
@@ -177,7 +179,9 @@ export default function Step3({ currentStep, setCurrentStep }: { currentStep: nu
                                                     className="w-full px-2 py-1.5 text-left text-sm text-gray-800 hover:bg-gray-50 transition-colors">
                                                     Video
                                                 </button>
-                                                <button className="w-full px-2 py-1.5 text-left text-sm text-gray-800 hover:bg-gray-50 transition-colors">
+                                                <button
+                                                    onClick={()=>setAttachFileModal(true)}
+                                                    className="w-full px-2 py-1.5 text-left text-sm text-gray-800 hover:bg-gray-50 transition-colors">
                                                     Attach File
                                                 </button>
                                                 <button className="w-full px-2 py-1.5 text-left text-sm text-gray-800 hover:bg-gray-50 transition-colors">
@@ -230,6 +234,10 @@ export default function Step3({ currentStep, setCurrentStep }: { currentStep: nu
             {
                 lectureVideoUploadModal &&
                     <LectureVideoUploadModal setLectureVideoUploadModal={setLectureVideoUploadModal} />
+            }
+            {
+                attachFileModal &&
+                    <AttachFileModal setAttachFileModal={setAttachFileModal} />
             }
         </div>
     );

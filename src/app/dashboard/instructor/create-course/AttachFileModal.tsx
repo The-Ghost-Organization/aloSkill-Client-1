@@ -3,20 +3,20 @@
 import { X } from 'lucide-react';
 import { type ChangeEvent, useState } from 'react';
 
-const LectureVideoUploadModal = ({ setLectureVideoUploadModal }: { setLectureVideoUploadModal: React.Dispatch<React.SetStateAction<boolean>>}) => {
+const AttachFileModal = ({ setAttachFileModal }: { setAttachFileModal: React.Dispatch<React.SetStateAction<boolean>> }) => {
     const [videoPreview, setVideoPreview] = useState("");
     const [videoFile, setVideoFile] = useState<File | null>(null);
 
-    const handleFileSelect = (e:ChangeEvent<HTMLInputElement>) => {
+    const handleFileSelect = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
             const file = e.target.files[0];
 
-            if (file && file.type.startsWith('video/')) {
+            if (file && file.type.startsWith('application/pdf')) {
                 setVideoFile(file);
                 const previewUrl = URL.createObjectURL(file);
                 setVideoPreview(previewUrl);
             } else {
-                alert('Please select a valid video file');
+                alert('Please select a valid file');
             }
         }
     };
@@ -26,7 +26,7 @@ const LectureVideoUploadModal = ({ setLectureVideoUploadModal }: { setLectureVid
             // Here you would implement your actual upload logic
             alert(`Uploading: ${videoFile.name}\nSize: ${formatFileSize(videoFile.size)}`);
             handleClose();
-            setLectureVideoUploadModal(false);
+            setAttachFileModal(false);
         }
     };
 
@@ -44,7 +44,7 @@ const LectureVideoUploadModal = ({ setLectureVideoUploadModal }: { setLectureVid
         setVideoFile(null)
     };
 
-    const formatFileSize = (bytes:number) => {
+    const formatFileSize = (bytes: number) => {
         if (bytes === 0) return '0 Bytes';
         const k = 1024;
         const sizes = ['Bytes', 'KB', 'MB', 'GB'];
@@ -70,7 +70,7 @@ const LectureVideoUploadModal = ({ setLectureVideoUploadModal }: { setLectureVid
                             Lecture Video
                         </h4>
                         <button
-                            onClick={() => setLectureVideoUploadModal(false)}
+                            onClick={() => setAttachFileModal(false)}
                             className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
                         >
                             <X className="w-5 h-5 text-gray-500" />
@@ -79,17 +79,10 @@ const LectureVideoUploadModal = ({ setLectureVideoUploadModal }: { setLectureVid
 
                     {/* Modal Body */}
                     <div className="p-4 w-full">
-                        {/* Video Upload Field */}
+                        {/* file Upload Field */}
                         {
                             videoPreview ?
-                            <div className='w-full h-[80px] flex items-center gap-2'>
-                                <div className='w-[28%] h-full'>
-                                    <video
-                                        src={videoPreview}
-                                        className="w-full aspect-video"
-                                        controls={false}
-                                    />
-                                </div>
+                                <div className='w-full h-[80px]'>
                                     <div className='flex-1'>
                                         <div className="flex items-center gap-2">
                                             <span className="text-xs">
@@ -107,30 +100,27 @@ const LectureVideoUploadModal = ({ setLectureVideoUploadModal }: { setLectureVid
                                             Replace Video
                                         </button>
                                     </div>
-                            </div>
+                                </div>
                                 :
-                            <div>
-                                <div className='w-full flex items-center'>
-                                    <label htmlFor='video' className='block flex-1 px-3 py-2 border border-r-0 border-gray-200 rounded-l text-sm'>
-                                        Upload video
+                                <div className='w-full h-[100px] flex items-center justify-center px-6 border border-gray-200 rounded'>
+                                    <label htmlFor='file' className='block w-full text-sm text-center'>
+                                        <p>Attach File</p>
+                                        <p className='text-xs'>Drag and drop or browse for files</p>
                                     </label>
                                     <input
-                                        id='video'
+                                        id='file'
                                         type="file"
-                                        accept="video/*"
+                                        accept=".pdf,.doc"
                                         onChange={handleFileSelect}
                                         className="hidden"
                                     />
-                                    <button className='px-3 py-2 border border-l-0 border-gray-200 rounded-r text-sm bg-gray-50'>Upload File</button>
                                 </div>
-                                <p className='text-xs font-medium text-gray-600 mt-1'>Note: All files should be at least 720p and less than 4.0 GB.</p>
-                            </div>
                         }
 
                         {/* Action Buttons */}
                         <div className="flex items-center justify-between pt-6">
                             <button
-                                onClick={() => setLectureVideoUploadModal(false)}
+                                onClick={() => setAttachFileModal(false)}
                                 className="px-4 py-1.5 text-gray-700 font-medium hover:bg-gray-100 rounded transition-colors"
                             >
                                 Cancel
@@ -150,4 +140,4 @@ const LectureVideoUploadModal = ({ setLectureVideoUploadModal }: { setLectureVid
     );
 };
 
-export default LectureVideoUploadModal;
+export default AttachFileModal;
