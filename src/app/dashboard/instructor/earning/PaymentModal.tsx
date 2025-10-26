@@ -12,7 +12,6 @@ const PaymentModal = ({setModalOpen}:{setModalOpen: React.Dispatch<React.SetStat
     });
 
     const handleSubmit = () => {
-        // Handle form submission logic here
         setModalOpen(false);
     };
 
