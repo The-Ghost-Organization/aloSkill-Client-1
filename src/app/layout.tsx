@@ -1,4 +1,3 @@
-import NavBar from "@/components/shared/header/NavBar.tsx";
 import { hindSiliguri, inter, playfair } from "@/styles/fonts.ts";
 import type { Metadata } from "next";
 import "./globals.css";
@@ -75,7 +74,7 @@ export default function RootLayout({
         }
       >
         <AuthProvider>
-          <NavBar />
+          {/* <NavBar /> */}
           {children}
         </AuthProvider>
       </body>

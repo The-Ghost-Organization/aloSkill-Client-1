@@ -69,7 +69,7 @@ export default function NavBar({ onMenuToggle }: HeaderProps) {
               placeholder='Search courses, books, or topics...'
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className='w-full pl-10 pr-4 py-2 bg-gray-100 border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-[var(--color-orange)] focus:border-transparent transition-all'
+              className='w-full pl-10 pr-4 py-1 bg-gray-100 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-orange)] focus:border-transparent transition-all'
             />
           </div>
         </div>

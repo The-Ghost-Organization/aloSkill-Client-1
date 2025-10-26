@@ -5,6 +5,7 @@ import {
   Calendar,
   Facebook,
   GraduationCap,
+  Home,
   Instagram,
   Trophy,
   Twitter,
@@ -13,6 +14,7 @@ import {
   Users,
   X,
 } from "lucide-react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 interface LeftSidebarProps {
   isOpen?: boolean;
@@ -20,7 +22,8 @@ interface LeftSidebarProps {
 }
 
 const navItems = [
-  { icon: UserCircle, label: "Sign In/Up", href: "/auth", color: "text-orange-500" },
+  { icon: Home, label: "Home", href: "/", color: "text-orange-700" },
+  { icon: UserCircle, label: "Sign In/Up", href: "/auth/signup", color: "text-orange-500" },
   { icon: GraduationCap, label: "Instructors", href: "/instructors", color: "text-blue-500" },
   { icon: Users, label: "Students", href: "/students", color: "text-green-500" },
   { icon: Calendar, label: "Events", href: "/events", color: "text-purple-500" },
@@ -53,8 +56,8 @@ export default function LeftSidebar({ isOpen = true, onClose }: LeftSidebarProps
       <aside
         className={`sidebar
           fixed top-24 left-0 z-40
-          h-[calc(100vh-4rem)] w-60
-          bg-transparent
+          h-[calc(100vh-4rem)] w-44 xl:w-52
+          bg-white border-r border-gray-200 shadow-lg
           transition-transform duration-300 ease-in-out
           overflow-y-auto
           ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
@@ -77,11 +80,11 @@ export default function LeftSidebar({ isOpen = true, onClose }: LeftSidebarProps
             const isActive = pathname === item.href;
 
             return (
-              <a
+              <Link
                 key={item.href}
                 href={item.href}
                 className={`
-                  flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300
+                  flex items-center gap-3 px-3 py-2 rounded-md transition-all duration-300
                   ${
                     isActive
                       ? "bg-orange-50 text-orange-600 font-semibold shadow-sm"
@@ -91,7 +94,7 @@ export default function LeftSidebar({ isOpen = true, onClose }: LeftSidebarProps
               >
                 <Icon className={`w-5 h-5 ${isActive ? "text-orange-500" : item.color}`} />
                 <span className='text-sm'>{item.label}</span>
-              </a>
+              </Link>
             );
           })}
         </nav>
