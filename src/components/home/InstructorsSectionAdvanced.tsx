@@ -54,8 +54,8 @@ import { instructorsData } from "../instructor/instructorsData.ts";
 
 export function InstructorsSectionAdvanced() {
   const [hoveredId, setHoveredId] = useState<number | null>(null);
-const featuredInstructors = instructorsData.instructors
-    .filter((instructor) => instructor.featured)
+  const featuredInstructors = instructorsData.instructors
+    .filter(instructor => instructor.featured)
     .slice(0, 4);
   return (
     <section className='py-16 md:py-24 bg-gradient-to-br from-gray-50 via-white to-purple-50'>
