@@ -1,10 +1,4 @@
-import AuthProvider from "../providers/session-provider.tsx";
-
-// src/app/dashboard/layout.tsx
+// Base dashboard layout - NO header/footer/sidebars
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <body className='min-h-screen bg-gray-50'>
-      <AuthProvider>{children}</AuthProvider>
-    </body>
-  );
+  return <div className='min-h-screen bg-gray-50'>{children}</div>;
 }

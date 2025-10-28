@@ -3,9 +3,12 @@
 // ============================================
 "use client";
 
-import { ArrowRight, CheckCircle, Send, Star } from "lucide-react";
+import BorderGradientButton from "@/components/buttons/BorderGradientButton.tsx";
+import { ArrowRightIcon, CheckCircle, Send, Star } from "lucide-react";
 import Image from "next/image";
-
+import { useRouter } from "next/navigation";
+import GradientButton from "../../../components/buttons/GradientButton.tsx";
+import "./HeroSection.module.css";
 const avatars = [
   "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80",
   "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80",
@@ -18,8 +21,13 @@ const avatars = [
 const features = ["1000+ Courses Available", "Expert Instructors", "Lifetime Access"];
 
 export default function HeroSection() {
+  const router = useRouter();
+  const handleRegistration = () => {
+    console.log("Registration button clicked");
+    router.push("/auth/signup");
+  };
   return (
-    <section className='relative min-h-screen  flex items-center justify-center px-4 py-4 lg:py-32 overflow-hidden   '>
+    <section className='relative min-h-screen  flex items-center justify-center px-4  py-10 overflow-hidden   '>
       {/* Decorative Blobs */}
       <div className='absolute inset-0 overflow-hidden pointer-events-none bg-gradient-soft-hero  mix-blend-multiply filter blur-2xl opacity-50 '></div>
       {/* <div className='absolute inset-0 overflow-hidden pointer-events-none'>
@@ -89,23 +97,25 @@ export default function HeroSection() {
             বাংলায়।
           </p>
         </div>
-
+        <div></div>
         {/* Primary Action Buttons */}
         <div className='flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-up'>
-          <button className='group w-full sm:w-auto relative px-8 py-4 bg-gradient-to-r from-[var(--color-orange)] to-orange-600 text-white rounded-full hover:from-orange-600 hover:to-[var(--color-orange)] transition-all duration-300 shadow-lg hover:shadow-xl font-semibold text-base overflow-hidden'>
-            <span className='relative z-10 flex items-center justify-center gap-2'>
-              Free Registration
-              <ArrowRight className='w-5 h-5 group-hover:translate-x-1 transition-transform' />
-            </span>
-          </button>
-
-          <button className='w-full sm:w-auto relative inline-flex h-14 active:scale-95 transition overflow-hidden rounded-full p-[2px] focus:outline-none'>
+          <GradientButton
+            icon={ArrowRightIcon}
+            iconPosition='right'
+            iconAnimation='slide'
+            onClick={handleRegistration}
+          >
+            Free Registration
+          </GradientButton>
+          <BorderGradientButton icon={Send}>Become Instructor</BorderGradientButton>
+          {/* <button className='w-full sm:w-auto relative inline-flex h-14 active:scale-95 transition overflow-hidden rounded-lg  focus:outline-none p-2 text-[17px]'>
             <span className='absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#DA7C36_0%,#f472b6_50%,#bd5fff_100%)]'></span>
-            <span className='inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-white px-8 text-sm font-semibold text-gray-900 backdrop-blur-3xl gap-2 hover:bg-[var(--color-orange)] hover:text-white transition-colors'>
+            <span className='inline-flex h-full w-full cursor-pointer items-center justify-center rounded-lg bg-white px-8 text-sm font-semibold text-gray-900 backdrop-blur-3xl gap-2 hover:bg-[var(--color-orange)] hover:text-white transition-colors'>
               Become Instructor
               <Send className='w-4 h-4' />
             </span>
-          </button>
+          </button> */}
         </div>
 
         {/* Stats Grid */}
@@ -150,63 +160,6 @@ export default function HeroSection() {
           </button>
         </div>
       </div>
-
-      <style jsx>{`
-        @keyframes blob {
-          0%,
-          100% {
-            transform: translate(0px, 0px) scale(1);
-          }
-          33% {
-            transform: translate(30px, -50px) scale(1.1);
-          }
-          66% {
-            transform: translate(-20px, 20px) scale(0.9);
-          }
-        }
-
-        .animate-blob {
-          animation: blob 7s infinite;
-        }
-
-        .animation-delay-2000 {
-          animation-delay: 2s;
-        }
-
-        .animation-delay-4000 {
-          animation-delay: 4s;
-        }
-
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes slideUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        .animate-fade-in {
-          animation: fadeIn 0.8s ease-out;
-        }
-
-        .animate-slide-up {
-          animation: slideUp 0.8s ease-out 0.3s both;
-        }
-      `}</style>
     </section>
   );
 }

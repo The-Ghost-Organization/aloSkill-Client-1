@@ -268,6 +268,7 @@
 
 "use client";
 import { BookOpen, ChevronLeft, ChevronRight, Sparkles, Star, TrendingUp } from "lucide-react";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 const cards = [
@@ -351,8 +352,8 @@ export default function RightSidebar() {
     setCardDirection("next");
     setCurrentCardIndex(prev => (prev + 1) % cards.length);
   };
-
-  const currentCard = cards[currentCardIndex];
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const currentCard = cards[currentCardIndex]!;
   const CurrentIcon = currentCard.icon;
 
   return (
@@ -362,7 +363,9 @@ export default function RightSidebar() {
         <div className='relative group rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300'>
           <div className='relative h-48 bg-gray-100'>
             {images.map((image, index) => (
-              <img
+              <Image
+                width={100}
+                height={100}
                 key={index}
                 src={image}
                 alt={`Book ${index + 1}`}
