@@ -113,15 +113,15 @@ export default function NavBar({ onMenuToggle }: HeaderProps) {
       </div>
 
       {/* Mobile Search Bar */}
-      <div className='md:hidden px-4 pb-3'>
+      <div className='md:hidden px-2 pb-2 w-sm mx-auto'>
         <div className='relative'>
-          <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400' />
+          <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400' />
           <input
             type='text'
             placeholder='Search...'
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
-            className='w-full pl-10 pr-4 py-2 bg-gray-100 border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-(--color-orange)'
+            className='w-full pl-10 pr-4  bg-gray-100 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-(--color-orange)'
           />
         </div>
       </div>

@@ -1,30 +1,42 @@
-import Footer from "@/components/shared/footer/Footer.tsx";
-import Header from "@/components/shared/header/Header.tsx";
-import LeftSidebar from "@/components/shared/leftsidebar/LeftSidebar.tsx";
+"use client";
 
-import RightSidebar from "@/components/shared/RightSide.tsx";
+import FooterSimple from "@/components/shared/footer/FooterSimple.tsx";
+import AnnouncementBar from "@/components/shared/header/AnnouncementBar";
+import NavBar from "@/components/shared/header/NavBar";
+import LeftSidebar from "@/components/shared/leftSidebar/LeftSidebar";
+
+import RightSidebar from "@/components/shared/RightSidebar";
+import { useState } from "react";
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
   return (
-    <div>
-      <Header />
-      <div className='flex-1 pt-28'>
-        <LeftSidebar />
-        <main className='min-h-[calc(100vh-7rem)] lg:ml-44 xl:ml-52 xl:mr-60 px-4 sm:px-6 md:px-8 lg:px-6'>
-          <div className='max-w-6xl mx-auto'>{children}</div>
-        </main>
+    <div className='min-h-screen flex flex-col bg-white'>
+      {/* Top section (Announcement + Navbar) */}
+      <div className='fixed top-0 w-full z-50  backdrop-blur-md border-b border-gray-200/50 shadow-sm'>
+        <AnnouncementBar />
+        <NavBar onMenuToggle={() => setIsSidebarOpen(prev => !prev)} />
+      </div>
+
+      {/* Main content area */}
+      <div className='flex flex-1 relative'>
+        {/* Left Sidebar (mobile + desktop responsive) */}
+        <LeftSidebar
+          isOpen={isSidebarOpen}
+          onClose={() => setIsSidebarOpen(false)}
+        />
+
+        {/* Main content */}
+        <main className='min-h-screen lg:ml-64  pt-20 w-full'>{children}</main>
+
+        {/* Right Sidebar */}
         <RightSidebar />
       </div>
-      <Footer />
+
+      {/* Footer */}
+
+      <FooterSimple />
     </div>
   );
 }
-//  <div className='min-h-screen bg-white'>
-//       {/* Fixed Header */}
-//       <header className='fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm'>
-
-//
-//       </header>
-//
-//
-//     </div>

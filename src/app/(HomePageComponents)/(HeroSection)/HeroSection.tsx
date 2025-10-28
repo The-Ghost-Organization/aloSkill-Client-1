@@ -27,7 +27,7 @@ export default function HeroSection() {
     router.push("/auth/signup");
   };
   return (
-    <section className='relative min-h-screen  flex items-center justify-center px-4  py-10 overflow-hidden   '>
+    <section className='relative min-h-screen  flex items-center justify-center px-4  py-30 overflow-hidden   '>
       {/* Decorative Blobs */}
       <div className='absolute inset-0 overflow-hidden pointer-events-none bg-gradient-soft-hero  mix-blend-multiply filter blur-2xl opacity-50 '></div>
       {/* <div className='absolute inset-0 overflow-hidden pointer-events-none'>

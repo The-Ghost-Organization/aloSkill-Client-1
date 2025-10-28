@@ -78,7 +78,7 @@ export default function FooterSimple() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className='relative bg-white overflow-hidden'>
+    <footer className='relative bg-white overflow-hidden w-full mx-auto'>
       {/* Decorative Gradient Blobs */}
       <div className='absolute inset-0 overflow-hidden pointer-events-none'>
         {/* Purple Blob */}
