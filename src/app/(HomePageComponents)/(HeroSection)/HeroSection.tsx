@@ -32,7 +32,7 @@ export default function HeroSection() {
       <div className='absolute inset-0 overflow-hidden pointer-events-none bg-gradient-soft-hero  mix-blend-multiply filter blur-2xl opacity-50 '></div>
       {/* <div className='absolute inset-0 overflow-hidden pointer-events-none'>
         <div className='absolute top-20 left-10 w-72 h-72 bg-gradient-to-br from-purple-300 to-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob'></div>
-        <div className='absolute top-40 right-10 w-72 h-72 bg-gradient-to-br from-[var(--color-orange)] to-orange-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000'></div>
+        <div className='absolute top-40 right-10 w-72 h-72 bg-gradient-to-br from-(--color-orange) to-orange-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000'></div>
         <div className='absolute -bottom-20 left-1/2 w-72 h-72 bg-gradient-to-br from-pink-300 to-rose-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000'></div>
       </div> */}
 
@@ -77,8 +77,8 @@ export default function HeroSection() {
         </div>
 
         {/* Badge */}
-        <div className='inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm px-6 py-2 rounded-full shadow-lg border border-[var(--color-orange)]/20 animate-slide-up'>
-          <span className='w-2 h-2 bg-[var(--color-orange)] rounded-full animate-pulse'></span>
+        <div className='inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm px-6 py-2 rounded-full shadow-lg border border-(--color-orange)/20 animate-slide-up'>
+          <span className='w-2 h-2 bg-(--color-orange) rounded-full animate-pulse'></span>
           <p className='text-sm font-semibold text-gray-700'>Learning and reading at one place</p>
         </div>
 
@@ -86,7 +86,7 @@ export default function HeroSection() {
         <div className='space-y-4 animate-fade-in'>
           <h1 className='text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-gray-900 leading-tight'>
             Start Learning{" "}
-            <span className='text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-orange)] to-orange-600'>
+            <span className='text-transparent bg-clip-text bg-linear-to-r from-(--color-orange) to-orange-600'>
               Today
             </span>
           </h1>
@@ -111,7 +111,7 @@ export default function HeroSection() {
           <BorderGradientButton icon={Send}>Become Instructor</BorderGradientButton>
           {/* <button className='w-full sm:w-auto relative inline-flex h-14 active:scale-95 transition overflow-hidden rounded-lg  focus:outline-none p-2 text-[17px]'>
             <span className='absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#DA7C36_0%,#f472b6_50%,#bd5fff_100%)]'></span>
-            <span className='inline-flex h-full w-full cursor-pointer items-center justify-center rounded-lg bg-white px-8 text-sm font-semibold text-gray-900 backdrop-blur-3xl gap-2 hover:bg-[var(--color-orange)] hover:text-white transition-colors'>
+            <span className='inline-flex h-full w-full cursor-pointer items-center justify-center rounded-lg bg-white px-8 text-sm font-semibold text-gray-900 backdrop-blur-3xl gap-2 hover:bg-(--color-orange) hover:text-white transition-colors'>
               Become Instructor
               <Send className='w-4 h-4' />
             </span>
@@ -121,15 +121,15 @@ export default function HeroSection() {
         {/* Stats Grid */}
         <div className='grid grid-cols-3 gap-6 max-w-2xl mx-auto py-8 animate-fade-in'>
           <div className='text-center'>
-            <p className='text-3xl md:text-4xl font-black text-[var(--color-orange)]'>50K+</p>
+            <p className='text-3xl md:text-4xl font-black text-(--color-orange)'>50K+</p>
             <p className='text-sm text-gray-600 font-medium mt-1'>Students</p>
           </div>
           <div className='text-center border-x border-gray-200'>
-            <p className='text-3xl md:text-4xl font-black text-[var(--color-orange)]'>1200+</p>
+            <p className='text-3xl md:text-4xl font-black text-(--color-orange)'>1200+</p>
             <p className='text-sm text-gray-600 font-medium mt-1'>Courses</p>
           </div>
           <div className='text-center'>
-            <p className='text-3xl md:text-4xl font-black text-[var(--color-orange)]'>25K+</p>
+            <p className='text-3xl md:text-4xl font-black text-(--color-orange)'>25K+</p>
             <p className='text-sm text-gray-600 font-medium mt-1'>Certificates</p>
           </div>
         </div>
@@ -141,7 +141,7 @@ export default function HeroSection() {
               key={index}
               className='flex items-center gap-2 text-sm font-medium text-gray-700 bg-white/60 backdrop-blur-sm px-4 py-2 rounded-full shadow-sm'
             >
-              <CheckCircle className='w-4 h-4 text-[var(--color-orange)]' />
+              <CheckCircle className='w-4 h-4 text-(--color-orange)' />
               <span>{feature}</span>
             </div>
           ))}
@@ -149,13 +149,13 @@ export default function HeroSection() {
 
         {/* Quick Action Pills */}
         <div className='flex flex-wrap justify-center gap-3 pt-4 animate-fade-in'>
-          <button className='px-5 py-2.5 bg-white/80 backdrop-blur-sm text-gray-700 rounded-full hover:bg-[var(--color-orange)] hover:text-white transition-all duration-300 text-sm font-medium border border-gray-200 shadow-md hover:shadow-lg'>
+          <button className='px-5 py-2.5 bg-white/80 backdrop-blur-sm text-gray-700 rounded-full hover:bg-(--color-orange) hover:text-white transition-all duration-300 text-sm font-medium border border-gray-200 shadow-md hover:shadow-lg'>
             Start learning & Get certificated
           </button>
-          <button className='px-5 py-2.5 bg-white/80 backdrop-blur-sm text-gray-700 rounded-full hover:bg-[var(--color-orange)] hover:text-white transition-all duration-300 text-sm font-medium border border-gray-200 shadow-md hover:shadow-lg'>
+          <button className='px-5 py-2.5 bg-white/80 backdrop-blur-sm text-gray-700 rounded-full hover:bg-(--color-orange) hover:text-white transition-all duration-300 text-sm font-medium border border-gray-200 shadow-md hover:shadow-lg'>
             Career on aloskill
           </button>
-          <button className='px-5 py-2.5 bg-white/80 backdrop-blur-sm text-gray-700 rounded-full hover:bg-[var(--color-orange)] hover:text-white transition-all duration-300 text-sm font-medium border border-gray-200 shadow-md hover:shadow-lg'>
+          <button className='px-5 py-2.5 bg-white/80 backdrop-blur-sm text-gray-700 rounded-full hover:bg-(--color-orange) hover:text-white transition-all duration-300 text-sm font-medium border border-gray-200 shadow-md hover:shadow-lg'>
             Learn & Earn Together
           </button>
         </div>

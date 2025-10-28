@@ -1,14 +1,14 @@
-import React from 'react';
-import AnnouncementBar from './AnnouncementBar.tsx';
-import NavBar from './NavBar.tsx';
+"use client";
+import AnnouncementBar from "./AnnouncementBar.tsx";
+import NavBar from "./NavBar.tsx";
 
 const Header = () => {
-    return (
-        <div>
-            <AnnouncementBar/>
-            <NavBar/>
-        </div>
-    );
+  return (
+    <div className='fixed top-0 w-full z-50  backdrop-blur-md border-b border-gray-200/50 shadow-sm'>
+      <AnnouncementBar />
+      <NavBar />
+    </div>
+  );
 };
 
 export default Header;

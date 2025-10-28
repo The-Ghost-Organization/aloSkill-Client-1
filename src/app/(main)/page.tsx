@@ -12,11 +12,18 @@ import { InstructorsSectionAdvanced } from "@/app/(HomePageComponents)/Instructo
 import PopularCoursesSection from "@/app/(HomePageComponents)/PopularCoursesSection";
 import { WhyLearnSectionAnimated } from "@/app/(HomePageComponents)/WhyLearnSectionAnimated";
 import StatsSection from "@/components/StatsSection";
+import BackToTop from "@/components/shared/BackToTop";
 import Newsletter from "@/components/shared/footer/Newsletter";
+import MobileMenu from "@/components/shared/menu/MobileMenu";
+import TabletDrawer from "@/components/shared/menu/TabletDrawer";
+import { useState } from "react";
 
 export default function HomePage() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   return (
     <>
+      {/* Page Sections */}
       <HeroSection />
       <CategoriesSectionAnimated />
       <StatsSection />
@@ -30,6 +37,14 @@ export default function HomePage() {
       <CertificateSectionSimple />
       <ConsultationSection />
       <Newsletter />
+
+      {/* Mobile/Tablet Components (Page-specific) */}
+      <MobileMenu
+        isOpen={isMobileMenuOpen}
+        onClose={() => setIsMobileMenuOpen(false)}
+      />
+      <TabletDrawer />
+      <BackToTop />
     </>
   );
 }

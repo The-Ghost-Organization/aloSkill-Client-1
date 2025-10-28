@@ -4,8 +4,8 @@ import { ArrowRight } from "lucide-react";
 
 import { useState } from "react";
 
-import InstructorCard from "@/app/(mainLayout)/instructors/InstructorCard";
-import { instructorsData } from "@/app/(mainLayout)/instructors/instructorsData";
+import InstructorCard from "@/app/(main)/instructors/InstructorCard";
+import { instructorsData } from "@/app/(main)/instructors/instructorsData";
 
 // import type { InstructorAdvanced } from "../instructor/instructorCard.types.ts";
 

@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+
 interface LeftSidebarProps {
   isOpen?: boolean;
   onClose?: () => void;
@@ -31,15 +32,9 @@ const navItems = [
   { icon: Trophy, label: "Challenge", href: "/challenge", color: "text-yellow-500" },
   { icon: Briefcase, label: "Workshop", href: "/workshop", color: "text-indigo-500" },
   { icon: Users, label: "Learn Together", href: "/learn-together", color: "text-teal-500" },
-  { icon: Users, label: "Learn Together", href: "/learn-together2", color: "text-teal-500" },
-  { icon: Users, label: "Learn Together", href: "/learn-together3", color: "text-teal-500" },
-  { icon: Users, label: "Learn Together", href: "/learn-together4", color: "text-teal-500" },
-  { icon: Users, label: "Learn Together", href: "/learn-together5", color: "text-teal-500" },
-  { icon: Users, label: "Learn Together", href: "/learn-together6", color: "text-teal-500" },
-  { icon: Users, label: "Learn Together", href: "/learn-together7", color: "text-teal-500" },
 ];
 
-export default function LeftSidebar({ isOpen = true, onClose }: LeftSidebarProps) {
+export default function LeftSidebar({ isOpen = false, onClose }: LeftSidebarProps) {
   const pathname = usePathname();
 
   return (
@@ -47,16 +42,17 @@ export default function LeftSidebar({ isOpen = true, onClose }: LeftSidebarProps
       {/* Mobile Overlay */}
       {isOpen && (
         <div
-          className='fixed top-0 inset-0 bg-black/50 z-40 md:hidden shrink-0'
+          className='fixed inset-0 bg-black/50 z-40 lg:hidden'
           onClick={onClose}
         />
       )}
 
-      {/* Sidebar */}
+      {/* Sidebar - Stops at footer */}
       <aside
-        className={`sidebar
-          fixed top-24 left-0 z-40
-          h-[calc(100vh-4rem)] w-44 xl:w-52
+        className={`
+          custom-scrollbar
+          fixed top-28 left-0 bottom-0 z-40
+          w-44 xl:w-52
           bg-white border-r border-gray-200 shadow-lg
           transition-transform duration-300 ease-in-out
           overflow-y-auto
@@ -68,6 +64,7 @@ export default function LeftSidebar({ isOpen = true, onClose }: LeftSidebarProps
           <button
             onClick={onClose}
             className='p-2 hover:bg-gray-100 rounded-lg transition-colors'
+            aria-label='Close sidebar'
           >
             <X className='w-6 h-6 text-gray-700' />
           </button>
@@ -83,6 +80,7 @@ export default function LeftSidebar({ isOpen = true, onClose }: LeftSidebarProps
               <Link
                 key={item.href}
                 href={item.href}
+                onClick={onClose}
                 className={`
                   flex items-center gap-3 px-3 py-2 rounded-md transition-all duration-300
                   ${
@@ -99,33 +97,31 @@ export default function LeftSidebar({ isOpen = true, onClose }: LeftSidebarProps
           })}
         </nav>
 
-        {/* Footer */}
-        <div className='p-6 border-t border-gray-200'>
+        {/* Social Footer */}
+        <div className='p-6 border-t border-gray-200 mt-auto'>
           <p className='text-xs text-gray-500 mb-3 font-medium'>Follow Us</p>
           <div className='flex gap-3'>
-            {/* Twitter */}
             <a
               href='#'
               className='w-9 h-9 flex items-center justify-center rounded-full border border-gray-300
-                 hover:border-sky-500 hover:text-sky-500 transition-all duration-300 hover:shadow-md'
+                hover:border-sky-500 hover:text-sky-500 transition-all duration-300 hover:shadow-md'
+              aria-label='Twitter'
             >
               <Twitter className='w-4 h-4' />
             </a>
-
-            {/* Facebook */}
             <a
               href='#'
               className='w-9 h-9 flex items-center justify-center rounded-full border border-gray-300
-                 hover:border-blue-600 hover:text-blue-600 transition-all duration-300 hover:shadow-md'
+                hover:border-blue-600 hover:text-blue-600 transition-all duration-300 hover:shadow-md'
+              aria-label='Facebook'
             >
               <Facebook className='w-4 h-4' />
             </a>
-
-            {/* Instagram */}
             <a
               href='#'
               className='w-9 h-9 flex items-center justify-center rounded-full border border-gray-300
-                 hover:border-pink-500 hover:text-pink-500 transition-all duration-300 hover:shadow-md'
+                hover:border-pink-500 hover:text-pink-500 transition-all duration-300 hover:shadow-md'
+              aria-label='Instagram'
             >
               <Instagram className='w-4 h-4' />
             </a>

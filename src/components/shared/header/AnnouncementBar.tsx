@@ -26,8 +26,8 @@ export default function AnnouncementBar() {
   const [selectedCurrency, setSelectedCurrency] = useState("USD");
 
   return (
-    <div className=' z-50 bg-[var(--color-orange)] w-full text-white'>
-      <div className='max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8'>
+    <div className=' z-50 bg-(--color-orange) w-full text-white'>
+      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='flex items-center justify-between py-2 text-sm'>
           {/* Left: Announcement Text */}
           <div className='hidden md:block'>
@@ -75,7 +75,7 @@ export default function AnnouncementBar() {
                   <option
                     key={lang.code}
                     value={lang.code}
-                    className='bg-[var(--color-orange)] text-white'
+                    className='bg-(--color-orange) text-white'
                   >
                     {lang.label}
                   </option>
@@ -109,7 +109,7 @@ export default function AnnouncementBar() {
                   <option
                     key={currency.code}
                     value={currency.code}
-                    className='bg-[var(--color-orange)] text-white'
+                    className='bg-(--color-orange) text-white'
                   >
                     {currency.code}
                   </option>
