@@ -54,14 +54,15 @@ export default function LeftSidebar({ isOpen = false, onClose }: LeftSidebarProp
 
       {/* ===== Sidebar Wrapper ===== */}
       <aside
-        className={`sidebar
-          fixed top-24 left-0 z-40
-          h-[calc(100vh-4rem)] w-44 xl:w-52
-          bg-white border-r border-gray-200 shadow-lg
-          transition-transform duration-300 ease-in-out
-          overflow-y-auto
-          ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
-        `}
+        className={`z-40
+      bg-white border-r border-gray-200 shadow-lg
+      w-44 xl:w-52
+      transition-transform duration-300 ease-in-out
+      overflow-y-auto
+      fixed top-12 left-0 h-[calc(100vh-6rem)]
+      lg:sticky lg:top-24 lg:h-[calc(100vh-6rem)]  lg:translate-x-0
+      ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
+    `}
       >
         {/* ===== Mobile Close Button ===== */}
         <div className='lg:hidden flex justify-end p-4'>

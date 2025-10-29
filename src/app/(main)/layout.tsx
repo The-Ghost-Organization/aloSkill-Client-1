@@ -20,15 +20,20 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       </div>
 
       {/* Main content area */}
-      <div className='flex flex-1 relative'>
+      <div className='flex flex-1  min-h-screen'>
         {/* Left Sidebar (mobile + desktop responsive) */}
-        <LeftSidebar
-          isOpen={isSidebarOpen}
-          onClose={() => setIsSidebarOpen(false)}
-        />
+        <div className='hidden lg:pt-24 lg:block    '>
+          <LeftSidebar isOpen={true} />
+        </div>
+        <div className='lg:hidden'>
+          <LeftSidebar
+            isOpen={isSidebarOpen}
+            onClose={() => setIsSidebarOpen(false)}
+          />
+        </div>
 
         {/* Main content */}
-        <main className='min-h-screen lg:ml-64  pt-20 w-full'>{children}</main>
+        <main className='flex-1 min-h-screen   pt-20 w-full'>{children}</main>
 
         {/* Right Sidebar */}
         <RightSidebar />
