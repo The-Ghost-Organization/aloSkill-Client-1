@@ -70,13 +70,16 @@ export default function RightSidebar() {
   const CurrentIcon = currentCard.icon;
 
   return (
-    <aside className='hidden xl:block sticky top-28 right-0 w-60 h-[calc(100vh-7rem)] z-40'>
+    <aside className=' xl:block sticky top-28 right-0 max-w-2xl lg:w-80 h-[calc(100vh-7rem)] z-40'>
       <div
         className='h-full overflow-y-auto px-4 py-6'
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
       >
-        <div className='space-y-4'>
+        <div
+          className='space-y-4  flex 
+        flex-row xl:flex-col'
+        >
           {/* Image Slider */}
           <div className='relative group rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300'>
             <div className='relative h-48 bg-gray-100'>
@@ -196,21 +199,6 @@ export default function RightSidebar() {
       </div>
 
       {/* Custom Scrollbar Styles */}
-      <style jsx>{`
-        aside > div::-webkit-scrollbar {
-          width: 6px;
-        }
-        aside > div::-webkit-scrollbar-track {
-          background: transparent;
-        }
-        aside > div::-webkit-scrollbar-thumb {
-          background: #cbd5e1;
-          border-radius: 3px;
-        }
-        aside > div::-webkit-scrollbar-thumb:hover {
-          background: #94a3b8;
-        }
-      `}</style>
     </aside>
   );
 }

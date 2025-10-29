@@ -37,6 +37,12 @@ const navItems = [
   { icon: UserPlus, label: "Groups", href: "/groupfg", color: "text-pink-500" },
   { icon: Trophy, label: "Challenge", href: "/challengef", color: "text-yellow-500" },
   { icon: Briefcase, label: "Workshop", href: "/workshokpg", color: "text-indigo-500" },
+  { icon: UserPlus, label: "Groups", href: "/groupfghg", color: "text-pink-500" },
+  { icon: Trophy, label: "Challenge", href: "/challengefhg", color: "text-yellow-500" },
+  { icon: Briefcase, label: "Workshop", href: "/workshokpggh", color: "text-indigo-500" },
+  { icon: UserPlus, label: "Groups", href: "/groupfghgkl", color: "text-pink-500" },
+  { icon: Trophy, label: "Challenge", href: "/challengefhgkl", color: "text-yellow-500" },
+  { icon: Briefcase, label: "Workshop", href: "/workshokpgghkl", color: "text-indigo-500" },
 ];
 
 export default function LeftSidebar({ isOpen = false, onClose }: LeftSidebarProps) {
@@ -59,8 +65,8 @@ export default function LeftSidebar({ isOpen = false, onClose }: LeftSidebarProp
       w-44 xl:w-52
       transition-transform duration-300 ease-in-out
       overflow-y-auto
-      fixed top-12 left-0 h-[calc(100vh-6rem)]
-      lg:sticky lg:top-24 lg:h-[calc(100vh-6rem)]  lg:translate-x-0
+      fixed top-12 left-0 h-[calc(100vh-2rem)]
+      lg:sticky lg:top-24 lg:h-[calc(100vh-4rem)] xl:h-[calc(100vh-6rem)]  lg:translate-x-0
       ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
     `}
       >
@@ -99,7 +105,7 @@ export default function LeftSidebar({ isOpen = false, onClose }: LeftSidebarProp
         </nav>
 
         {/* ===== Social Footer ===== */}
-        <div className='p-6 sticky bottom-0 left-0 bg-white  border-t border-gray-200'>
+        <div className='px-6  pt-3 sticky bottom-0 left-0 bg-white  border-t border-gray-200'>
           <p className='text-xs text-gray-500 mb-3 font-medium'>Follow Us</p>
           <div className='flex gap-3'>
             <a
