@@ -1,7 +1,6 @@
 "use client";
 
 import HeroSection from "@/app/(HomePageComponents)/(HeroSection)/HeroSection";
-import BonusesSection from "@/app/(HomePageComponents)/BonusSection";
 import { CategoriesSectionAnimated } from "@/app/(HomePageComponents)/CategoriesSectionAnimated";
 import { CertificateSectionSimple } from "@/app/(HomePageComponents)/CertificateSectionSimple";
 import CommunitySection from "@/app/(HomePageComponents)/CommunitySection";
@@ -13,7 +12,6 @@ import PopularCoursesSection from "@/app/(HomePageComponents)/PopularCoursesSect
 import { WhyLearnSectionAnimated } from "@/app/(HomePageComponents)/WhyLearnSectionAnimated";
 import StatsSection from "@/components/StatsSection";
 import BackToTop from "@/components/shared/BackToTop";
-import RightSidebar from "@/components/shared/RightSidebar.tsx";
 import Newsletter from "@/components/shared/footer/Newsletter";
 import MobileMenu from "@/components/shared/menu/MobileMenu";
 import TabletDrawer from "@/components/shared/menu/TabletDrawer";
@@ -25,14 +23,14 @@ export default function HomePage() {
   return (
     <>
       {/* Page Sections */}
-      <div className='block xl:hidden mt-6'>
+      {/* <div className='block xl:hidden mt-6'>
         <RightSidebar />
-      </div>
+      </div> */}
 
       <HeroSection />
       <CategoriesSectionAnimated />
       <StatsSection />
-      <BonusesSection />
+
       <WhyLearnSectionAnimated />
       <PopularCoursesSection />
       <DiscoverBooksSectionCarousel />

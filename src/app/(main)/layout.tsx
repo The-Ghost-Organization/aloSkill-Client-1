@@ -36,7 +36,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         <main className='flex-1 min-h-screen   pt-20 w-full'>{children}</main>
 
         {/* Right Sidebar */}
-        <div className='hidden xl:block xl:w-[320px]'>
+        <div className='hidden xl:block '>
           <RightSidebar />
         </div>
       </div>

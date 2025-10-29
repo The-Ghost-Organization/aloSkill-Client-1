@@ -36,7 +36,7 @@ export default function HeroSection() {
         <div className='absolute -bottom-20 left-1/2 w-72 h-72 bg-gradient-to-br from-pink-300 to-rose-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000'></div>
       </div> */}
 
-      <div className='relative z-10 max-w-5xl mx-auto text-center space-y-2'>
+      <div className='relative z-10 max-w-5xl mx-auto text-center space-y-6'>
         {/* Social Proof - Top */}
         <div className='flex items-center justify-center gap-4 flex-wrap animate-fade-in'>
           {/* Avatars */}
@@ -109,17 +109,10 @@ export default function HeroSection() {
             Free Registration
           </GradientButton>
           <BorderGradientButton icon={Send}>Become Instructor</BorderGradientButton>
-          {/* <button className='w-full sm:w-auto relative inline-flex h-14 active:scale-95 transition overflow-hidden rounded-lg  focus:outline-none p-2 text-[17px]'>
-            <span className='absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#DA7C36_0%,#f472b6_50%,#bd5fff_100%)]'></span>
-            <span className='inline-flex h-full w-full cursor-pointer items-center justify-center rounded-lg bg-white px-8 text-sm font-semibold text-gray-900 backdrop-blur-3xl gap-2 hover:bg-(--color-orange) hover:text-white transition-colors'>
-              Become Instructor
-              <Send className='w-4 h-4' />
-            </span>
-          </button> */}
         </div>
 
         {/* Stats Grid */}
-        <div className='grid grid-cols-3 gap-6 max-w-2xl mx-auto py-8 animate-fade-in'>
+        {/* <div className='grid grid-cols-3 gap-6 max-w-2xl mx-auto py-8 animate-fade-in'>
           <div className='text-center'>
             <p className='text-3xl md:text-4xl font-black text-(--color-orange)'>50K+</p>
             <p className='text-sm text-gray-600 font-medium mt-1'>Students</p>
@@ -132,7 +125,7 @@ export default function HeroSection() {
             <p className='text-3xl md:text-4xl font-black text-(--color-orange)'>25K+</p>
             <p className='text-sm text-gray-600 font-medium mt-1'>Certificates</p>
           </div>
-        </div>
+        </div> */}
 
         {/* Features List */}
         <div className='flex flex-wrap items-center justify-center gap-4 pt-4 animate-slide-up'>

@@ -66,7 +66,7 @@ export default function LeftSidebar({ isOpen = false, onClose }: LeftSidebarProp
       transition-transform duration-300 ease-in-out
       overflow-y-auto
       fixed top-12 left-0 h-[calc(100vh-2rem)]
-      lg:sticky lg:top-24 lg:h-[calc(100vh-4rem)] xl:h-[calc(100vh-6rem)]  lg:translate-x-0
+      lg:sticky lg:top-24 lg:h-[calc(100vh-2rem)] xl:h-[calc(100vh-6rem)]  lg:translate-x-0
       ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
     `}
       >

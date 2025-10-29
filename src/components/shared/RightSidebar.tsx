@@ -70,18 +70,18 @@ export default function RightSidebar() {
   const CurrentIcon = currentCard.icon;
 
   return (
-    <aside className=' xl:block sticky top-28 right-0 max-w-2xl lg:w-80 h-[calc(100vh-7rem)] z-40'>
+    <aside className=' xl:block sticky top-28 right-0 xl:w-65  h-[calc(100vh-7rem)] z-40'>
       <div
         className='h-full overflow-y-auto px-4 py-6'
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
       >
         <div
-          className='space-y-4  flex 
-        flex-row xl:flex-col'
+          className=' w-full flex
+        flex-row flex-wrap xl:flex-col justify-center gap-4 '
         >
           {/* Image Slider */}
-          <div className='relative group rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300'>
+          <div className='relative group rounded-2xl overflow-hidden flex-1 shadow-sm hover:shadow-md transition-shadow duration-300'>
             <div className='relative h-48 bg-gray-100'>
               {images.map((image, index) => (
                 <Image
@@ -133,7 +133,7 @@ export default function RightSidebar() {
           </div>
 
           {/* Card Slider */}
-          <div className='relative group'>
+          <div className='relative flex-1 group'>
             <div
               className={`bg-linear-to-br ${currentCard.gradient} rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer border border-gray-100 min-h-[180px]`}
             >
@@ -179,7 +179,7 @@ export default function RightSidebar() {
           </div>
 
           {/* Static Cards */}
-          <div className='space-y-4'>
+          <div className='space-y-4 flex-1'>
             {cards.slice(0, 2).map(card => {
               const Icon = card.icon;
               return (
